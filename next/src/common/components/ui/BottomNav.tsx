@@ -12,7 +12,7 @@ const BottomNav = () => {
   const mainItems = items.slice(0, -1);
   const lastItem = items.at(-1)!;
 
-  const navItemsWrapperClass = twMerge('border-[1px] border-theme-accent-light pointer-events-auto flex items-center gap-1.5 rounded-full bg-theme-surface/75 shadow-theme-floating backdrop-blur-2xl',
+  const navItemsWrapperClass = twMerge('border-[1px] border-theme-accent/20 pointer-events-auto flex items-center gap-1.5 rounded-full bg-theme-surface/75 shadow-theme-floating backdrop-blur-2xl',
     BG_TRANSITION_CLASS,
     "transition-[background-color,border-color]");
   const navItemClass = cn('flex cursor-pointer items-center justify-center rounded-full text-xl', BG_TRANSITION_CLASS);
