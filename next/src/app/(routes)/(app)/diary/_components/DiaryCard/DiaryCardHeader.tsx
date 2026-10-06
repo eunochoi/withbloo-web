@@ -5,6 +5,7 @@ import type { DiaryData } from '@/common/types/diary';
 import { parseLocalDate } from '@/common/utils/date/parseLocalDate';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { MdMoreVert } from 'react-icons/md';
 
@@ -30,19 +31,26 @@ const DiaryCardHeader = ({ diaryData }: Props) => {
 
   return (
     <div className="relative flex min-w-0 w-full items-center gap-3">
-      {emotion && (
-        <EmotionImage emotion={emotion} alt="" className="h-12 w-12 shrink-0 object-contain" />
-      )}
-      <div className=" flex min-w-0 flex-col gap-0.5">
-        <time dateTime={diaryData.date} className="flex flex-wrap gap-x-1 text-base font-semibold text-theme-text-primary">
-          <span className="whitespace-nowrap">{formattedDate}</span>
-        </time>
-        <div className='flex gap-1 text-sm text-theme-text-tertiary'>
-          <time>{week}</time>
-          {emotion && <span>·</span>}
-          {emotion && <span>{emotion.nameKr}</span>}
+      <Link
+        href={`/diary/${diaryData.id}`}
+        scroll={false}
+        aria-label={`${diaryData.date} 일기 자세히 보기`}
+        className="flex min-w-0 shrink items-center gap-3 text-left"
+      >
+        {emotion && (
+          <EmotionImage emotion={emotion} alt="" className="h-12 w-12 shrink-0 object-contain" />
+        )}
+        <div className=" flex min-w-0 flex-col gap-0.5">
+          <time dateTime={diaryData.date} className="flex flex-wrap gap-x-1 text-base font-semibold text-theme-text-primary">
+            <span className="whitespace-nowrap">{formattedDate}</span>
+          </time>
+          <div className='flex gap-1 text-sm text-theme-text-tertiary'>
+            <time>{week}</time>
+            {emotion && <span>·</span>}
+            {emotion && <span>{emotion.nameKr}</span>}
+          </div>
         </div>
-      </div>
+      </Link>
       <button
         className="ml-auto flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-xl text-theme-text-tertiary"
         aria-label="일기 메뉴"
