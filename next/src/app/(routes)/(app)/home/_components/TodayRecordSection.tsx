@@ -37,7 +37,7 @@ const TodayRecordSection = ({ initialDate }: { initialDate: string }) => {
   useEffect(() => {
     try {
       setSoberSort(JSON.parse(localStorage.getItem('took:sober-sort') ?? '{}'));
-    } catch {}
+    } catch { }
   }, []);
   useEffect(() => {
     const timer = window.setInterval(() => setNow(Date.now()), 60000);
@@ -62,9 +62,9 @@ const TodayRecordSection = ({ initialDate }: { initialDate: string }) => {
   const sober = sortSobers(soberQuery.data ?? [], soberSort, now)[0];
   const soberDays = sober
     ? Math.floor(
-        getSoberSummary(sober, sober.restarts, now).current.duration /
-          SOBER_DAY_MS,
-      ) + 1
+      getSoberSummary(sober, sober.restarts, now).current.duration /
+      SOBER_DAY_MS,
+    ) + 1
     : null;
   const habitQuery = useQuery({ ...habitQueries.todayStat(authAction, today) });
   const completed = habitQuery.data?.todayDoneHabits ?? 0;
