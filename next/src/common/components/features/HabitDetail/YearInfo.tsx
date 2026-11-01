@@ -132,7 +132,7 @@ const YearInfo = ({
             <span className="text-sm text-theme-text-secondary">
               {stat.label}
             </span>
-            <strong className="text-2xl text-theme-text-primary">
+            <strong className="whitespace-nowrap text-lg text-theme-text-primary">
               {stat.value}
               <span className="ml-0.5 text-sm text-theme-text-secondary">
                 {stat.unit}
