@@ -1,17 +1,18 @@
 'use client';
 
-import { cn } from "@/common/utils/cn";
+import { useMonthSwipe } from '@/common/components/ui/Calendar/useMonthSwipe';
 import DiaryAnalysis from "./DiaryAnalysis";
 import EmotionStats from "./EmotionStats";
 import HabitAnalysis from "./HabitAnalysis";
-import TodayRecordSection from "./TodayRecordSection";
+import SoberAnalysis from "./SoberAnalysis";
 
 import type { DiaryStats, HabitStats } from "@/common/actions/stats";
 import HomeYearChangePrompt from "./HomeYearChangePrompt";
 
 interface Props {
-  initialDate: string;
+  today: string;
   selectedYear: number;
+  onChangeYear: (year: number) => void;
   diaryStats?: DiaryStats;
   habitStats?: HabitStats;
   isDiaryStatsError: boolean;
@@ -21,14 +22,10 @@ interface Props {
   onOpenYearPicker: () => void;
 }
 
-const HomePageContent = ({ initialDate, selectedYear, diaryStats, habitStats, isDiaryStatsError, isHabitStatsError, onRetryDiaryStats, onRetryHabitStats, onOpenYearPicker }: Props) => {
+const HomePageContent = ({ today, selectedYear, onChangeYear, diaryStats, habitStats, isDiaryStatsError, isHabitStatsError, onRetryDiaryStats, onRetryHabitStats, onOpenYearPicker }: Props) => {
+  const swipeProps = useMonthSwipe(() => { if (selectedYear > 1900) onChangeYear(selectedYear - 1); }, () => { if (selectedYear < new Date().getFullYear()) onChangeYear(selectedYear + 1); });
   return (
-    <section className={cn("pt-3 grid flex-1 w-full min-w-0 grid-cols-1 items-start desktop:grid-cols-[minmax(0,11fr)_minmax(0,9fr)] desktop:gap-x-8")}>
-      <div className="hidden min-w-0 desktop:col-start-2 desktop:row-start-1 desktop:sticky desktop:top-[max(112px,calc(var(--page-toolbar-height,0px)+24px))] desktop:flex desktop:flex-col desktop:gap-12 desktop:self-start desktop:border-l desktop:border-theme-border/60 desktop:pl-8">
-        <TodayRecordSection initialDate={initialDate} />
-        <HomeYearChangePrompt onOpenYearPicker={onOpenYearPicker} />
-      </div>
-      <div className="flex min-w-0 flex-col gap-14 desktop:gap-20 desktop:col-start-1 desktop:row-start-1">
+    <section {...swipeProps} className="flex min-w-0 flex-col gap-14">
         {diaryStats && <>
           <DiaryAnalysis stats={diaryStats} year={selectedYear} />
           <EmotionStats
@@ -37,11 +34,9 @@ const HomePageContent = ({ initialDate, selectedYear, diaryStats, habitStats, is
             halfYearEmotionCounts={diaryStats?.halfYearEmotionCounts}
           />
         </>}
-        {habitStats && <HabitAnalysis stats={habitStats} year={selectedYear} />}
-        <div className="desktop:hidden">
-          <HomeYearChangePrompt onOpenYearPicker={onOpenYearPicker} />
-        </div>
-      </div>
+        {habitStats && <HabitAnalysis stats={habitStats} year={selectedYear} today={today} />}
+        <SoberAnalysis />
+        <HomeYearChangePrompt onOpenYearPicker={onOpenYearPicker} />
     </section>
   );
 };

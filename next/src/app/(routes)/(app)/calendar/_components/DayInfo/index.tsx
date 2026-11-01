@@ -20,6 +20,7 @@ import { useState } from 'react';
 import DayInfoDiarySection from './DayInfoDiarySection';
 import DayInfoHabitSection from './DayInfoHabitSection';
 import DayInfoHeader from './DayInfoHeader';
+import EmotionImage from '@/common/components/ui/EmotionImage';
 
 interface Props {
   date: string;
@@ -60,7 +61,7 @@ const DayInfo = ({
     isDiaryPlaceholder ||
     isHabitPlaceholder;
 
-  const emotion = diaryData?.visible
+  const emotion = diaryData
     ? EMOTIONS[diaryData.emotion]
     : undefined;
 
@@ -96,6 +97,7 @@ const DayInfo = ({
       }
 
       await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['habits'] }),
         queryClient.invalidateQueries({
           queryKey: ['habit'],
         }),
@@ -135,15 +137,15 @@ const DayInfo = ({
   };
 
   return (
-    <section className="box-border flex w-full flex-col gap-3">
-      <DayInfoHeader
-        date={date}
-        emotion={emotion}
-      />
+    <section className="box-border flex w-full flex-col gap-3 desktop:min-h-0 desktop:flex-1">
+      <div className="hidden desktop:block"><DayInfoHeader date={date} emotion={emotion} /></div>
+      {emotion && !isTransitioning && !isDiaryError && !isHabitError && <div className="mx-auto flex w-16 flex-col gap-2 desktop:hidden"><EmotionImage emotion={emotion} alt="" width={64} height={64} className="h-16 w-16" /><div className="mx-2 h-1 overflow-hidden rounded-full bg-theme-border"><div className="h-full bg-theme-accent" style={{ width: `${habitData?.summary.total ? habitData.summary.completed / habitData.summary.total * 100 : 0}%` }} /></div></div>}
+      {(isDiaryError || isHabitError) && !isTransitioning && <button type="button" className="min-h-16 text-sm text-theme-danger" onClick={() => { if (isDiaryError) onRetryDiary(); if (isHabitError) void refetchHabits(); }}>기록을 불러오지 못했어요. 다시 시도</button>}
 
-      <AnimatePresence mode="wait" initial={false}>
+      {!(isDiaryError || isHabitError) && <AnimatePresence mode="wait" initial={false}>
         <motion.div
           key={date}
+          className="desktop:flex desktop:min-h-0 desktop:flex-1 desktop:flex-col"
           initial={{
             opacity: 0,
             y: 4,
@@ -164,7 +166,7 @@ const DayInfo = ({
           <fieldset
             disabled={isTransitioning}
             aria-busy={isTransitioning}
-            className="m-0 flex min-w-0 flex-col gap-4"
+            className="m-0 flex min-w-0 flex-col gap-6 desktop:min-h-0 desktop:flex-1"
           >
             <DayInfoDiarySection
               diaryData={diaryData}
@@ -180,7 +182,7 @@ const DayInfo = ({
             />
           </fieldset>
         </motion.div>
-      </AnimatePresence>
+      </AnimatePresence>}
     </section>
   );
 };

@@ -1,17 +1,9 @@
-import AppPageLayout from '@/common/components/layout/AppPageLayout';
 import { getTodayStringInUserTimezone } from '@/common/utils/date/userTimezone';
-import HomePageSkeleton from './_components/HomePageSkeleton';
-import HomePageTopSection from './_components/HomePageTopSection';
+import HomePage from './_components/HomePage';
 
 const HomeLoading = async () => {
   const initialDate = await getTodayStringInUserTimezone();
-
-  return (
-    <AppPageLayout
-      topSection={<HomePageTopSection initialDate={initialDate} loading />}
-      mainSection={<HomePageSkeleton />}
-    />
-  );
+  return <HomePage initialDate={initialDate} loading />;
 };
 
 export default HomeLoading;

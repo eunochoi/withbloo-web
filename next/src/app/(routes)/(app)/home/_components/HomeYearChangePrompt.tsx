@@ -1,6 +1,8 @@
 'use client';
 
-import { FaArrowRight } from "react-icons/fa";
+import { ArrowRightIcon } from '@/common/constants/appIcons';
+
+
 
 interface Props {
   onOpenYearPicker: () => void;
@@ -17,7 +19,7 @@ const HomeYearChangePrompt = ({ onOpenYearPicker }: Props) => {
         onClick={onOpenYearPicker}
         className="mr-2 desktop:mr-6 mt-4 self-end flex shrink-0 items-center gap-2 text-lg desktop:text-base font-medium text-theme-accent">
         <span>연도 선택</span>
-        <FaArrowRight aria-hidden="true" />
+        <ArrowRightIcon aria-hidden="true" />
       </button>
     </div>
   );

@@ -32,7 +32,7 @@ const HomeServerPage = async ({ searchParams }: Props) => {
     queryClient.prefetchQuery(statsQueries.diary(selectedYear, unwrapQueryAction)),
     queryClient.prefetchQuery(statsQueries.habit(selectedYear, unwrapQueryAction)),
     queryClient.prefetchQuery(diaryQueries.byDate(initialDate, unwrapQueryAction)),
-    queryClient.prefetchQuery(habitQueries.todayStat(unwrapQueryAction)),
+    queryClient.prefetchQuery(habitQueries.todayStat(unwrapQueryAction, initialDate)),
   ]);
 
   const dehydratedState = dehydrate(queryClient);

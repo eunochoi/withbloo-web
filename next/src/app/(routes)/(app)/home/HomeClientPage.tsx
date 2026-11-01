@@ -1,5 +1,6 @@
 'use client';
 
+
 import HomePageContent from "./_components/HomePageContent";
 import HomePageSkeleton from "./_components/HomePageSkeleton";
 
@@ -8,15 +9,18 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
 
 import { authAction } from "@/common/auth/authAction";
-import AppPageLayout from "@/common/components/layout/AppPageLayout";
+import { PanelDialog } from "@/common/components/ui/Dialog/PanelDialog";
+import { PanelBody } from "@/common/components/ui/Dialog/PanelDialog/PanelBody";
+import { PanelHeader } from "@/common/components/ui/Dialog/PanelDialog/PanelHeader";
 import { usePrefetchPage } from "@/common/hooks/usePrefetchPage";
 import { statsQueries } from "@/common/queries/statsQueries";
 import { AnimatePresence } from 'framer-motion';
+import HomePage from './_components/HomePage';
 import HomePageYearPicker from './_components/HomePageYearPicker';
-import HomePageTopSection from './_components/HomePageTopSection';
 
 const HomeClientPage = ({ initialDate }: { initialDate: string }) => {
   usePrefetchPage();
+  const [isAnalysisOpen, setAnalysisOpen] = useState(false);
   const currentYear = Number(initialDate.slice(0, 4));
   const pathname = usePathname();
   const router = useRouter();
@@ -60,32 +64,38 @@ const HomeClientPage = ({ initialDate }: { initialDate: string }) => {
 
   return (
     <>
-      <AppPageLayout
-        topSection={<HomePageTopSection initialDate={initialDate} />}
-        mainSection={isStatsError ? (
-          <div className="flex min-h-64 w-full flex-col items-center justify-center gap-3 text-center text-theme-text-secondary">
-            <span>홈 기록을 불러오지 못했어요.</span>
-            <button type="button" className="text-theme-accent" onClick={() => {
-              if (isDiaryStatsError) void refetchDiaryStats();
-              if (isHabitStatsError) void refetchHabitStats();
-            }}>다시 시도</button>
-          </div>
-        ) : isStatsPending ? (
-          <HomePageSkeleton />
-        ) : (
-          <HomePageContent
-            initialDate={initialDate}
-            selectedYear={selectedYear}
-            diaryStats={diaryStats}
-            habitStats={habitStats}
-            isDiaryStatsError={isDiaryStatsError}
-            isHabitStatsError={isHabitStatsError}
-            onRetryDiaryStats={() => { void refetchDiaryStats(); }}
-            onRetryHabitStats={() => { void refetchHabitStats(); }}
-            onOpenYearPicker={() => setIsYearPickerOpen(true)}
-          />
-        )}
-      />
+      <HomePage initialDate={initialDate} onOpenAnalysis={() => setAnalysisOpen(true)} />
+      <AnimatePresence>
+        {isAnalysisOpen && <PanelDialog ariaLabel="기록 분석" onClose={() => setAnalysisOpen(false)}>
+          <PanelHeader title="기록 분석" />
+          <PanelBody showScrollFade>
+            <div className="pt-6 pb-[max(2rem,env(safe-area-inset-bottom))]">{isStatsError ? (
+              <div className="flex min-h-64 w-full flex-col items-center justify-center gap-3 text-center text-theme-text-secondary">
+                <span>홈 기록을 불러오지 못했어요.</span>
+                <button type="button" className="text-theme-accent" onClick={() => {
+                  if (isDiaryStatsError) void refetchDiaryStats();
+                  if (isHabitStatsError) void refetchHabitStats();
+                }}>다시 시도</button>
+              </div>
+            ) : isStatsPending ? (
+              <HomePageSkeleton />
+            ) : (
+              <HomePageContent
+                today={initialDate}
+                selectedYear={selectedYear}
+                onChangeYear={handleApplyYear}
+                diaryStats={diaryStats}
+                habitStats={habitStats}
+                isDiaryStatsError={isDiaryStatsError}
+                isHabitStatsError={isHabitStatsError}
+                onRetryDiaryStats={() => { void refetchDiaryStats(); }}
+                onRetryHabitStats={() => { void refetchHabitStats(); }}
+                onOpenYearPicker={() => setIsYearPickerOpen(true)}
+              />
+            )}</div>
+          </PanelBody>
+        </PanelDialog>}
+      </AnimatePresence>
       <AnimatePresence>
         {isYearPickerOpen && (
           <HomePageYearPicker
