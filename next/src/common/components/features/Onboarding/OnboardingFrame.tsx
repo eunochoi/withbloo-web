@@ -30,7 +30,7 @@ export function OnboardingFrame({
         </h2>
         <p className="text-base text-theme-text-secondary">{description}</p>
       </header>
-      <div className="flex shrink-0 flex-col gap-6">
+      <div className="flex shrink-0 flex-col gap-8">
         {children}
         {info && <InfoNotice className="shrink-0 text-xs">{info}</InfoNotice>}
       </div>

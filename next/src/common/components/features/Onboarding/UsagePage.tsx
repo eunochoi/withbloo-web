@@ -44,7 +44,6 @@ export function UsagePage() {
     <OnboardingFrame
       title="편리하게 사용해요"
       description="알아두면 더 편리한 기능들이에요."
-      info="긴 이름 예시는 직접 눌러볼 수 있어요."
     >
       <section className={sectionClassName}>
         <h3 className={sectionTitleClassName}>화면 맨 위로 빠르게</h3>

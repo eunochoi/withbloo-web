@@ -4,14 +4,14 @@ import EmotionImage from '@/common/components/ui/EmotionImage';
 import { DiaryIcon, HabitIcon } from '@/common/constants/appIcons';
 import { EMOTIONS } from '@/common/constants/emotions';
 import { twMerge } from 'tailwind-merge';
+import { OnboardingFrame } from './OnboardingFrame';
 import {
+  exampleClassName,
   sectionClassName,
   sectionContentClassName,
-  exampleClassName,
   sectionTextClassName,
   sectionTitleClassName,
 } from './styles';
-import { OnboardingFrame } from './OnboardingFrame';
 
 export function CalendarGuidePage() {
   return (
@@ -109,7 +109,7 @@ export function CalendarGuidePage() {
             ))}
           </div>
           <p className={sectionTextClassName}>
-            이번 달에 작성한 일기와 습관 성취도를 한눈에 파악해요.
+            이번 달 일기와 습관 성취도를 한눈에 파악해요.
           </p>
         </div>
       </section>
