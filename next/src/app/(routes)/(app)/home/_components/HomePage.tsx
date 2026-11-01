@@ -74,13 +74,13 @@ const HomePage = ({
           )}
           <HomeAnalysisCard onOpenAnalysis={onOpenAnalysis} />
         </div>
-        <div className="flex flex-col">
+        <div className="flex flex-col items-center">
           <Image
             priority
             src={cat}
             alt="고양이 블루"
             sizes="(min-width: 480px) 400px, 80vw"
-            className="block h-auto max-h-[25dvh] w-full object-contain tablet:max-h-[30dvh] desktop:hidden"
+            className="block h-auto max-h-[25dvh] w-full max-w-[250px] object-contain tablet:max-h-[30dvh] desktop:hidden"
           />
           <span className="text-base text-center whitespace-pre-line text-theme-accent-deep">
             {'Bloom with Bloo & Blue.'}

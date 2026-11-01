@@ -17,8 +17,8 @@ const HomeAnalysisCard = ({
     />
     <span className="flex min-w-0 flex-1 flex-col gap-1">
       <span className="font-semibold desktop:text-lg">하루하루 쌓아온 나의 발자취</span>
-      <span className="text-sm desktop:text-base text-theme-text-secondary">
-        감정 일기, 습관, 거리두기 흐름을 한눈에 파악해요.
+      <span className="tracking-tighter text-sm desktop:text-base text-theme-text-secondary">
+        감정, 습관, 거리두기 흐름을 파악해요.
       </span>
     </span>
   </button>
