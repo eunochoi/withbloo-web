@@ -147,8 +147,8 @@ const DiaryHabitMonthCalendar = ({
                     <EmotionImage
                       emotion={emotion}
                       alt=""
-                      className="h-full max-h-full w-full object-contain tablet:max-h-[40px] tablet:max-w-[40px]"
-                      style={{ rotate: `${rotationDegrees}deg` }}
+                      className="h-full max-h-[48px] w-full max-w-[48px] object-contain"
+                      style={{ rotate: `${rotationDegrees}deg`, transform: 'scale(1.2)' }}
                     />
                   ) : (
                     <span>{day.dayNumber}</span>
