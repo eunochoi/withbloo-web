@@ -260,7 +260,6 @@ export async function getSoberMemos(
       where: {
         soberId,
         sober: { userId: auth.userId },
-        memo: { not: null },
         ...(cursor && date
           ? {
               OR: [

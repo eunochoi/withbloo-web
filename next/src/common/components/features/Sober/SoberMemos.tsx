@@ -35,13 +35,13 @@ export default function SoberMemos({
   const items = query.data?.pages.flatMap((page) => page.items) ?? [];
   return (
     <>
-      <PanelDialog ariaLabel={`${name} 메모`} onClose={onClose}>
-        <PanelHeader title={`${name} 메모`} />
+      <PanelDialog ariaLabel={`${name} 기록`} onClose={onClose}>
+        <PanelHeader title={`${name} 기록`} />
         <PanelBody showScrollFade>
           <div className="flex flex-col gap-3 pb-7 pt-6">
             <button
               type="button"
-              aria-label={`메모 기록 정렬, ${sort === 'DESC' ? '최신순' : '과거순'}`}
+              aria-label={`다시 시작 기록 정렬, ${sort === 'DESC' ? '최신순' : '과거순'}`}
               onClick={() => setSorting(true)}
               className="mb-3 flex min-h-11 items-center gap-1 self-end text-sm text-theme-accent"
             >
@@ -53,11 +53,11 @@ export default function SoberMemos({
                 role="status"
                 className="py-16 text-center text-theme-text-secondary"
               >
-                메모 기록 불러오는 중
+                다시 시작 기록 불러오는 중
               </p>
             ) : query.isError && !query.data ? (
               <div className="space-y-3 py-16 text-center">
-                <p>메모 기록을 불러오지 못했어요.</p>
+                <p>다시 시작 기록을 불러오지 못했어요.</p>
                 <button
                   type="button"
                   onClick={() => void query.refetch()}
@@ -97,18 +97,20 @@ export default function SoberMemos({
                           <MoreIcon />
                         </button>
                       </div>
-                      <p className="whitespace-pre-wrap text-sm tracking-tighter text-theme-text-secondary">
-                        {record.memo}
-                      </p>
+                      {record.memo && (
+                        <p className="whitespace-pre-wrap text-sm tracking-tighter text-theme-text-secondary">
+                          {record.memo}
+                        </p>
+                      )}
                     </div>
                   </div>
                 );
               })
             ) : (
               <div className="flex min-h-48 flex-col items-center justify-center gap-3 text-center">
-                <p>아직 남긴 메모가 없어요.</p>
+                <p>아직 다시 시작한 기록이 없어요.</p>
                 <p className="text-sm text-theme-text-secondary">
-                  다시 시작할 때 남긴 메모를 여기서 모아볼 수 있어요.
+                  다시 시작한 기록을 여기서 모아볼 수 있어요.
                 </p>
               </div>
             )}
@@ -116,8 +118,8 @@ export default function SoberMemos({
               <div role="alert" className="space-y-2 text-center">
                 <p className="text-sm text-theme-text-secondary">
                   {query.isFetchNextPageError
-                    ? '다음 메모를 불러오지 못했어요.'
-                    : '메모 기록을 새로 불러오지 못했어요.'}
+                    ? '다음 기록을 불러오지 못했어요.'
+                    : '다시 시작 기록을 새로 불러오지 못했어요.'}
                 </p>
                 <button
                   type="button"
@@ -139,7 +141,7 @@ export default function SoberMemos({
                 className="min-h-11 text-theme-accent disabled:opacity-40"
               >
                 {query.isFetchingNextPage
-                  ? '메모 기록 더 불러오는 중'
+                  ? '다시 시작 기록 더 불러오는 중'
                   : '더 보기'}
               </button>
             )}
@@ -149,7 +151,7 @@ export default function SoberMemos({
       <AnimatePresence>
         {sorting && (
           <SortPicker
-            title="메모 기록 정렬"
+            title="다시 시작 기록 정렬"
             sortLabel="다시 시작 일시 정렬"
             value={sort}
             options={[
