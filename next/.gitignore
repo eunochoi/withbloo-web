@@ -15,6 +15,8 @@
 # next.js
 /.next/
 /.next-dev/
+/.next-onboarding-refactor-temp/
+/.next-onboarding-user-temp/
 /out/
 
 # production
