@@ -7,7 +7,7 @@ import { useSettingsContext } from '@/common/settings/useSettingsContext';
 import { EMOTION_ICON_STYLE_LABELS, EMOTION_ICON_STYLE_LIST } from '@/common/types/setting';
 import { cn } from '@/common/utils/cn';
 
-export const EmotionIconStyleSelector = ({ compact = false }: { compact?: boolean }) => {
+export const EmotionIconStyleSelector = ({ compact = false, choiceClassName }: { compact?: boolean; choiceClassName?: string }) => {
   const { emotionIcon } = useSettingsContext();
 
   return (
@@ -21,6 +21,7 @@ export const EmotionIconStyleSelector = ({ compact = false }: { compact?: boolea
               'relative flex min-w-0 cursor-pointer flex-col items-center justify-center gap-1 border px-2 py-2 rounded-xl transition-colors',
               compact ? 'gap-1 py-2' : 'h-24',
               emotionIcon.style === style ? 'border-theme-accent bg-theme-accent-light/50' : 'border-0',
+              choiceClassName,
             )}
           >
             <input
