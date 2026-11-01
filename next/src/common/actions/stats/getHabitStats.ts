@@ -1,5 +1,6 @@
 'use server';
 
+import { formatDateInTimezone, getUserTimezone } from '../../utils/date/userTimezone';
 import { prisma } from '../../../../lib/prisma';
 import { getAuth } from '../../auth/getAuth';
 import type { ActionResult } from '../types';
@@ -12,39 +13,27 @@ export const getHabitStats = async ({ year }: YearParams): Promise<ActionResult<
     if (!auth.ok) return createAuthErrorResult(auth);
 
     const { startDate, endDate } = getYearRange(year);
-    const [allHabits, diaries] = await Promise.all([
+    const timezone = await getUserTimezone();
+    const today = formatDateInTimezone(new Date(), timezone);
+    const [allHabits, records] = await Promise.all([
       prisma.habit.findMany({
-        where: { email: auth.email },
+        where: { email: auth.email, priority: { gt: 0 } },
         select: {
           id: true,
           name: true,
           priority: true,
           iconKey: true,
+          iconColor: true,
+          initialStartedAt: true,
         },
       }),
-      prisma.diary.findMany({
-        where: {
-          email: auth.email,
-          date: {
-            gte: startDate,
-            lte: endDate,
-          },
-        },
-        select: {
-          id: true,
-          visible: true,
-          date: true,
-          habits: {
-            select: {
-              id: true,
-              name: true,
-              priority: true,
-            },
-          },
-        },
+      prisma.habitCompletion.findMany({
+        where: { habit: { userId: auth.userId }, date: { gte: startDate, lte: endDate } },
+        select: { habitId: true, date: true },
       }),
     ]);
 
+    const startedDates = new Map(allHabits.map((habit) => [habit.id, formatDateInTimezone(habit.initialStartedAt, timezone)]));
     const habitCounts: Record<number, HabitCount> = {};
     allHabits.forEach((habit) => {
       habitCounts[habit.id] = {
@@ -52,19 +41,13 @@ export const getHabitStats = async ({ year }: YearParams): Promise<ActionResult<
         name: habit.name,
         priority: habit.priority,
         iconKey: habit.iconKey,
+        iconColor: habit.iconColor,
         count: 0,
       };
     });
 
-    diaries.forEach((diary) => {
-      const habits = diary.habits;
-      if (habits.length > 0) {
-        habits.forEach((habit) => {
-          if (habitCounts[habit.id]) {
-            habitCounts[habit.id].count += 1;
-          }
-        });
-      }
+    records.forEach((record) => {
+      if (habitCounts[record.habitId] && record.date >= startedDates.get(record.habitId)! && record.date <= today) habitCounts[record.habitId].count += 1;
     });
 
     const sortedHabits = Object.values(habitCounts)

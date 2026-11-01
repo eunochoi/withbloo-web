@@ -36,7 +36,7 @@ export const HabitList = ({ tempHabits, onOrderChange }: HabitListProps) => {
       onDragEnd={handleDragEnd}
       modifiers={[restrictToVerticalAxis, restrictToParentElement]}
     >
-      <div className="w-full divide-y divide-theme-border/60">
+      <div className="w-full">
         <SortableContext items={tempHabits.map((habit) => habit.id)} strategy={verticalListSortingStrategy}>
           {tempHabits.map((tempHabit) => (
             <HabitItem key={tempHabit.id} habit={tempHabit} />

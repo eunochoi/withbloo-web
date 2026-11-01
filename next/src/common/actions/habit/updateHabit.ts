@@ -1,5 +1,9 @@
 'use server';
 
+import { isHabitIconColor } from '../../constants/habitIconColors';
+import { isValidHabitStartedAt } from '../../functions/habitStats';
+import { getUserTimezone } from '../../utils/date/userTimezone';
+
 import { prisma } from '../../../../lib/prisma';
 import { getAuth } from '../../auth/getAuth';
 import { isValidHabitIconKey } from '../../constants/habitIcons';
@@ -18,10 +22,11 @@ import {
   parseHabitId,
 } from './utils';
 
-export const updateHabit = async ({ habitId, habitName, priority, iconKey }: HabitFormParams): Promise<ActionResult<HabitData>> => {
+export const updateHabit = async ({ habitId, habitName, priority, iconKey, iconColor, initialStartedAt }: HabitFormParams): Promise<ActionResult<HabitData>> => {
   try {
     const auth = await getAuth();
     if (!auth.ok) return createAuthErrorResult(auth);
+    const timezone = await getUserTimezone();
 
     const parsedHabitId = parseHabitId(habitId);
     if (!parsedHabitId) {
@@ -32,6 +37,12 @@ export const updateHabit = async ({ habitId, habitName, priority, iconKey }: Hab
     }
     if (!isValidHabitPriority(priority)) {
       return { ok: false, code: 'INVALID_HABIT_PRIORITY', message: '습관 우선순위가 올바르지 않습니다.' };
+    }
+    if (iconColor !== undefined && !isHabitIconColor(iconColor)) {
+      return { ok: false, code: 'INVALID_HABIT_COLOR', message: '아이콘 색상을 다시 선택해주세요.' };
+    }
+    if (initialStartedAt !== undefined && !isValidHabitStartedAt(initialStartedAt)) {
+      return { ok: false, code: 'INVALID_HABIT_START', message: '시작 일시는 1900년 이후의 현재 또는 과거 시각으로 입력해주세요.' };
     }
     const normalizedHabitName = habitName.trim();
     if (iconKey !== undefined && !isValidHabitIconKey(iconKey)) {
@@ -44,6 +55,10 @@ export const updateHabit = async ({ habitId, habitName, priority, iconKey }: Hab
 
     if (!habit) {
       return { ok: false, code: 'HABIT_NOT_FOUND', message: '습관이 존재하지 않습니다.' };
+    }
+
+    if (initialStartedAt !== undefined && initialStartedAt !== habit.initialStartedAt.toISOString()) {
+      return { ok: false, code: 'HABIT_START_IMMUTABLE', message: '시작 일시는 저장 후 변경할 수 없어요.' };
     }
 
     const duplicateName = await prisma.habit.findFirst({
@@ -64,10 +79,11 @@ export const updateHabit = async ({ habitId, habitName, priority, iconKey }: Hab
         name: normalizedHabitName,
         priority,
         ...(iconKey !== undefined ? { iconKey } : {}),
+        ...(iconColor !== undefined ? { iconColor } : {}),
       },
     });
 
-    return { ok: true, data: formatHabitData(updatedHabit) };
+    return { ok: true, data: formatHabitData(updatedHabit, timezone) };
   } catch (error) {
     console.error(error);
     return createServerErrorResult();

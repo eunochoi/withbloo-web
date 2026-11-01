@@ -22,7 +22,7 @@ const HabitFormNameInput = ({
         className="min-h-12 w-full border-none bg-transparent text-base leading-8 text-theme-text-primary placeholder:text-theme-text-tertiary"
         maxLength={HABIT_NAME_MAX_LENGTH}
         onChange={(event) => setName(event.currentTarget.value)}
-        placeholder="꾸준히 이어가고 싶은 습관을 적어보세요."
+        placeholder="매일 물 마시기"
         value={name}
       />
       <div id="habit-name-count" className={cn('flex flex-wrap items-center justify-end gap-x-3 gap-y-1 text-xs tabular-nums', isOverLimit ? 'text-theme-danger' : 'text-theme-text-tertiary')}>

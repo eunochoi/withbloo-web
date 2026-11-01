@@ -2,28 +2,31 @@
 
 import AppPageLayout from '@/common/components/layout/AppPageLayout';
 import HabitPageSkeleton from './_components/HabitPageSkeleton';
-import HabitPageTopSection from './_components/HabitPageTopSection';
+import AppPageTitle from '@/common/components/layout/AppPageTitle';
 import HabitPageToolbar from './_components/HabitPageToolbar';
 import { useHabitSortPreferences } from './_hooks/useHabitSortPreferences';
 
 const HabitLoading = () => {
-  const { sortValue, priorityFirst, onToggleSort, onTogglePriorityFirst } = useHabitSortPreferences();
+  const { sortValue, priorityFirst } = useHabitSortPreferences();
 
   return (
     <AppPageLayout
-      topSection={<HabitPageTopSection />}
+      header={<AppPageTitle title="습관 관리" hashtags="#실천 #성장" />}
       toolbar={
         <HabitPageToolbar
-          onToggle={onToggleSort}
-          onTogglePriorityFirst={onTogglePriorityFirst}
+          onToggle={() => {}}
+          onOpenFilter={() => {}}
+          completedOnly={false}
+          priorities={[]}
           onAddHabit={() => {}}
           sortValue={sortValue}
           priorityFirst={priorityFirst}
           disabledAdd
         />
       }
-      mainSection={<HabitPageSkeleton />}
-    />
+    >
+      <HabitPageSkeleton />
+    </AppPageLayout>
   );
 };
 

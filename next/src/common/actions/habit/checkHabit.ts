@@ -41,48 +41,24 @@ export const checkHabit = async ({ habitId, date }: CheckHabitParams): Promise<A
 
       const habit = await tx.habit.findFirst({
         where: { userId: auth.userId, id: habitId },
-        select: { id: true, createdAt: true },
+        select: { id: true, initialStartedAt: true },
       });
       if (!habit) throw new Error('HABIT_NOT_FOUND');
-      if (date < formatDateInTimezone(habit.createdAt, timezone)) {
-        throw new Error('HABIT_DATE_BEFORE_CREATION');
+      if (date < formatDateInTimezone(habit.initialStartedAt, timezone)) {
+        throw new Error('HABIT_DATE_BEFORE_START');
       }
 
-      const diary = await tx.diary.upsert({
-        where: {
-          userId_date: {
-            userId: user.id,
-            date,
-          },
-        },
+      await tx.habitCompletion.upsert({
+        where: { habitId_date: { habitId: habit.id, date } },
+        create: { habitId: habit.id, date },
         update: {},
-        create: {
-          visible: false,
-          userId: user.id,
-          email: auth.email,
-          emotion: 0,
-          date,
-          text: '-',
-        },
-        select: { id: true },
-      });
-
-      // Diary와 Habit의 암시적 N:M 연결에 habit을 추가한다.
-      // 이미 연결되어 있으면 Prisma가 같은 연결을 중복으로 만들지 않는다.
-      await tx.diary.update({
-        where: { id: diary.id },
-        data: {
-          habits: {
-            connect: { id: habit.id },
-          },
-        },
       });
     });
 
     return { ok: true, data: 'checked' };
   } catch (error) {
-    if (error instanceof Error && error.message === 'HABIT_DATE_BEFORE_CREATION') {
-      return { ok: false, code: 'HABIT_DATE_BEFORE_CREATION', message: '습관을 만든 날짜 이전에는 완료를 기록할 수 없습니다.' };
+    if (error instanceof Error && error.message === 'HABIT_DATE_BEFORE_START') {
+      return { ok: false, code: 'HABIT_DATE_BEFORE_START', message: '습관 시작일 이전에는 완료를 기록할 수 없습니다.' };
     }
     if (error instanceof Error && error.message === 'USER_NOT_FOUND') {
       return { ok: false, code: 'USER_NOT_FOUND', message: '유저 정보가 존재하지 않습니다.' };

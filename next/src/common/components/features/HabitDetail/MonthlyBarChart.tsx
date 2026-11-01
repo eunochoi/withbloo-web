@@ -4,9 +4,10 @@ import { cn } from "@/common/utils/cn";
 interface Props {
   rootClassName?: string;
   data?: number[];
+  color?: string;
 }
 
-const MonthlyBarChart = ({ data, rootClassName }: Props) => {
+const MonthlyBarChart = ({ data, rootClassName, color }: Props) => {
   const maxCount = Math.max(...(data ?? [1]), 1);
 
   return (
@@ -23,7 +24,7 @@ const MonthlyBarChart = ({ data, rootClassName }: Props) => {
                 <div className="min-h-[18px] text-sm text-theme-text-tertiary">{hasValue && count}</div>
                 <div
                   className={hasValue ? "min-h-1 w-3/5 max-w-5 rounded-[3px] bg-theme-accent transition-[height] duration-200 ease-in-out" : "min-h-1 w-3/5 max-w-5 rounded-[3px] bg-theme-text-primary/15 transition-[height] duration-200 ease-in-out"}
-                  style={{ height: `${height}px` }}
+                  style={{ height: `${height}px`, ...(hasValue && color ? { backgroundColor: color } : {}) }}
                 />
               </div>
               <span className="text-sm text-theme-text-tertiary">{i + 1}</span>

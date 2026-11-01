@@ -1,8 +1,13 @@
-import { getHabitById, getHabitList, getHabitMonthData, getHabitPageData, getHabitYearlyStatus, getHabitsByDate, getTodayHabitStat } from '@/common/actions/habit';
+import { getHabitById, getHabitFlow, getHabitList, getHabitMonthData, getHabitPageData, getHabitYearlyStatus, getHabitsByDate, getTodayHabitStat } from '@/common/actions/habit';
 import type { QueryActionRunner } from '@/common/queries/queryAction';
 import { queryOptions } from '@tanstack/react-query';
 
 export const habitQueries = {
+  flow: (date: string, runAction: QueryActionRunner) => queryOptions({
+    queryKey: ['habit', 'flow', date],
+    queryFn: () => runAction(() => getHabitFlow({ date })),
+    staleTime: 60_000,
+  }),
   page: (date: string, runAction: QueryActionRunner) => queryOptions({
     queryKey: ['habits', 'page', date],
     queryFn: () => runAction(() => getHabitPageData({ date })),
@@ -23,8 +28,8 @@ export const habitQueries = {
     queryFn: () => runAction(() => getHabitsByDate({ date })),
     staleTime: 60_000,
   }),
-  todayStat: (runAction: QueryActionRunner) => queryOptions({
-    queryKey: ['habit', 'today-stat'],
+  todayStat: (runAction: QueryActionRunner, date?: string) => queryOptions({
+    queryKey: ['habit', 'today-stat', date],
     queryFn: () => runAction(getTodayHabitStat),
     staleTime: 60_000,
   }),

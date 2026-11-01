@@ -1,3 +1,4 @@
+import type { HabitIconColorKey } from '../../../constants/habitIconColors';
 import type { Habit } from '@prisma/client';
 import type { HabitIconKey } from '../../../constants/habitIcons';
 import type { HabitSort } from '../../../types/sort';
@@ -26,6 +27,8 @@ export type HabitFormParams = {
   habitName: string;
   priority: number;
   iconKey?: string;
+  iconColor?: string;
+  initialStartedAt?: string;
 };
 
 export type DeleteHabitParams = {
@@ -37,9 +40,13 @@ export type CheckHabitParams = {
   date: string;
 };
 
-export type HabitData = Omit<Habit, 'userId' | 'createdAt' | 'updatedAt' | 'iconKey'> & {
+export type HabitData = Omit<Habit, 'userId' | 'createdAt' | 'updatedAt' | 'iconKey' | 'iconColor' | 'initialStartedAt'> & {
   UserId: number;
   iconKey: HabitIconKey;
+  iconColor: HabitIconColorKey;
+  initialStartedAt: string;
+  startedDate: string;
+  latestRecordedDate?: string | null;
   createdAt: string;
   updatedAt: string;
 };
@@ -49,6 +56,7 @@ export type HabitPageData = HabitData & { recentDateStatus: boolean[] };
 export type TodayHabitStat = {
   createdHabits: number;
   todayDoneHabits: number;
+  excludedCompleted: number;
 };
 
 export type HabitByDate = {
@@ -56,10 +64,13 @@ export type HabitByDate = {
   name: string;
   priority: number;
   iconKey: string;
+  iconColor: string;
+  canEdit: boolean;
   completed: boolean;
 };
 
 export type HabitsByDate = {
+  summary: { total: number; completed: number; excludedCompleted: number };
   habits: HabitByDate[];
   canEdit: boolean;
   isFuture: boolean;

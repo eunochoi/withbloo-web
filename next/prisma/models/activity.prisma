@@ -1,7 +1,6 @@
 model Diary {
   id        Int      @id @default(autoincrement())
   email     String   @db.VarChar(30)
-  visible   Boolean
   emotion   Int
   text      String
   date      String   @db.VarChar(10)
@@ -13,8 +12,6 @@ model Diary {
   user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   // Diary 1 : N Image
   images Image[]
-  // Diary N : M Habit — 암시적 관계 테이블
-  habits Habit[] @relation("DiaryHabit")
 
   @@unique([userId, date])
   @@index([userId, date])
@@ -27,16 +24,67 @@ model Habit {
   name      String   @db.VarChar(50)
   priority  Int
   iconKey   String   @default("goal") @db.VarChar(32)
+  iconColor String   @default("theme") @db.VarChar(32)
+  initialStartedAt DateTime @default(now())
   userId    Int      @map("UserId")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   // Habit N : 1 User, onDelete: Cascade - 사용자를 삭제하면 습관도 함께 삭제
   user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  // Habit N : M Diary — 암시적 관계 테이블
-  diaries Diary[] @relation("DiaryHabit")
+  completions HabitCompletion[]
 
   @@unique([userId, name])
   @@index([userId])
   @@map("Habit")
+}
+
+model HabitCompletion {
+  habitId   Int
+  date      String @db.VarChar(10)
+  createdAt DateTime @default(now())
+  habit     Habit @relation(fields: [habitId], references: [id], onDelete: Cascade)
+
+  @@id([habitId, date])
+  @@index([date])
+}
+
+// Keep one-off SQL data migrations recorded across prisma db push operations.
+model DataMigration {
+  name      String   @id
+  appliedAt DateTime @default(now())
+
+  @@map("_TookDataMigration")
+}
+
+model Sober {
+  id               Int            @id @default(autoincrement())
+  userId           Int
+  name             String         @db.VarChar(30)
+  description      String?        @db.VarChar(500)
+  iconKey          String
+  iconColor        String         @default("theme")
+  isPriority       Boolean        @default(false)
+  initialStartedAt DateTime
+  goalMode         String         @default("AUTO")
+  goalDays         Int?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  user             User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  restarts         SoberRestart[]
+
+  @@unique([userId, name])
+  @@index([userId, createdAt])
+}
+
+model SoberRestart {
+  id          Int      @id @default(autoincrement())
+  soberId     Int
+  restartedAt DateTime
+  memo        String?  @db.VarChar(500)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  sober       Sober    @relation(fields: [soberId], references: [id], onDelete: Cascade)
+
+  @@index([soberId, restartedAt, id])
 }

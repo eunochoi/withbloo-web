@@ -69,7 +69,12 @@ export const useHabitSortPreferences = () => {
     }
   }, [setSortPreferences, storageKey]);
 
+  const setSort = useCallback((value: typeof sortValue, priority: boolean) => {
+    setSortPreferences((previous) => ({ ...previous, habit: value, habitPriorityFirst: value === 'CUSTOM' ? false : priority }));
+  }, [setSortPreferences]);
+
   return {
+    setSort,
     customHabitOrder,
     setCustomHabitOrder,
     sortValue,

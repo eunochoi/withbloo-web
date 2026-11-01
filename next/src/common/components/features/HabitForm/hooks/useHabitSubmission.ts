@@ -60,12 +60,14 @@ export const useHabitSubmission = ({
         queryClient.invalidateQueries({ queryKey: ['habits'] }),
         queryClient.invalidateQueries({ queryKey: ['habit'] }),
         queryClient.invalidateQueries({ queryKey: ['stats'] }),
+        queryClient.invalidateQueries({ queryKey: ['diary'] }),
+        queryClient.invalidateQueries({ queryKey: ['diary-habit'] }),
       ]);
       onSuccess();
       setTimeout(() => showNotice(successMessage), 300);
     } catch (error) {
       console.error(failureMessage, error);
-      showNotice(failureMessage);
+      showNotice(error instanceof Error ? error.message : failureMessage);
     } finally {
       setIsSubmitting(false);
     }

@@ -8,6 +8,7 @@ type UpdateHabitRequestParams = {
   name: string;
   priority: number;
   iconKey: HabitIconKey;
+  iconColor: string;
 };
 
 export const updateHabitRequest = async ({
@@ -15,6 +16,7 @@ export const updateHabitRequest = async ({
   name,
   priority,
   iconKey,
+  iconColor,
 }: UpdateHabitRequestParams): Promise<HabitData> =>
   authAction(() =>
     updateHabit({
@@ -22,5 +24,6 @@ export const updateHabitRequest = async ({
       habitName: name,
       priority,
       iconKey,
+      iconColor,
     }),
   );

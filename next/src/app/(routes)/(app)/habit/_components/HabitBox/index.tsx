@@ -9,7 +9,6 @@ import { useQueryClient } from "@tanstack/react-query";
 import { format, parseISO, subDays } from "date-fns";
 import { memo, useRef, useState } from "react";
 
-import { MdCheck } from "react-icons/md";
 import HabitBoxHeader from "./HabitBoxHeader";
 import HabitBoxRecentDays from "./HabitBoxRecentDays";
 
@@ -18,17 +17,18 @@ interface Props {
   id: number;
   priority: number;
   iconKey: string;
+  iconColor: string;
+  startedDate: string;
   recentDateStatus: boolean[];
   todayString: string;
 }
 
-const HabitBox = ({ name, id, priority, iconKey, recentDateStatus, todayString }: Props) => {
+const HabitBox = ({ name, id, priority, iconKey, iconColor, startedDate, recentDateStatus, todayString }: Props) => {
   const queryClient = useQueryClient();
   const [isMenuOpen, setMenuOpen] = useState(false);
   const [isUpdating, setUpdating] = useState(false);
   const updatingRef = useRef(false);
 
-  const todayCompleted = recentDateStatus[0];
 
 
   const onToggleHabit = async (checked: boolean, dateString: string) => {
@@ -44,7 +44,8 @@ const HabitBox = ({ name, id, priority, iconKey, recentDateStatus, todayString }
       }
 
       void Promise.all([
-        queryClient.invalidateQueries({ queryKey: ['habit', 'today-stat'], exact: true }),
+        queryClient.invalidateQueries({ queryKey: ['habit', 'today-stat'] }),
+        queryClient.invalidateQueries({ queryKey: ['habit', 'flow'] }),
         queryClient.invalidateQueries({ queryKey: ['habit', 'date'] }),
         queryClient.invalidateQueries({ queryKey: ['habit', 'id', String(id)] }),
         queryClient.invalidateQueries({ queryKey: ['diary'] }),
@@ -77,33 +78,25 @@ const HabitBox = ({ name, id, priority, iconKey, recentDateStatus, todayString }
   const controlsDisabled = isUpdating;
 
   return (
-    <article className={cn("relative mx-auto flex h-full w-full min-w-0 flex-col gap-4 bg-theme-surface px-2 py-4 desktop:px-4 desktop:py-6", isMenuOpen && "z-10")}>
+    <article className={cn("gap-4 relative mx-auto flex h-full w-full min-w-0 flex-col bg-theme-surface px-2 py-5 desktop:px-4", isMenuOpen && "z-10")}>
       <HabitBoxHeader
         id={id}
         name={name}
         priority={priority}
         iconKey={iconKey}
+        iconColor={iconColor}
         isMenuOpen={isMenuOpen}
         setMenuOpen={setMenuOpen}
       />
       <HabitBoxRecentDays
+        iconColor={iconColor}
         name={name}
+        startedDate={startedDate}
         recentDateStatus={recentDateStatus}
         todayString={todayString}
         controlsDisabled={controlsDisabled}
         onToggleHabit={onToggleHabit}
       />
-      <button
-        type="button"
-        disabled={controlsDisabled || todayCompleted}
-        onClick={() => onToggleHabit(true, todayString)}
-        className={cn(
-          "w-full min-h-10 mt-auto self-start rounded-xl px-3 py-2 text-sm transition-colors disabled:cursor-not-allowed",
-          todayCompleted ? "bg-theme-bg text-theme-text-secondary" : "bg-theme-accent/75 text-theme-text-on-accent",
-        )}
-      >
-        {todayCompleted ? <span className="flex justify-center items-center gap-2"><MdCheck className="shrink-0" />오늘 완료했어요</span> : '오늘 완료하기'}
-      </button>
     </article>
   );
 };

@@ -1,5 +1,12 @@
 'use client';
 
+import { format } from 'date-fns';
+import { isValidHabitStartedAt } from '@/common/functions/habitStats';
+import HabitFormIconPicker from './HabitFormIconPicker';
+import HabitFormColorPicker from './HabitFormColorPicker';
+import HabitFormPriorityPicker from './HabitFormPriorityPicker';
+import HabitFormDatePicker from './HabitFormDatePicker';
+import HabitFormRecordOptions from './HabitFormRecordOptions';
 import { authAction } from '@/common/auth/authAction';
 import { habitQueries } from '@/common/queries/habitQueries';
 import { showNotice } from '@/common/components/ui/Notice/notice';
@@ -32,6 +39,7 @@ interface HabitFormClientPageProps {
 
 const HabitFormClientPage = ({ isEdit, habitId }: HabitFormClientPageProps) => {
   const router = useRouter();
+  const [picker, setPicker] = useState<'priority' | 'icon' | 'color' | 'date' | null>(null);
   const [isDialogMounted, setIsDialogMounted] = useState(true);
   const {
     data: habitData,
@@ -48,6 +56,10 @@ const HabitFormClientPage = ({ isEdit, habitId }: HabitFormClientPageProps) => {
     setPriority,
     iconKey,
     setIconKey,
+    iconColor,
+    setIconColor,
+    startedAtInput,
+    setStartedAtInput,
   } = useHabitForm();
   const isFormInitialized = useSyncHabitDataToForm({
     enabled: isEdit,
@@ -55,6 +67,8 @@ const HabitFormClientPage = ({ isEdit, habitId }: HabitFormClientPageProps) => {
     setName,
     setPriority,
     setIconKey,
+    setIconColor,
+    setStartedAtInput,
   });
   const isHabitLoadFailure = useHandleHabitFormLoadFailure({
     isEdit,
@@ -63,32 +77,25 @@ const HabitFormClientPage = ({ isEdit, habitId }: HabitFormClientPageProps) => {
     isError,
     isPending,
   });
-  const saveHabit = isEdit
-    ? (habitName: string) => {
-      if (!habitId) {
-        throw new Error('HABIT_ID_REQUIRED');
-      }
-
-      return updateHabitRequest({
-        habitId,
-        name: habitName,
-        priority,
-        iconKey,
-      });
+  const saveHabit = async (habitName: string) => {
+    if (isEdit) {
+      if (!habitId) throw new Error('습관 정보를 다시 불러와주세요.');
+      return updateHabitRequest({ habitId, name: habitName, priority, iconKey, iconColor });
     }
-    : (habitName: string) =>
-      createHabitRequest({
-        name: habitName,
-        priority,
-        iconKey,
-      });
+    const date = new Date(startedAtInput);
+    if (!Number.isFinite(date.getTime()) || format(date, "yyyy-MM-dd'T'HH:mm") !== startedAtInput
+      || !isValidHabitStartedAt(date.toISOString())) {
+      throw new Error('시작 일시는 1900년 이후의 현재 또는 과거 시각으로 입력해주세요.');
+    }
+    return createHabitRequest({ name: habitName, priority, iconKey, iconColor, initialStartedAt: date.toISOString() });
+  };
   const confirmText = isEdit ? '수정' : '추가';
   const { isSubmitting, handleSubmit } = useHabitSubmission({
     name,
     priority,
     saveHabit,
-    successMessage: isEdit ? '습관 항목 수정 완료' : '습관 항목 생성 완료',
-    failureMessage: isEdit ? '습관 항목 수정 실패' : '습관 항목 생성 실패',
+    successMessage: isEdit ? '습관을 수정했어요' : '습관을 추가했어요',
+    failureMessage: isEdit ? '저장하지 못했어요' : '저장하지 못했어요',
     onSuccess: () => setIsDialogMounted(false),
   });
 
@@ -110,23 +117,25 @@ const HabitFormClientPage = ({ isEdit, habitId }: HabitFormClientPageProps) => {
   }
 
   return (
+    <>
     <AnimatePresence onExitComplete={() => router.back()}>
       {isDialogMounted && (
         <PanelDialog
-          ariaLabel={`목표 습관 ${confirmText}`}
+          ariaLabel={`습관 항목 ${confirmText}`}
           dismissible={!isSubmitting}
           onClose={handleBack}
         >
           <PanelHeader
-            title={`목표 습관 ${confirmText}`}
+            title={`습관 항목 ${confirmText}`}
             onBack={handleBack}
           />
           <PanelBody showScrollFade>
             <fieldset disabled={isSubmitting} className="m-0 flex min-w-0 w-full flex-col gap-7 border-0 pb-6 pt-2">
-              <div className="flex w-full flex-col gap-6">
+              <div className="flex w-full flex-col gap-7">
                 <HabitFormNameSection name={name} setName={setName} />
-                <HabitFormPrioritySection priority={priority} setPriority={setPriority} />
-                <HabitFormIconSection iconKey={iconKey} setIconKey={setIconKey} />
+                <HabitFormPrioritySection priority={priority} onOpen={() => setPicker('priority')} />
+                <HabitFormIconSection iconKey={iconKey} iconColor={iconColor} onOpen={() => setPicker('icon')} />
+                <HabitFormRecordOptions iconColor={iconColor} startedAtInput={startedAtInput} isEdit={isEdit} onOpenColor={() => setPicker('color')} onOpenDate={() => setPicker('date')} />
               </div>
             </fieldset>
           </PanelBody>
@@ -134,7 +143,7 @@ const HabitFormClientPage = ({ isEdit, habitId }: HabitFormClientPageProps) => {
             <PanelSubmitButton
               type="button"
               onClick={handleSubmit}
-              disabled={isSubmitting || name.length > HABIT_NAME_MAX_LENGTH}
+              disabled={isSubmitting || !name.trim() || name.length > HABIT_NAME_MAX_LENGTH}
               aria-busy={isSubmitting}
             >
               {isSubmitting && <span aria-hidden="true" className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent motion-reduce:animate-none" />}
@@ -144,6 +153,13 @@ const HabitFormClientPage = ({ isEdit, habitId }: HabitFormClientPageProps) => {
         </PanelDialog>
       )}
     </AnimatePresence>
+    <AnimatePresence>
+      {picker === 'priority' && <HabitFormPriorityPicker value={priority} onClose={() => setPicker(null)} onApply={(value) => { setPriority(value); setPicker(null); }} />}
+      {picker === 'icon' && <HabitFormIconPicker value={iconKey} iconColor={iconColor} onClose={() => setPicker(null)} onApply={(value) => { setIconKey(value); setPicker(null); }} />}
+      {picker === 'color' && <HabitFormColorPicker value={iconColor} onClose={() => setPicker(null)} onApply={(value) => { setIconColor(value); setPicker(null); }} />}
+      {picker === 'date' && !isEdit && <HabitFormDatePicker value={startedAtInput} onClose={() => setPicker(null)} onApply={(value) => { setStartedAtInput(value); setPicker(null); }} />}
+    </AnimatePresence>
+    </>
   );
 };
 

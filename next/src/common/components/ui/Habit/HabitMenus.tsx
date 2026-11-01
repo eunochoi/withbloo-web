@@ -13,9 +13,10 @@ interface Props {
   isMenuOpen: boolean;
   setMenuOpen: Dispatch<SetStateAction<boolean>>;
   onDeleted?: () => void;
+  showDetail?: boolean;
 }
 
-const HabitMenus = ({ habitId, habitName, priority, isMenuOpen, setMenuOpen, onDeleted }: Props) => {
+const HabitMenus = ({ habitId, habitName, isMenuOpen, setMenuOpen, onDeleted, showDetail = false }: Props) => {
   const queryClient = useQueryClient();
   const router = useRouter();
 
@@ -35,14 +36,13 @@ const HabitMenus = ({ habitId, habitName, priority, isMenuOpen, setMenuOpen, onD
     }
   };
 
-  const starText = priority === 0 ? '★' : priority === 1 ? '★★' : '★★★';
-
   return (
     <Menus
       isOpen={isMenuOpen}
       onClose={() => setMenuOpen(false)}
-      title={`${habitName} (${starText})`}
-      message="목표가 바뀌었다면 언제든 수정하거나 삭제해 보세요"
+      title={habitName}
+      kind="habit"
+      onDetail={showDetail ? () => router.push(`/habit/${habitId}`, { scroll: false }) : undefined}
       onEdit={() => router.push(`/habit/${habitId}/edit`, { scroll: false })}
       onDelete={onDelete}
     />

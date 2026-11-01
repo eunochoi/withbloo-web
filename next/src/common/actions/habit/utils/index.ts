@@ -1,3 +1,5 @@
+import { getHabitIconColor } from '../../../constants/habitIconColors';
+import { formatDateInTimezone } from '../../../utils/date/userTimezone';
 import type { Habit } from '@prisma/client';
 import { getHabitIconKey } from '../../../constants/habitIcons';
 
@@ -42,9 +44,9 @@ export const validateDateFormat = (dateString: string | undefined) => {
 };
 
 export const getYearRange = (year: string | number | null | undefined) => {
-  const parsedYear = typeof year === 'string' ? parseInt(year, 10) : year;
+  const parsedYear = typeof year === 'string' ? Number(year) : year;
 
-  if (!parsedYear || Number.isNaN(parsedYear) || parsedYear < 1900 || parsedYear > 2100) {
+  if (!parsedYear || !Number.isInteger(parsedYear) || parsedYear < 1900 || parsedYear > 2100) {
     throw new Error('INVALID_YEAR');
   }
 
@@ -57,7 +59,7 @@ export const getYearRange = (year: string | number | null | undefined) => {
 export const parseHabitId = (id: string | number | null | undefined) => {
   const habitId = Number(id);
 
-  if (!id || Number.isNaN(habitId)) {
+  if (!Number.isSafeInteger(habitId) || habitId <= 0) {
     return null;
   }
 
@@ -77,7 +79,7 @@ export const isValidHabitPriority = (priority: unknown): priority is number => {
     && priority <= HABIT_PRIORITY_MAX;
 };
 
-export const formatHabitData = (habit: Habit): HabitData => {
+export const formatHabitData = (habit: Habit, timezone: string): HabitData => {
   return {
     UserId: habit.userId,
     id: habit.id,
@@ -85,6 +87,9 @@ export const formatHabitData = (habit: Habit): HabitData => {
     name: habit.name,
     priority: habit.priority,
     iconKey: getHabitIconKey(habit.iconKey),
+    iconColor: getHabitIconColor(habit.iconColor),
+    initialStartedAt: habit.initialStartedAt.toISOString(),
+    startedDate: formatDateInTimezone(habit.initialStartedAt, timezone),
     createdAt: habit.createdAt.toISOString(),
     updatedAt: habit.updatedAt.toISOString(),
   };

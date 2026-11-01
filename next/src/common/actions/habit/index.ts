@@ -11,3 +11,5 @@ export { getTodayHabitStat } from './getTodayHabitStat';
 export { uncheckHabit } from './uncheckHabit';
 export { updateHabit } from './updateHabit';
 export type { HabitByDate, HabitData, HabitPageData, HabitsByDate, TodayHabitStat } from './types';
+
+export { getHabitFlow } from './getHabitFlow';

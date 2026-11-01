@@ -29,7 +29,7 @@ export const getHabitMonthData = async ({ id, month }: {
 
     const habit = await prisma.habit.findFirst({
       where: { id: habitId, userId: auth.userId },
-      select: { createdAt: true },
+      select: { initialStartedAt: true, priority: true },
     });
     if (!habit) {
       return { ok: false, code: 'HABIT_NOT_FOUND', message: '습관을 찾을 수 없습니다.' };
@@ -37,21 +37,21 @@ export const getHabitMonthData = async ({ id, month }: {
 
     const timezone = await getUserTimezone();
     const today = formatDateInTimezone(new Date(), timezone);
-    const createdDate = formatDateInTimezone(habit.createdAt, timezone);
-    const { editableFrom, lastLockedDate } = getHabitDateWindow(today);
+    const startedDate = formatDateInTimezone(habit.initialStartedAt, timezone);
+    const { editableFrom } = getHabitDateWindow(today);
 
-    const records = await prisma.diary.findMany({
+    const records = await prisma.habitCompletion.findMany({
       where: {
-        userId: auth.userId,
+        habit: { userId: auth.userId },
         date: { gte: range.startDate, lte: range.endDate },
-        habits: { some: { id: habitId } },
+        habitId,
       },
       select: { date: true },
     });
 
     const daysByDate: HabitMonthData['daysByDate'] = {};
     for (const record of records) {
-      // 생성일 이전의 기존 기록도 표시하되 통계에서는 제외한다.
+      // 시작일 이전의 기존 기록도 표시하되 통계에서는 제외한다.
       daysByDate[record.date] = true;
     }
 
@@ -60,16 +60,16 @@ export const getHabitMonthData = async ({ id, month }: {
       data: {
         month,
         today,
-        createdDate,
+        startedDate,
         editableFrom,
         daysByDate,
         summary: getHabitMonthSummary({
           monthStart: range.startDate,
           monthEnd: range.endDate,
-          createdDate,
+          startedDate,
           today,
-          lastLockedDate,
           completedDates: records.map(({ date }) => date),
+          isFree: habit.priority === 0,
         }),
       },
     };

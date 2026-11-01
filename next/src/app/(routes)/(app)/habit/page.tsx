@@ -7,7 +7,7 @@ import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query
 import HabitClientPage from "./HabitClientPage";
 
 export const metadata: Metadata = {
-  title: '습관 만들기',
+  title: '습관 관리',
   description: '나만의 습관을 만들고 매일의 실천을 기록해요.',
 };
 

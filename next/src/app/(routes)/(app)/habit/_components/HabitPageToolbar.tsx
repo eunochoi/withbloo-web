@@ -1,53 +1,43 @@
 'use client';
 
-import ToolbarButton from "@/common/components/ui/ToolbarButton";
-import type { HabitSort } from "@/common/types/sort";
-import { FaPlus } from "react-icons/fa6";
-import { MdSort } from "react-icons/md";
+import Toolbar from '@/common/components/ui/Toolbar';
 
-import { IoMdStar, IoMdStarOutline } from "react-icons/io";
+import { AddIcon, FilterIcon, SortIcon } from '@/common/constants/appIcons';
+
+import ToolbarButton from '@/common/components/ui/ToolbarButton';
+import ToolbarSelectionButton from '@/common/components/ui/ToolbarSelectionButton';
+import { getSelectionSummary, getToolbarSortParts } from '@/common/functions/toolbarSummary';
+import type { HabitSort } from '@/common/types/sort';
 
 
-const HABIT_SORT_LABELS: Record<HabitSort, string> = {
-  ASC: '과거순',
-  DESC: '최신순',
-  CUSTOM: '커스텀'
-};
 
 interface Props {
   onToggle: () => void;
-  onTogglePriorityFirst: () => void;
+  onOpenFilter: () => void;
+  completedOnly: boolean;
+  priorities: number[];
   onAddHabit: () => void;
   sortValue: HabitSort;
   priorityFirst: boolean;
   disabledAdd?: boolean;
 }
 
-const HabitPageToolbar = ({ onToggle, onTogglePriorityFirst, onAddHabit, sortValue, priorityFirst, disabledAdd = false }: Props) => {
+const HabitPageToolbar = ({ onToggle, onOpenFilter, completedOnly, priorities, onAddHabit, sortValue, priorityFirst, disabledAdd = false }: Props) => {
+  const filterParts = [
+    ...(completedOnly ? ['완료'] : []),
+    ...(priorities.length > 0 && priorities.length < 4 ? priorities.map((priority) => priority === 0 ? '자유' : <span key={priority} className="text-theme-accent">{'★'.repeat(priority)}</span>) : []),
+  ];
+  const showPriority = sortValue !== 'CUSTOM' && priorityFirst;
+  const sortDescription = sortValue === 'CUSTOM' ? '커스텀' : `${showPriority ? '중요한 항목 먼저 · ' : ''}생성일 ${sortValue === 'DESC' ? '최신순' : '과거순'}`;
+  const filterDescription = `${completedOnly ? '오늘 완료' : '완료 상태 전체'}, 중요도 ${getSelectionSummary(priorities.map((priority) => priority === 0 ? '자유 기록' : '★'.repeat(priority)), 4)}`;
   return (
-    <div className='w-full flex justify-between'>
-      <div className='flex gap-2'>
-        <ToolbarButton onClick={onToggle}>
-          <MdSort size={18} className="shrink-0" aria-hidden="true" />
-          {HABIT_SORT_LABELS[sortValue]}
-        </ToolbarButton>
-        {sortValue !== 'CUSTOM' && (
-          <ToolbarButton
-            aria-label="중요도 우선"
-            aria-pressed={priorityFirst}
-            title="중요도 우선"
-            onClick={onTogglePriorityFirst}
-          >
-            {priorityFirst ? <IoMdStar size={20} fill={priorityFirst ? 'currentColor' : 'none'} aria-hidden="true" /> : <IoMdStarOutline size={20} aria-hidden="false" />}
-          </ToolbarButton>
-        )}
+    <Toolbar>
+      <ToolbarSelectionButton onClick={onToggle} icon={<SortIcon size={18} aria-hidden="true" />} parts={getToolbarSortParts(sortValue, priorityFirst)} accessibilityLabel={`습관 정렬, ${sortDescription}`} />
+      <ToolbarSelectionButton onClick={onOpenFilter} icon={<FilterIcon size={18} aria-hidden="true" />} parts={filterParts.length ? filterParts : ['필터']} accessibilityLabel={`습관 필터, ${filterDescription}`} />
+      <div className="ml-auto shrink-0">
+        <ToolbarButton aria-label="습관 추가" onClick={onAddHabit} title="습관 추가" disabled={disabledAdd}><AddIcon size={18} aria-hidden="true" /></ToolbarButton>
       </div>
-      <div className='flex gap-2'>
-        <ToolbarButton aria-label="습관 추가" onClick={onAddHabit} title="습관 추가" disabled={disabledAdd}>
-          <FaPlus size={18} aria-hidden="true" />
-        </ToolbarButton>
-      </div>
-    </div>
+    </Toolbar>
   );
 };
 

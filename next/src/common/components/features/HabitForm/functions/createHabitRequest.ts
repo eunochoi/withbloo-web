@@ -7,17 +7,23 @@ type CreateHabitRequestParams = {
   name: string;
   priority: number;
   iconKey: HabitIconKey;
+  iconColor: string;
+  initialStartedAt: string;
 };
 
 export const createHabitRequest = async ({
   name,
   priority,
   iconKey,
+  iconColor,
+  initialStartedAt,
 }: CreateHabitRequestParams): Promise<HabitData> =>
   authAction(() =>
     createHabit({
       habitName: name,
       priority,
       iconKey,
+      iconColor,
+      initialStartedAt,
     }),
   );

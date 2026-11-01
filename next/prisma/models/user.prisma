@@ -11,6 +11,7 @@ model User {
   diaries         Diary[]
   // User 1 : N Habit
   habits          Habit[]
+  sobers          Sober[]
   // User 1 : N RefreshSession
   refreshSessions RefreshSession[]
   // User N : M ImageContent — 사용자가 사용할 수 있는 이미지 콘텐츠 목록

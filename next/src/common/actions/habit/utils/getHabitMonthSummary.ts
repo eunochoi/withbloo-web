@@ -6,41 +6,28 @@ import { parseLocalDate } from '../../../utils/date/parseLocalDate';
 interface Params {
   monthStart: string;
   monthEnd: string;
-  createdDate: string;
+  startedDate: string;
   today: string;
-  lastLockedDate: string;
   completedDates: string[];
+  isFree?: boolean;
 }
 
 export const getHabitMonthSummary = ({
-  monthStart, monthEnd, createdDate, today, lastLockedDate, completedDates,
+  monthStart, monthEnd, startedDate, today, completedDates, isFree = false,
 }: Params): HabitMonthData['summary'] => {
-  const targetStart = createdDate > monthStart ? createdDate : monthStart;
-  const hasTargetDays = targetStart <= monthEnd;
-  const targetDays = hasTargetDays
-    ? differenceInCalendarDays(parseLocalDate(monthEnd), parseLocalDate(targetStart)) + 1
+  const targetStart = startedDate > monthStart ? startedDate : monthStart;
+  const targetEnd = today < monthEnd ? today : monthEnd;
+  const targetDays = targetStart <= targetEnd
+    ? differenceInCalendarDays(parseLocalDate(targetEnd), parseLocalDate(targetStart)) + 1
     : 0;
-  const completedThrough = today < monthEnd ? today : monthEnd;
-  const lockedThrough = lastLockedDate < monthEnd ? lastLockedDate : monthEnd;
-
-  let completedCount = 0;
-  let lockedCompletedCount = 0;
-  for (const date of completedDates) {
-    if (date < targetStart || date > monthEnd) continue;
-    if (date <= completedThrough) completedCount += 1;
-    if (date <= lockedThrough) lockedCompletedCount += 1;
-  }
-
-  const lockedTargetDays = hasTargetDays
-    ? Math.max(0, differenceInCalendarDays(parseLocalDate(lockedThrough), parseLocalDate(targetStart)) + 1)
-    : 0;
-
+  const completedCount = new Set(completedDates.filter((date) => date >= targetStart && date <= targetEnd)).size;
   return {
-    periodStart: hasTargetDays ? targetStart : null,
-    periodEnd: hasTargetDays ? monthEnd : null,
+    periodStart: targetDays ? targetStart : null,
+    periodEnd: targetDays ? targetEnd : null,
     targetDays,
     completedCount,
-    completionRate: targetDays > 0 ? Number(((completedCount / targetDays) * 100).toFixed(1)) : null,
-    missedCount: Math.max(0, lockedTargetDays - lockedCompletedCount),
+    completionRate: !isFree && targetDays ? Number(((completedCount / targetDays) * 100).toFixed(1)) : null,
+    missedCount: isFree ? null : Math.max(0, targetDays - completedCount),
+    averageInterval: completedCount ? targetDays / completedCount : null,
   };
 };

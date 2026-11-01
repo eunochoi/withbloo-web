@@ -1,5 +1,6 @@
 'use server';
 
+import { formatDateInTimezone, getUserTimezone } from '../../utils/date/userTimezone';
 import { prisma } from '../../../../lib/prisma';
 import { getAuth } from '../../auth/getAuth';
 import type { ActionResult } from '../types';
@@ -12,13 +13,15 @@ export const uncheckHabit = async ({ habitId, date }: CheckHabitParams): Promise
     const auth = await getAuth();
     if (!auth.ok) return createAuthErrorResult(auth);
 
-    if (habitId == null || date == null) {
+    if (!Number.isSafeInteger(habitId) || habitId <= 0 || date == null) {
       return { ok: false, code: 'INVALID_HABIT_CHECK_INPUT', message: 'habitId와 date는 필수입니다.' };
     }
     if (!validateDateFormat(date)) {
       return { ok: false, code: 'INVALID_DATE', message: '날짜 형식이 올바르지 않습니다. (yyyy-MM-dd)' };
     }
-    const { canEdit, isFuture } = await getHabitDateAccess(date);
+    const timezone = await getUserTimezone();
+    const today = formatDateInTimezone(new Date(), timezone);
+    const { canEdit, isFuture } = await getHabitDateAccess(date, { today });
     if (!canEdit) {
       return {
         ok: false,
@@ -38,37 +41,24 @@ export const uncheckHabit = async ({ habitId, date }: CheckHabitParams): Promise
 
       const habit = await tx.habit.findFirst({
         where: { email: auth.email, id: habitId },
-        select: { id: true },
+        select: { id: true, initialStartedAt: true },
       });
       if (!habit) throw new Error('HABIT_NOT_FOUND');
+      if (date < formatDateInTimezone(habit.initialStartedAt, timezone)) throw new Error('HABIT_DATE_BEFORE_START');
 
-      const diary = await tx.diary.findFirst({
-        where: { email: auth.email, date },
-        select: { id: true },
-      });
-      if (!diary) throw new Error('DIARY_NOT_FOUND');
-
-      // Diary와 Habit의 암시적 N:M 연결에서 해당 habit만 해제한다.
-      await tx.diary.update({
-        where: { id: diary.id },
-        data: {
-          habits: {
-            disconnect: { id: habit.id },
-          },
-        },
-      });
+      await tx.habitCompletion.deleteMany({ where: { habitId: habit.id, date } });
     });
 
     return { ok: true, data: 'unchecked' };
   } catch (error) {
+    if (error instanceof Error && error.message === 'HABIT_DATE_BEFORE_START') {
+      return { ok: false, code: 'HABIT_DATE_BEFORE_START', message: '습관 시작일 이전에는 기록을 변경할 수 없습니다.' };
+    }
     if (error instanceof Error && error.message === 'USER_NOT_FOUND') {
       return { ok: false, code: 'USER_NOT_FOUND', message: '유저 정보가 존재하지 않습니다.' };
     }
     if (error instanceof Error && error.message === 'HABIT_NOT_FOUND') {
       return { ok: false, code: 'HABIT_NOT_FOUND', message: '습관이 존재하지 않습니다.' };
-    }
-    if (error instanceof Error && error.message === 'DIARY_NOT_FOUND') {
-      return { ok: false, code: 'DIARY_NOT_FOUND', message: '다이어리가 존재하지 않습니다.' };
     }
 
     console.error(error);

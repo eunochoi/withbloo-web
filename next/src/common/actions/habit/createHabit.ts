@@ -1,5 +1,9 @@
 'use server';
 
+import { DEFAULT_HABIT_ICON_COLOR, isHabitIconColor } from '../../constants/habitIconColors';
+import { isValidHabitStartedAt } from '../../functions/habitStats';
+import { getUserTimezone } from '../../utils/date/userTimezone';
+
 import { prisma } from '../../../../lib/prisma';
 import { getAuth } from '../../auth/getAuth';
 import { DEFAULT_HABIT_ICON_KEY, isValidHabitIconKey } from '../../constants/habitIcons';
@@ -18,16 +22,23 @@ import {
   isValidHabitPriority,
 } from './utils';
 
-export const createHabit = async ({ habitName, priority, iconKey = DEFAULT_HABIT_ICON_KEY }: HabitFormParams): Promise<ActionResult<HabitData>> => {
+export const createHabit = async ({ habitName, priority, iconKey = DEFAULT_HABIT_ICON_KEY, iconColor = DEFAULT_HABIT_ICON_COLOR, initialStartedAt }: HabitFormParams): Promise<ActionResult<HabitData>> => {
   try {
     const auth = await getAuth();
     if (!auth.ok) return createAuthErrorResult(auth);
+    const timezone = await getUserTimezone();
 
     if (!isValidHabitName(habitName)) {
       return { ok: false, code: 'INVALID_HABIT_NAME', message: `습관 이름은 ${HABIT_NAME_MIN_LENGTH}~${HABIT_NAME_MAX_LENGTH}자로 입력해주세요.` };
     }
     if (!isValidHabitPriority(priority)) {
       return { ok: false, code: 'INVALID_HABIT_PRIORITY', message: '습관 우선순위가 올바르지 않습니다.' };
+    }
+    if (iconColor !== undefined && !isHabitIconColor(iconColor)) {
+      return { ok: false, code: 'INVALID_HABIT_COLOR', message: '아이콘 색상을 다시 선택해주세요.' };
+    }
+    if (initialStartedAt !== undefined && !isValidHabitStartedAt(initialStartedAt)) {
+      return { ok: false, code: 'INVALID_HABIT_START', message: '시작 일시는 1900년 이후의 현재 또는 과거 시각으로 입력해주세요.' };
     }
     const normalizedHabitName = habitName.trim();
     if (!isValidHabitIconKey(iconKey)) {
@@ -66,10 +77,12 @@ export const createHabit = async ({ habitName, priority, iconKey = DEFAULT_HABIT
         name: normalizedHabitName,
         priority,
         iconKey,
+        iconColor,
+        initialStartedAt: initialStartedAt ? new Date(initialStartedAt) : new Date(),
       },
     });
 
-    return { ok: true, data: formatHabitData(habit) };
+    return { ok: true, data: formatHabitData(habit, timezone) };
   } catch (error) {
     console.error(error);
     return createServerErrorResult();

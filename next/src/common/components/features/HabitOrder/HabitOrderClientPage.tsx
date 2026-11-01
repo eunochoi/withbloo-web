@@ -1,5 +1,6 @@
 'use client';
 
+import { ResetIcon, UndoIcon } from '@/common/constants/appIcons';
 import { sortHabits } from '@/common/functions/sortHabits';
 
 import { authAction } from '@/common/auth/authAction';
@@ -80,11 +81,12 @@ export const HabitOrderClientPage = () => {
           <PanelHeader title='습관 순서 설정' onBack={() => setIsDialogMounted(false)} />
           <PanelBody showScrollFade>
             <div className="flex w-full flex-col gap-4 py-6">
-              <p className="text-sm text-theme-text-secondary">드래그하거나 방향키로 습관 순서를 변경하세요.</p>
-              <div className="flex flex-wrap items-center justify-end gap-x-5 gap-y-2 text-sm">
-                <button className="text-theme-text-secondary disabled:opacity-40" disabled={!hasChanges} onClick={onCancelChanges} type="button">변경사항 취소</button>
-                <button className="text-theme-text-secondary disabled:opacity-40" disabled={!tempHabits || (isDefaultOrder && customHabitOrder.length === 0)} onClick={onResetToDefault} type="button">기본 순서로 초기화</button>
+              <div className="flex gap-3">
+                <button className="flex min-h-12 min-w-0 flex-1 items-center justify-center gap-2 rounded-xl border border-theme-accent/30 px-2 py-2 text-sm text-theme-accent-text transition-opacity hover:opacity-65 disabled:opacity-40" disabled={!hasChanges} onClick={onCancelChanges} type="button"><UndoIcon className="shrink-0 text-lg" aria-hidden="true" />변경사항 취소</button>
+                <button className="flex min-h-12 min-w-0 flex-1 items-center justify-center gap-2 rounded-xl border border-theme-accent/20 bg-theme-accent-light px-2 py-2 text-center text-sm text-theme-accent-text transition-opacity hover:opacity-65 disabled:opacity-40" disabled={!tempHabits || (isDefaultOrder && customHabitOrder.length === 0)} onClick={onResetToDefault} type="button"><ResetIcon className="shrink-0 text-lg" aria-hidden="true" />기본 순서로 초기화</button>
               </div>
+              {isPending && <p role="status" className="py-4 text-center text-sm text-theme-text-secondary">습관을 불러오는 중이에요.</p>}
+              {isError && <div className="py-4 text-center text-sm text-theme-text-secondary">습관을 불러오지 못했어요. <button type="button" onClick={() => void refetch()} className="text-theme-accent">다시 시도</button></div>}
               {tempHabits && <HabitList tempHabits={tempHabits} onOrderChange={setTempHabits} />}
             </div>
           </PanelBody>
