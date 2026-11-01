@@ -9,9 +9,9 @@ const SideBar = () => {
   const { items, current, navigate } = useNavItems();
 
   return (
-    <aside className={cn("bg-theme-bg flex h-full w-full flex-col  overflow-y-auto border-r border-theme-border/75 px-3 py-8 desktop:px-5", BG_TRANSITION_CLASS)}>
+    <aside className={cn("flex h-full w-full flex-col overflow-y-auto border-r border-theme-border/75 px-3 py-8 desktop:px-5", current === 'home' ? "bg-theme-surface" : "bg-theme-bg", BG_TRANSITION_CLASS)}>
       <button type="button" onClick={() => navigate('/home')} aria-label="위블 홈" className="mb-10 self-center rounded-lg desktop:ml-3 desktop:self-start">
-        <Wordmark className="text-[28px] desktop:text-[36px]" />
+        <Wordmark className="text-[18px] desktop:text-[32px]" />
       </button>
       <nav className="flex flex-col gap-2" aria-label="주요 메뉴">
         {items.map(({ key, segment, icon: Icon, href, label }) => (
