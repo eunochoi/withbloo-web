@@ -8,7 +8,7 @@ const LoginTopSection = () => (
     <section
       aria-labelledby="login-intro-title"
       className={`w-full flex flex-col gap-12 px-6 pt-12 pb-0 tablet:px-10 desktop:gap-24 desktop:px-12 desktop:pt-10 desktop:pb-0 xl:px-20`}>
-      <Wordmark className="text-6xl desktop:text-7xl" />
+      <Wordmark className="text-5xl desktop:text-7xl" />
 
       <div className="flex flex-col gap-6">
         <h1 id="login-intro-title" className="flex flex-col gap-2 text-3xl desktop:text-4xl font-bold tracking-tight">

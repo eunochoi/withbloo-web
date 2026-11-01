@@ -8,6 +8,7 @@ import { useRef, useState } from 'react';
 import { PiBrowserFill, PiDeviceMobileFill, PiFloppyDiskBackFill } from 'react-icons/pi';
 import { twMerge } from 'tailwind-merge';
 import IntroHero from './_components/IntroHero';
+import IntroInfoCard from './_components/IntroInfoCard';
 import IntroSection from './_components/IntroSection';
 import {
   introContainerClass,
@@ -48,8 +49,8 @@ const IntroClientPage = () => {
     <div className="static-theme-blue h-[100dvh] w-full overflow-y-auto bg-theme-bg text-theme-text-primary">
       <IntroHero />
       <IntroSection
-        hashtag="#파란마음 #분홍빛하루"
-        title="안녕, 나는 블루야!"
+        hashtag="#블루 #파란날 #분홍날"
+        title={"안녕, 나는 '블루'야!"}
         description={['파란 날에도, 분홍빛 날에도', '나는 여전히 나야!']}
       >
         <div
@@ -128,10 +129,10 @@ const IntroClientPage = () => {
       <IntroSection
         bordered
         reverse
-        hashtag="#오늘의색 #마음한조각"
+        hashtag="#감정 #일기 #오늘의색"
         title="오늘의 마음을 남겨요"
         description={[
-          '오늘은 어떤 색이었나요?',
+          '오늘은 어떤 색의 하루였나요?',
           '그 마음을 있는 그대로 기록해요.',
         ]}
       >
@@ -141,11 +142,11 @@ const IntroClientPage = () => {
       </IntroSection>
       <IntroSection
         bordered
-        hashtag="#작은걸음 #나를돌보는시간"
+        hashtag="#습관 #거리두기 #한걸음"
         title="나를 위한 작은 실천"
         description={[
           '이어가고 싶은 습관은 쌓고',
-          '멀어지고 싶은 것과는 거리를 둬요.',
+          '줄이고 싶은 것과는 거리를 둬요.',
         ]}
       >
         <div className="rounded-[20px] bg-theme-accent-light p-8 text-center text-theme-text-secondary">
@@ -155,7 +156,7 @@ const IntroClientPage = () => {
       <IntroSection
         bordered
         reverse
-        hashtag="#차곡차곡 #우리의발자국"
+        hashtag="#기록 #통계 #발자국"
         title="하루하루 쌓이는 발자국"
         description={[
           '지나온 날들을 가만히 펼치면',
@@ -175,50 +176,29 @@ const IntroClientPage = () => {
         >
           <div className="flex flex-col gap-5 text-center">
             <span className="text-base font-semibold text-theme-accent-deep desktop:text-lg">
-              #언제어디서나 #블루와함께
+              #웹 #앱 #내방식
             </span>
             <h2 className={cn(introTitleClass, 'text-center')}>
-              위블, 나에게 맞는 방식으로
+              나에게 맞는 방식으로 시작해요
             </h2>
           </div>
-          <div className="grid auto-rows-fr gap-6 tablet:grid-cols-2 text-theme-text-secondary leading-relaxed">
-            <div className="flex items-center gap-5 rounded-[20px] bg-theme-accent-light p-6 leading-8">
-              <PiBrowserFill
-                aria-hidden="true"
-                className="shrink-0 text-4xl text-theme-accent"
-              />
-              <div className="min-w-0">
-                <strong className="text-lg text-theme-text-primary">웹</strong>
-                <p className="mt-3 break-keep">
-                  계정으로 기록하고, 여러 기기에서 이어가요.
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center gap-5 rounded-[20px] bg-theme-accent-light p-6 leading-8">
-              <PiDeviceMobileFill
-                aria-hidden="true"
-                className="shrink-0 text-4xl text-theme-accent"
-              />
-              <div className="min-w-0">
-                <strong className="text-lg text-theme-text-primary">앱</strong>
-                <p className="mt-3 break-keep">
-                  계정 없이 내 기기에 기록을 남겨요.
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className="flex items-center gap-5 rounded-[20px] bg-theme-accent-light p-6 leading-8 text-theme-text-secondary">
-            <PiFloppyDiskBackFill
-              aria-hidden="true"
-              className="shrink-0 text-4xl text-theme-accent"
+          <div className="grid auto-rows-fr gap-6 tablet:grid-cols-2">
+            <IntroInfoCard
+              icon={PiBrowserFill}
+              title="웹"
+              description="계정으로 기록하고, 여러 기기에서 이어가요."
             />
-            <div className="min-w-0">
-              <strong className="text-lg text-theme-text-primary">백업 및 복원</strong>
-              <p className="mt-3 break-keep">
-                웹에서 백업한 기록은 앱에서 복원할 수 있어요. 앱에서는 백업과 복원을 모두 지원해요.
-              </p>
-            </div>
+            <IntroInfoCard
+              icon={PiDeviceMobileFill}
+              title="앱"
+              description="계정 없이 내 기기에 기록을 남겨요."
+            />
           </div>
+          <IntroInfoCard
+            icon={PiFloppyDiskBackFill}
+            title="백업 및 복원"
+            description="웹에서 백업한 기록은 앱에서 복원할 수 있어요. 앱에서는 백업과 복원을 모두 지원해요."
+          />
         </div>
       </section>
       <section className={twMerge(introSectionClass, 'bg-theme-accent-light')}>
