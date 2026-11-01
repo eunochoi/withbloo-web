@@ -19,7 +19,7 @@ const DiaryFormEmotionSection = ({
   const selectedEmotion = EMOTIONS.find((item) => item.id === emotion);
 
   return (
-    <div className="border-b border-theme-border-muted pb-4">
+    <div className="pb-4">
       <button
         type="button"
         aria-haspopup="dialog"

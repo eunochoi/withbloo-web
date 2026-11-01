@@ -6,7 +6,7 @@ interface DiaryFormTextSectionProps {
 }
 
 const DiaryFormTextSection = ({ text, setText }: DiaryFormTextSectionProps) => (
-  <section aria-labelledby="diary-text-title" className="flex w-full flex-col gap-3 pt-5">
+  <section aria-labelledby="diary-text-title" className="flex min-h-0 w-full flex-1 flex-col gap-3">
     <h2 id="diary-text-title" className=" text-lg font-semibold text-theme-text-primary">오늘의 이야기</h2>
     <DiaryFormTextarea text={text} setText={setText} />
   </section>

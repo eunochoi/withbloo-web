@@ -4,6 +4,7 @@ import { authAction } from '@/common/auth/authAction';
 import { diaryQueries } from '@/common/queries/diaryQueries';
 import { showNotice } from '@/common/components/ui/Notice/notice';
 import { DIARY_TEXT_MAX_LENGTH } from '@/common/constants/diary';
+import { DIARY_EMOTION_GROUPS } from '@/common/constants/diaryFilters';
 import { isValidLocalDateString } from '@/common/utils/date/isValidLocalDateString';
 import { parseLocalDate } from '@/common/utils/date/parseLocalDate';
 import { arrayMove } from '@dnd-kit/sortable';
@@ -14,7 +15,9 @@ import { AnimatePresence } from 'framer-motion';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import Image from 'next/image';
-import standingCat from '/public/img/bloolog/cats/cat-blue-standing.png';
+import neutralCat from '/public/img/bloolog/cats/cat-blue.png';
+import positiveCat from '/public/img/bloolog/cats/cat-blue-p.png';
+import negativeCat from '/public/img/bloolog/cats/cat-blue-n.png';
 import { PanelDialog } from '../../ui/Dialog/PanelDialog';
 import { PanelBody } from '../../ui/Dialog/PanelDialog/PanelBody';
 import { PanelFooter } from '../../ui/Dialog/PanelDialog/PanelFooter';
@@ -79,6 +82,11 @@ const DiaryFormClientPage = ({ isEdit, diaryId }: DiaryFormClientPageProps) => {
   const date = isEdit ? selectedDate ?? diaryData?.date ?? null : selectedDate;
   const effectiveDate = isEdit && diaryData && selectedDate === null ? diaryData.date : date;
   const headerTitle = effectiveDate ? format(parseLocalDate(effectiveDate), 'yyyy. M. d. EEEE', { locale: ko }) : '날짜를 선택해주세요';
+  const cat = (DIARY_EMOTION_GROUPS.positive.emotions as readonly number[]).includes(emotion)
+    ? positiveCat
+    : (DIARY_EMOTION_GROUPS.negative.emotions as readonly number[]).includes(emotion)
+      ? negativeCat
+      : neutralCat;
   const saveDiary = isEdit
     ? (imageContentIds: string[]) => {
       if (!diaryId) {
@@ -140,13 +148,13 @@ const DiaryFormClientPage = ({ isEdit, diaryId }: DiaryFormClientPageProps) => {
             onBack={handleBack}
             onTitleClick={allowDateChange && !isSubmitting ? () => setIsDatePickerOpen(true) : undefined}
           />
-          <PanelBody showScrollFade contentClassName="flex flex-col">
-            <fieldset disabled={isSubmitting} className="m-0 flex min-w-0 w-full flex-1 flex-col gap-7 border-0 pb-6 pt-2">
-              <div className="w-full">
-                <DiaryFormEmotionSection
-                  emotion={emotion}
-                  setEmotion={setEmotion}
-                />
+          <PanelBody showScrollFade contentClassName="flex h-full min-h-full flex-col">
+            <fieldset disabled={isSubmitting} className="m-0 flex h-full min-h-0 w-full flex-1 flex-col justify-between border-0 pt-2">
+              <DiaryFormEmotionSection
+                emotion={emotion}
+                setEmotion={setEmotion}
+              />
+              <div className="flex min-h-0 w-full flex-1 flex-col">
                 <DiaryFormTextSection
                   text={text}
                   setText={setText}
@@ -160,8 +168,8 @@ const DiaryFormClientPage = ({ isEdit, diaryId }: DiaryFormClientPageProps) => {
                 onReorder={(from, to) => setDiaryImages((images) => arrayMove(images, from, to))}
                 isLoading={isSubmitting}
               />
-              <div className="flex flex-1 items-center justify-center py-4" aria-hidden="true">
-                <Image src={standingCat} alt="" className="h-auto w-36 max-w-full" sizes="144px" />
+              <div className="flex shrink-0 items-center justify-center pt-2" aria-hidden="true">
+                <Image src={cat} alt="" className="h-auto w-44 max-w-full" sizes="176px" />
               </div>
             </fieldset>
           </PanelBody>
