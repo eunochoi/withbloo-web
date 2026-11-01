@@ -18,7 +18,6 @@ export function CalendarGuidePage() {
     <OnboardingFrame
       title="달력에서 한눈에 봐요"
       description="지난 감정과 습관을 함께 살펴볼 수 있어요."
-      info={'자유 기록 습관은 완료율 계산에 포함되지 않아요.'}
     >
       <section className={sectionClassName}>
         <h3 className={sectionTitleClassName}>그날의 감정</h3>
