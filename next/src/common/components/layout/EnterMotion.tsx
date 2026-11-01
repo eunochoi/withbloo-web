@@ -20,7 +20,7 @@ export const EnterMotion = forwardRef<
     <motion.div
       ref={ref}
       className={cn(
-        'flex h-auto w-full flex-col',
+        'flex w-full flex-col',
         className,
       )}
       initial={

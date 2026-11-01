@@ -1,57 +1,44 @@
 'use client';
 
 import { AnimatePresence } from 'framer-motion';
-import { useId } from 'react';
+import { useId, useRef } from 'react';
 import { PickerDialog } from './PickerDialog';
-import {
-  PICKER_ACTIONS_CLASS,
-  PICKER_CONFIRM_BUTTON_CLASS,
-  PICKER_CONTENT_CLASS,
-  PICKER_DESCRIPTION_CLASS,
-  PICKER_TITLE_CLASS,
-} from './PickerDialog/constants';
 
 interface ConfirmDialogProps {
   isOpen: boolean;
   title: string;
   message: string;
   confirmLabel: string;
+  danger?: boolean;
   onClose: () => void;
   onConfirm: () => void;
 }
 
-export const ConfirmDialog = ({
-  isOpen,
-  title,
-  message,
-  confirmLabel,
-  onClose,
-  onConfirm,
-}: ConfirmDialogProps) => {
+export const ConfirmDialog = ({ isOpen, title, message, confirmLabel, danger = false, onClose, onConfirm }: ConfirmDialogProps) => {
   const id = useId();
-  const titleId = `${id}-title`;
-  const messageId = `${id}-message`;
+  const confirmed = useRef(false);
 
   return (
-    <AnimatePresence>
+    <AnimatePresence onExitComplete={() => {
+      if (confirmed.current) {
+        confirmed.current = false;
+        onConfirm();
+      }
+    }}>
       {isOpen && (
-        <PickerDialog labelledBy={titleId} describedBy={messageId} onClose={onClose}>
-          <div className={PICKER_CONTENT_CLASS}>
-            <div>
-              <h2 id={titleId} className={PICKER_TITLE_CLASS}>{title}</h2>
-              <p id={messageId} className={PICKER_DESCRIPTION_CLASS}>{message}</p>
+        <PickerDialog labelledBy={`${id}-title`} describedBy={`${id}-message`} onClose={onClose}>
+          <div className="flex w-full flex-col gap-6 pb-[max(1rem,env(safe-area-inset-bottom))]">
+            <div className="flex flex-col items-center gap-2">
+              <h2 id={`${id}-title`} className="text-center text-lg font-semibold tracking-tight text-theme-text-primary">{title}</h2>
             </div>
-            <div className={`${PICKER_ACTIONS_CLASS} flex gap-3`}>
-              <button
-                type="button"
-                className="flex min-h-12 w-full items-center justify-center rounded-full bg-theme-surface px-5  text-base text-theme-text-secondary"
-                onClick={onClose}
-              >
-                취소
-              </button>
-              <button type="button" className={PICKER_CONFIRM_BUTTON_CLASS} onClick={onConfirm}>
-                {confirmLabel}
-              </button>
+            <p id={`${id}-message`} className="text-center text-sm leading-relaxed text-theme-text-primary">{message}</p>
+            <div className="flex gap-3">
+              <button type="button" className="flex min-h-12 flex-1 items-center justify-center rounded-full border border-theme-border px-5 text-base text-theme-text-primary" onClick={onClose}>취소</button>
+              <button type="button" className={`flex min-h-12 flex-1 items-center justify-center rounded-full border border-theme-overlay/15 px-5 text-base text-theme-text-on-accent ${danger ? 'bg-theme-danger' : 'bg-theme-accent'}`} onClick={() => {
+                if (confirmed.current) return;
+                confirmed.current = true;
+                onClose();
+              }}>{confirmLabel}</button>
             </div>
           </div>
         </PickerDialog>

@@ -5,11 +5,6 @@ interface Props {
   edge: 'top' | 'bottom';
 }
 
-const positionClass = {
-  top: "top-0",
-  bottom: "bottom-0",
-} as const;
-
 export const ScrollBoundary = forwardRef<HTMLDivElement, Props>(({ edge }, ref) => {
   return (
     <div
@@ -17,7 +12,7 @@ export const ScrollBoundary = forwardRef<HTMLDivElement, Props>(({ edge }, ref) 
       aria-hidden="true"
       className={cn(
         "pointer-events-none absolute inset-x-0 h-1",
-        positionClass[edge],
+        edge === 'top' ? "top-0" : "bottom-0",
       )}
     />
   );

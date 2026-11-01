@@ -1,10 +1,12 @@
 'use client';
 
+import { ChevronLeftIcon } from '@/common/constants/appIcons';
+
 import Wordmark from '@/common/components/ui/Wordmark';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { MdArrowBackIos } from 'react-icons/md';
-import hidingCat from '/public/img/hiding-cat/hiding-cat.png';
+
+import hidingCat from '/public/img/bloolog/cats/cat-blue.png';
 
 interface Props {
   description?: string;
@@ -27,7 +29,7 @@ const DocHeader = ({ description, subtitle, title }: Props) => {
           onClick={() => router.back()}
           type="button"
         >
-          <MdArrowBackIos />
+          <ChevronLeftIcon />
         </button>
         <Wordmark className="text-5xl tablet:text-6xl" />
         <div className="flex flex-col gap-3">

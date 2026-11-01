@@ -4,9 +4,9 @@ import { cn } from '@/common/utils/cn';
 
 const WEEKDAYS = ['월', '화', '수', '목', '금', '토', '일'];
 
-export const CalendarGrid = ({ children, className, ...props }: HTMLAttributes<HTMLDivElement>) => (
+export const CalendarGrid = ({ children, className, daysClassName, ...props }: HTMLAttributes<HTMLDivElement> & { daysClassName?: string }) => (
   <div className={cn('w-full', className)} {...props}>
-    <div className="grid grid-cols-7 py-2 text-center text-sm text-theme-text-secondary">
+    <div className="mb-1.5 grid h-10 grid-cols-7 items-center text-center text-sm text-theme-text-secondary">
       {WEEKDAYS.map((weekday, index) => (
         <span
           key={weekday}
@@ -19,7 +19,7 @@ export const CalendarGrid = ({ children, className, ...props }: HTMLAttributes<H
         </span>
       ))}
     </div>
-    <div className="grid grid-cols-7 gap-1">
+    <div className={cn("grid grid-cols-7 gap-1", daysClassName)}>
       {children}
     </div>
   </div>

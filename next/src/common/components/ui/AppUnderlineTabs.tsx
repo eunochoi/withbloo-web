@@ -1,5 +1,9 @@
 import { cn } from "@/common/utils/cn";
 
+export const underlineTitleClass = "pb-2 pt-2 text-base font-normal text-theme-text-primary";
+
+export const titleMarkerClass = "h-2 w-2 shrink-0 rounded-full bg-theme-accent";
+
 interface AppUnderlineTabsOption<T extends string | number> {
   label: string;
   value: T;
@@ -17,19 +21,21 @@ const AppUnderlineTabs = <T extends string | number>({
   onChange,
 }: AppUnderlineTabsProps<T>) => {
   return (
-    <div className="flex gap-3">
+    <div className="mx-1 flex items-center gap-3">
       {options.map((option) => (
         <button
           key={option.value}
           className={cn(
-            "border-b-2 pb-1 text-base ",
+            underlineTitleClass,
+            "flex items-center gap-2 pr-2",
             value === option.value
-              ? "border-theme-accent text-theme-text-primary"
-              : "border-transparent font-normal text-theme-text-tertiary",
+              ? "text-theme-text-primary"
+              : "font-normal text-theme-text-tertiary/70",
           )}
           onClick={() => onChange(option.value)}
           type="button"
         >
+          <span aria-hidden="true" className={cn(titleMarkerClass, value !== option.value && "bg-theme-text-tertiary/70")} />
           {option.label}
         </button>
       ))}

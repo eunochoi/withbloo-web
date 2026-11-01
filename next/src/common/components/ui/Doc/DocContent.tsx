@@ -22,7 +22,7 @@ const DocContent = ({ closing, list, paragraphs, subsections, title }: Props) =>
   return (
     <DocCard className="select-text px-5 py-8 tablet:px-8 tablet:py-10">
       <h2 className="m-0 text-2xl leading-tight text-theme-text-primary">{title}</h2>
-      <div className="mt-4 flex flex-col gap-3 text-base leading-[1.8] text-theme-text-secondary">
+      <div className="mt-4 flex flex-col gap-3 text-base leading-7 text-theme-text-secondary">
         {paragraphs?.map((paragraph) => (
           <p key={paragraph} className={paragraphClass}>{paragraph}</p>
         ))}

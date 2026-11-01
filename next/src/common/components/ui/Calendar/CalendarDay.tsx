@@ -6,6 +6,7 @@ import type { CalendarDayModel } from './useMonthCalendar';
 interface Props {
   day: CalendarDayModel;
   isToday: boolean;
+  showTodayIndicator?: boolean;
   isSelected?: boolean;
   label?: string;
   className?: string;
@@ -14,10 +15,10 @@ interface Props {
 }
 
 export const CalendarDay = ({
-  day, isToday, isSelected, label, className, onClick, children,
+  day, isToday, showTodayIndicator = true, isSelected, label, className, onClick, children,
 }: Props) => {
   const cellClassName = cn(
-    'relative flex aspect-[1/1.25] min-w-0 flex-col items-center justify-center rounded-lg text-xs transition-colors',
+    'relative flex aspect-[4/5] min-w-0 flex-col items-center justify-center rounded-lg text-xs transition-colors',
     day.weekday === 6
       ? 'text-theme-calendar-saturday'
       : day.weekday === 0
@@ -32,7 +33,7 @@ export const CalendarDay = ({
   const content = (
     <>
       {children ?? day.dayNumber}
-      {isToday && !day.isOutsideMonth && (
+      {showTodayIndicator && isToday && !day.isOutsideMonth && (
         <span
           aria-hidden="true"
           className="absolute -bottom-[3px] h-1.5 w-4 rounded-full bg-theme-accent"

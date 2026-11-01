@@ -1,12 +1,16 @@
+import { AppPageContainer } from './AppPageContainer';
+
 interface Props {
   title: string;
-  description?: string;
+  hashtags: string;
 }
 
-const AppPageTitle = ({ title, description }: Props) => (
-  <header className="flex min-w-0 flex-col gap-2">
-    <h1 className="m-0  text-3xl font-bold leading-tight tracking-tight text-theme-text-primary desktop:text-3xl">{title}</h1>
-    {description && <p className="m-0 text-lg leading-relaxed text-theme-text-secondary">{description}</p>}
+const AppPageTitle = ({ title, hashtags }: Props) => (
+  <header className="bg-theme-surface pb-1 pt-8">
+    <AppPageContainer className="flex flex-col items-start gap-1">
+      <p className="m-0 text-base font-semibold text-theme-accent-deep">{hashtags}</p>
+      <h1 className="m-0 text-4xl font-bold leading-tight tracking-tight text-theme-text-primary">{title}</h1>
+    </AppPageContainer>
   </header>
 );
 

@@ -1,8 +1,6 @@
 'use client';
 
-import { cn } from "@/common/utils/cn";
 import type { ReactNode } from 'react';
-import { MdArrowBackIos } from 'react-icons/md';
 import { PANEL_HORIZONTAL_PADDING_CLASS } from './constants';
 
 interface PanelHeaderProps {
@@ -10,41 +8,12 @@ interface PanelHeaderProps {
   onBack?: () => void;
   backLabel?: string;
   rightAction?: ReactNode;
+  onTitleClick?: () => void;
 }
 
-const panelHeaderClass = "relative flex h-[var(--panel-header-height)] w-full shrink-0 items-center justify-between";
-const panelHeaderButtonClass = "text-xl flex items-center justify-center text-theme-accent";
-const panelHeaderTitleClass = "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2  text-base font-semibold text-theme-text-primary";
-
-export const PanelHeader = ({
-  title,
-  onBack,
-  backLabel = '패널 닫기',
-  rightAction,
-}: PanelHeaderProps) => {
-  return (
-    <div
-      className={cn(
-        panelHeaderClass,
-        PANEL_HORIZONTAL_PADDING_CLASS,
-      )}
-    >
-      {onBack ? (
-        <button
-          aria-label={backLabel}
-          className={panelHeaderButtonClass}
-          onClick={onBack}
-          type="button"
-        >
-          <MdArrowBackIos />
-        </button>
-      ) : <span />}
-      {title ? (
-        <span className={panelHeaderTitleClass}>
-          {title}
-        </span>
-      ) : null}
-      {rightAction ?? <span />}
-    </div>
-  );
-};
+export const PanelHeader = ({ title, rightAction, onTitleClick }: PanelHeaderProps) => (
+  <div className={`relative flex min-h-12 w-full shrink-0 items-center justify-center ${PANEL_HORIZONTAL_PADDING_CLASS}`}>
+    {title && (onTitleClick ? <button type="button" onClick={onTitleClick} className="min-h-11 px-10 text-center text-lg font-semibold tracking-tight" aria-label={`${title}, 날짜 선택`}>{title}</button> : <h2 className="px-10 text-center text-lg font-semibold tracking-tight">{title}</h2>)}
+    {rightAction && <div className="absolute right-[5%] flex items-center tablet:right-12 desktop:right-[81px]">{rightAction}</div>}
+  </div>
+);

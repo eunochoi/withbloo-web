@@ -1,78 +1,88 @@
 'use client';
 
-import { ReactNode, RefObject, useEffect, useRef } from "react";
-import { twMerge } from "tailwind-merge";
+import { ReactNode, RefObject, useEffect, useImperativeHandle, useRef, useState } from "react";
+import { AppPageContainer } from "./AppPageContainer";
 
-import { BG_TRANSITION_CLASS } from "@/common/constants/transitions";
+import { PAGE_SCROLL_TO_TOP_EVENT } from '@/common/constants/navigation';
 import { cn } from "@/common/utils/cn";
-import { BottomSafe } from "../ui/BottomSafe";
 import { ScrollContainer } from "../ui/ScrollContainer";
+import { ScrollEdgeFade } from "../ui/ScrollContainer/ScrollEdgeFade";
 import { EnterMotion } from "./EnterMotion";
 
 interface Props {
-  topSection?: ReactNode;
-  mainSection: ReactNode;
-  pageRef?: RefObject<HTMLDivElement>;
-  showScrollToTop?: boolean;
+  header?: ReactNode;
+  children: ReactNode;
+  scrollRef?: RefObject<HTMLDivElement>;
   toolbar?: ReactNode;
-  bottomSectionClass?: string;
-  bottomSafeClassName?: string;
+  fixedDesktop?: boolean;
 }
 
-export const TOP_SECTION_WRAPPER_CLASS = "w-full bg-theme-accent-light";
-
-const AppPageLayout = ({ topSection, mainSection, pageRef, showScrollToTop = false, toolbar, bottomSectionClass, bottomSafeClassName }: Props) => {
+const AppPageLayout = ({ header, children, scrollRef, toolbar, fixedDesktop = false }: Props) => {
   const layoutRef = useRef<HTMLDivElement>(null);
+  const internalScrollRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const [isToolbarPinned, setToolbarPinned] = useState(false);
   const toolbarRef = useRef<HTMLDivElement>(null);
   const hasToolbar = Boolean(toolbar);
-  const hasTopSection = Boolean(topSection);
+  const hasHeader = Boolean(header);
+
+  useImperativeHandle(scrollRef, () => internalScrollRef.current!, []);
 
   useEffect(() => {
-    const toolbar = toolbarRef.current;
-    if (!toolbar) {
-      layoutRef.current?.style.setProperty('--page-toolbar-height', '0px');
-      return;
-    }
-    const observer = new ResizeObserver(() => {
-      layoutRef.current?.style.setProperty('--page-toolbar-height', `${toolbar.getBoundingClientRect().height}px`);
-    });
-    observer.observe(toolbar);
+    const scrollToTop = () => {
+      internalScrollRef.current?.scrollTo({ top: 0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    };
+    window.addEventListener(PAGE_SCROLL_TO_TOP_EVENT, scrollToTop);
+    return () => window.removeEventListener(PAGE_SCROLL_TO_TOP_EVENT, scrollToTop);
+  }, []);
+
+  useEffect(() => {
+    const syncLayout = () => {
+      const topHeight = headerRef.current?.offsetHeight ?? 0;
+      layoutRef.current?.style.setProperty('--page-top-height', `${topHeight}px`);
+      layoutRef.current?.style.setProperty('--page-toolbar-height', `${toolbarRef.current?.offsetHeight ?? 0}px`);
+      const scrollTop = internalScrollRef.current?.scrollTop ?? 0;
+      setToolbarPinned(hasToolbar && scrollTop > 0 && scrollTop >= topHeight);
+    };
+    const observer = new ResizeObserver(syncLayout);
+    if (headerRef.current) observer.observe(headerRef.current);
+    if (toolbarRef.current) observer.observe(toolbarRef.current);
+    syncLayout();
     return () => observer.disconnect();
-  }, [hasToolbar]);
+  }, [hasToolbar, hasHeader]);
 
   return (
-    <div ref={layoutRef} className="flex h-[100dvh] w-full min-w-0 flex-col">
+    <div ref={layoutRef} className="flex h-dvh w-full min-w-0 flex-col">
       <ScrollContainer
-        ref={pageRef}
-        className="flex min-h-0 flex-1 flex-col items-center justify-start border-none"
-        contentClassName="flex min-h-full flex-col items-center justify-start"
-        scrollAreaClassName={cn("flex h-full w-full flex-col items-center justify-start")}
+        ref={internalScrollRef}
+        onScroll={(event) => {
+          const scrollTop = event.currentTarget.scrollTop;
+          setToolbarPinned(hasToolbar && scrollTop > 0 && scrollTop >= (headerRef.current?.offsetHeight ?? 0));
+        }}
+        className="flex-1"
+        contentClassName={cn("flex flex-col", fixedDesktop && "desktop:h-full desktop:min-h-0")}
+        scrollAreaClassName={fixedDesktop ? "desktop:overflow-hidden" : undefined}
+        scrollFadeClassName={fixedDesktop ? "desktop:hidden" : undefined}
         showScrollFade
-        showScrollToTop={showScrollToTop}
+        showTopFade={!hasToolbar}
       >
-        {/* top section */}
-        {hasTopSection && <div className={twMerge(TOP_SECTION_WRAPPER_CLASS,
-          BG_TRANSITION_CLASS)}>{topSection}</div>}
-        {/* bottom section : toolbar + main */}
-        <div className={twMerge(BG_TRANSITION_CLASS,
-          "w-full h-auto flex flex-col",
-          "flex-1 bg-theme-surface px-[5dvw] py-2 pb-0 tablet:px-9 tablet:py-4 desktop:px-14 desktop:pt-6 desktop:pb-24 ",
-          bottomSectionClass)} >
-          {/* bottom section container for max width */}
-          <div className="flex flex-col w-full tablet:max-w-[500px] desktop:max-w-[900px] mx-auto">
-            {/* toolbar section */}
+        {/* Keep the toolbar inside the top section while allowing the title to scroll away. */}
+        {(hasHeader || hasToolbar) && (
+          <div className={cn('shrink-0', hasToolbar && 'sticky top-[calc(-1*var(--page-top-height,0px))] z-[91]')}>
+            {hasHeader && <div ref={headerRef} className="flow-root">{header}</div>}
             {hasToolbar && (
-              <div ref={toolbarRef} data-component="pageToolbar" className={twMerge("sticky top-0 z-[91] mb-4 -mx-1 flex flex-wrap items-center gap-2 py-4")}>
-                {toolbar}
+              <div ref={toolbarRef} data-component="pageToolbar" className="relative bg-theme-surface py-2">
+                <AppPageContainer>{toolbar}</AppPageContainer>
+                <ScrollEdgeFade edge="top" visible={isToolbarPinned} className="absolute inset-x-0 top-full h-6" />
               </div>
             )}
-            {/* main section */}
-            <EnterMotion>
-              {mainSection}
-            </EnterMotion>
           </div>
-          <BottomSafe className={(twMerge(bottomSafeClassName), "desktop:hidden ")} />
-        </div>
+        )}
+        <main className={cn('flex flex-1 flex-col pb-[calc(var(--mobileNav)+env(safe-area-inset-bottom)+1rem)] tablet:pb-4 desktop:pb-24', hasToolbar ? 'pt-4' : 'tablet:pt-4 desktop:pt-6', fixedDesktop && 'tablet:pb-8 desktop:min-h-0 desktop:pb-4')}>
+          <AppPageContainer className={fixedDesktop ? "flex flex-1 flex-col desktop:min-h-0" : undefined}>
+            <EnterMotion className={fixedDesktop ? "flex-1 desktop:min-h-0" : undefined}>{children}</EnterMotion>
+          </AppPageContainer>
+        </main>
       </ScrollContainer>
     </div>
   );

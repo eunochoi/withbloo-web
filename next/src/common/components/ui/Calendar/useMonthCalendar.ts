@@ -1,6 +1,8 @@
 'use client';
 
-import { addMonths, eachDayOfInterval, endOfMonth, endOfWeek, format, startOfWeek } from 'date-fns';
+import { addDays, addMonths, format, startOfWeek } from 'date-fns';
+import { getTodayString } from '@/common/functions/getTodayString';
+import { isValidLocalDateString } from '@/common/utils/date/isValidLocalDateString';
 import { useMemo, useState } from 'react';
 
 import type { DateKey, MonthKey } from '@/common/types/calendar';
@@ -16,10 +18,9 @@ export interface CalendarDayModel {
 export const makeMonthCalendarDays = (month: MonthKey): CalendarDayModel[] => {
   const monthStart = parseLocalDate(`${month}-01`);
 
-  return eachDayOfInterval({
-    start: startOfWeek(monthStart, { weekStartsOn: 1 }),
-    end: endOfWeek(endOfMonth(monthStart), { weekStartsOn: 1 }),
-  }).map((date) => {
+  const start = startOfWeek(monthStart, { weekStartsOn: 1 });
+  return Array.from({ length: 42 }, (_, index) => {
+    const date = addDays(start, index);
     const dateKey = format(date, 'yyyy-MM-dd');
 
     return {
@@ -31,21 +32,19 @@ export const makeMonthCalendarDays = (month: MonthKey): CalendarDayModel[] => {
   });
 };
 
-export const useMonthCalendar = (initialDate: DateKey) => {
-  const [visibleMonth, setVisibleMonth] = useState<MonthKey>(() => initialDate.slice(0, 7));
+export const useMonthCalendar = (initialDate: DateKey, { minDate = '1900-01-01', maxDate = getTodayString() }: { minDate?: DateKey; maxDate?: DateKey } = {}) => {
+  const minMonth = minDate.slice(0, 7);
+  const maxMonth = maxDate.slice(0, 7);
+  const [requestedMonth, setVisibleMonth] = useState<MonthKey>(() => initialDate.slice(0, 7));
+  const visibleMonth = requestedMonth < minMonth ? minMonth : requestedMonth > maxMonth ? maxMonth : requestedMonth;
   const days = useMemo(() => makeMonthCalendarDays(visibleMonth), [visibleMonth]);
-
-  const goPreviousMonth = () => {
-    setVisibleMonth((month) => format(addMonths(parseLocalDate(`${month}-01`), -1), 'yyyy-MM'));
-  };
-
-  const goNextMonth = () => {
-    setVisibleMonth((month) => format(addMonths(parseLocalDate(`${month}-01`), 1), 'yyyy-MM'));
-  };
-
+  const isDateAvailable = (date: DateKey) => isValidLocalDateString(date) && date >= minDate && date <= maxDate;
   const showDate = (date: DateKey) => {
-    setVisibleMonth(date.slice(0, 7));
+    const month = date.slice(0, 7);
+    if (isValidLocalDateString(date) && month >= minMonth && month <= maxMonth) setVisibleMonth(month);
   };
+  const goPreviousMonth = () => showDate(format(addMonths(parseLocalDate(`${visibleMonth}-01`), -1), 'yyyy-MM-dd'));
+  const goNextMonth = () => showDate(format(addMonths(parseLocalDate(`${visibleMonth}-01`), 1), 'yyyy-MM-dd'));
 
   return {
     visibleMonth,
@@ -54,5 +53,8 @@ export const useMonthCalendar = (initialDate: DateKey) => {
     goPreviousMonth,
     goNextMonth,
     showDate,
+    isDateAvailable,
+    canGoPrevious: visibleMonth > minMonth,
+    canGoNext: visibleMonth < maxMonth,
   };
 };

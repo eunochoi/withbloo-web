@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef } from 'react';
-import type { MouseEvent, TouchEvent } from 'react';
+import type { MouseEvent, TouchEvent, WheelEvent } from 'react';
 
 export const useMonthSwipe = (goPreviousMonth: () => void, goNextMonth: () => void) => {
   const start = useRef<{ id: number; x: number; y: number } | null>(null);
@@ -52,5 +52,18 @@ export const useMonthSwipe = (goPreviousMonth: () => void, goNextMonth: () => vo
     }
   };
 
-  return { onTouchStart, onTouchMove, onTouchEnd, onTouchCancel, onClickCapture };
+  const wheel = useRef({ amount: 0, lastInput: 0, moved: false });
+  const onWheel = (event: WheelEvent<HTMLDivElement>) => {
+    if (event.ctrlKey || Math.abs(event.deltaX) <= Math.abs(event.deltaY)) return;
+    const now = Date.now();
+    if (now - wheel.current.lastInput > 250) wheel.current = { amount: 0, lastInput: now, moved: false };
+    wheel.current.lastInput = now;
+    wheel.current.amount += event.deltaX;
+    if (!wheel.current.moved && Math.abs(wheel.current.amount) >= 50) {
+      wheel.current.moved = true;
+      if (wheel.current.amount < 0) goPreviousMonth(); else goNextMonth();
+    }
+  };
+  return { onTouchStart, onTouchMove, onTouchEnd, onTouchCancel, onClickCapture, onWheel };
+
 };

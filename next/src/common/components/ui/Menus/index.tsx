@@ -1,87 +1,64 @@
+import { ChevronRightIcon, DeleteIcon, EditIcon, InfoIcon } from '@/common/constants/appIcons';
 import { AnimatePresence } from 'framer-motion';
 import { useId, useRef, useState } from 'react';
-import { MdClose } from 'react-icons/md';
+
+import { ConfirmDialog } from '../Dialog/ConfirmDialog';
 import { PickerDialog } from '../Dialog/PickerDialog';
-import {
-  PICKER_ACTIONS_CLASS,
-  PICKER_CLOSE_BUTTON_CLASS,
-  PICKER_CONFIRM_BUTTON_CLASS,
-  PICKER_CONTENT_CLASS,
-  PICKER_DANGER_BUTTON_CLASS,
-  PICKER_TITLE_CLASS
-} from '../Dialog/PickerDialog/constants';
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
   title: string;
-  message: string;
+  kind: 'diary' | 'habit' | 'sober';
+  onDetail?: () => void;
   onEdit: () => void;
   onDelete: () => void;
 }
 
-const Menus = ({ isOpen, onClose, title, message, onEdit, onDelete }: Props) => {
+const Menus = ({ isOpen, onClose, title, kind, onDetail, onEdit, onDelete }: Props) => {
   const id = useId();
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
-  const pendingAction = useRef<'edit' | 'delete' | null>(null);
-  const titleId = `${id}-title`;
-  const messageId = `${id}-message`;
+  const pendingAction = useRef<'detail' | 'edit' | 'confirm' | null>(null);
+  const label = kind === 'diary' ? '일기' : kind === 'sober' ? '거리두기' : '습관';
+  const actions = [
+    ...(onDetail ? [{ key: 'detail' as const, icon: InfoIcon, title: '상세보기', description: kind === 'diary' ? '일기와 사진을 자세히 확인해요.' : kind === 'sober' ? '거리두기 현황과 기록을 확인해요.' : '습관과 기록 흐름을 확인해요.' }] : []),
+    { key: 'edit' as const, icon: EditIcon, title: kind === 'sober' ? '수정하기' : `${label} 수정하기`, description: kind === 'diary' ? '내용과 사진을 수정해요.' : kind === 'sober' ? '이름·목표·아이콘을 바꿔요.' : '이름·우선순위 등을 바꿔요.' },
+    { key: 'confirm' as const, icon: DeleteIcon, title: kind === 'sober' ? '삭제하기' : `${label} 삭제하기`, description: kind === 'diary' ? '일기와 사진을 삭제해요.' : kind === 'sober' ? '항목과 재시작 기록을 삭제해요.' : '습관과 모든 기록을 삭제해요.' },
+  ];
 
   return (
-    <AnimatePresence onExitComplete={() => {
-      const action = pendingAction.current;
-      pendingAction.current = null;
-      setIsConfirmingDelete(false);
-      if (action === 'edit') onEdit();
-      if (action === 'delete') window.requestAnimationFrame(onDelete);
-    }}>
-      {isOpen && (
-        <PickerDialog labelledBy={titleId} describedBy={messageId} onClose={onClose}>
-          <div className={PICKER_CONTENT_CLASS}>
-            <button type="button" aria-label="메뉴 닫기" onClick={onClose} className={PICKER_CLOSE_BUTTON_CLASS}>
-              <MdClose aria-hidden="true" className="h-5 w-5" />
-            </button>
-            <div className="flex flex-col">
-              <h2 id={titleId} className={`${PICKER_TITLE_CLASS} break-words`}>{title}</h2>
-              <span id={messageId} aria-live="polite" className='mt-4 text-center text-sm text-theme-text-primary text-pretty break-keep'>
-                {isConfirmingDelete ? <>정말 삭제하시겠어요?<br />삭제한 뒤에는 되돌릴 수 없어요.</> : message}
-              </span>
+    <>
+      <AnimatePresence onExitComplete={() => {
+        const action = pendingAction.current;
+        pendingAction.current = null;
+        if (action === 'detail') onDetail?.();
+        if (action === 'edit') onEdit();
+        if (action === 'confirm') setIsConfirmingDelete(true);
+      }}>
+        {isOpen && (
+          <PickerDialog labelledBy={`${id}-title`} onClose={onClose}>
+            <div className="flex w-full flex-col gap-6 pb-[max(1rem,env(safe-area-inset-bottom))]">
+              <div className="flex flex-col items-center gap-2">
+                <h2 id={`${id}-title`} className="text-center text-lg font-semibold tracking-tight text-theme-text-primary">{title}</h2>
+              </div>
+              <div className="flex flex-col gap-3">
+                {actions.map(({ key, icon: Icon, title: actionTitle, description }) => (
+                  <button key={key} type="button" onClick={() => { pendingAction.current = key; onClose(); }} className="flex min-h-16 w-full items-center gap-4 rounded-2xl border border-theme-border p-4 text-left transition-opacity hover:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-theme-accent">
+                    <Icon className={`shrink-0 text-2xl ${key === 'confirm' ? 'text-theme-danger' : 'text-theme-accent'}`} aria-hidden="true" />
+                    <span className="flex min-w-0 flex-1 flex-col gap-1">
+                      <span className={`text-base font-semibold ${key === 'confirm' ? 'text-theme-danger' : 'text-theme-text-primary'}`}>{actionTitle}</span>
+                      <span className="text-sm leading-5 tracking-tight text-theme-text-secondary">{description}</span>
+                    </span>
+                    <ChevronRightIcon className="shrink-0 text-xl text-theme-text-tertiary" aria-hidden="true" />
+                  </button>
+                ))}
+              </div>
             </div>
-
-            <div className={`${PICKER_ACTIONS_CLASS} flex gap-3`}>
-              <button
-                type="button"
-                className={PICKER_CONFIRM_BUTTON_CLASS}
-                onClick={() => {
-                  if (isConfirmingDelete) {
-                    setIsConfirmingDelete(false);
-                    return;
-                  }
-                  pendingAction.current = 'edit';
-                  onClose();
-                }}
-              >
-                {isConfirmingDelete ? '취소' : '수정'}
-              </button>
-              <button
-                type="button"
-                className={PICKER_DANGER_BUTTON_CLASS}
-                onClick={() => {
-                  if (!isConfirmingDelete) {
-                    setIsConfirmingDelete(true);
-                    return;
-                  }
-                  pendingAction.current = 'delete';
-                  onClose();
-                }}
-              >
-                {isConfirmingDelete ? '삭제하기' : '삭제'}
-              </button>
-            </div>
-          </div>
-        </PickerDialog>
-      )}
-    </AnimatePresence>
+          </PickerDialog>
+        )}
+      </AnimatePresence>
+      <ConfirmDialog isOpen={isConfirmingDelete} title={kind === 'sober' ? '이 거리두기를 삭제할까요?' : '정말 삭제하시겠어요?'} message={kind === 'sober' ? `‘${title}’의 거리두기와 모든 다시 시작 기록이 삭제돼요. 삭제한 뒤에는 되돌릴 수 없어요.` : '삭제한 뒤에는 되돌릴 수 없어요.'} confirmLabel="삭제하기" danger onClose={() => setIsConfirmingDelete(false)} onConfirm={onDelete} />
+    </>
   );
 };
 

@@ -7,7 +7,7 @@ export const SectionTitle = forwardRef<HTMLSpanElement, SpanProps>(
   ({ className, ...props }, ref) => (
     <span
       ref={ref}
-      className={cn("inline-flex items-center gap-2 text-xl font-medium leading-[1.2] text-theme-accent", className)}
+      className={cn("inline-flex items-center gap-2 text-xl font-medium leading-tight text-theme-accent", className)}
       {...props}
     />
   ),
@@ -28,7 +28,7 @@ export const SectionTitleIcon = forwardRef<HTMLSpanElement, SpanProps>(
       <span
         ref={ref}
         className={cn(
-          "inline-flex h-[1.2em] w-[1.2em] shrink-0 items-center justify-center text-xl leading-none text-theme-accent",
+          "inline-flex h-[1em] w-[1em] shrink-0 items-center justify-center text-xl leading-none text-theme-accent",
           className,
         )}
         {...props}

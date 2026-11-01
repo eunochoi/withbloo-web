@@ -2,18 +2,21 @@
 
 import { motion, useIsPresent, useReducedMotion } from 'framer-motion';
 import { ReactNode, useLayoutEffect, useRef } from 'react';
-import { DialogBackdrop } from '../DialogBackdrop';
+import { cn } from '@/common/utils/cn';
 import { DIALOG_ROOT_CLASS } from '../constants';
+import { DialogBackdrop } from '../DialogBackdrop';
+import { SheetHandle } from '../SheetHandle';
 
 interface PickerDialogProps {
   children: ReactNode;
   labelledBy: string;
   describedBy?: string;
+  fixedHeight?: boolean;
   onClose: () => void;
 }
 
 // 히스토리에 남기지 않는 임시 선택 UI다. 열림 상태와 적용된 값은 상위 컴포넌트가 관리한다.
-export const PickerDialog = ({ children, labelledBy, describedBy, onClose }: PickerDialogProps) => {
+export const PickerDialog = ({ children, labelledBy, describedBy, onClose, fixedHeight = false }: PickerDialogProps) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const isPresent = useIsPresent();
@@ -56,13 +59,17 @@ export const PickerDialog = ({ children, labelledBy, describedBy, onClose }: Pic
       />
       <motion.div
         ref={contentRef}
-        className="py-6 absolute inset-x-0 bottom-0 max-h-[85dvh] w-full overflow-y-auto rounded-t-3xl bg-theme-accent-light shadow-theme-modal [--picker-offset:50px] tablet:inset-0 tablet:m-auto tablet:h-fit tablet:w-[440px] tablet:max-w-[calc(100dvw-32px)] tablet:rounded-3xl desktop:[--picker-offset:0px]"
+        className={cn(
+          "absolute inset-x-0 bottom-0 mx-auto flex max-h-[95dvh] w-full max-w-[550px] desktop:max-w-[650px] flex-col overflow-hidden rounded-t-[2rem] border border-theme-border bg-theme-surface pt-2 shadow-theme-modal [--picker-offset:50px]",
+          fixedHeight && "h-[95dvh]",
+        )}
         initial={{ opacity: 0, y: offset }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: offset }}
         transition={transition}
       >
-        {children}
+        <SheetHandle onClose={onClose} />
+        <div className={cn("min-h-0 px-5 tablet:px-12 desktop:px-[81px]", fixedHeight ? "flex flex-1 flex-col overflow-hidden" : "overflow-y-auto overscroll-contain")}>{children}</div>
       </motion.div>
     </dialog>
   );

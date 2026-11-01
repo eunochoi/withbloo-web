@@ -5,7 +5,7 @@ export const AppSurfaceCard = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivE
   ({ className, ...props }, ref) => (
     <div
       ref={ref}
-      className={twMerge("border-[1px] border-theme-accent/30 rounded-theme bg-theme-surface shadow-card w-full p-3 px-4", className)}
+      className={twMerge("border-[1px] border-theme-accent/30 rounded-[20px] bg-theme-surface shadow-card w-full p-3 px-4", className)}
       {...props}
     />
   ),

@@ -17,7 +17,7 @@ const Logo = ({ withText = false, rootClassName, logoClassName, textClassName }:
         <Image src="/icon/icon.png" width={64} height={64} sizes="64px" className={cn('h-auto max-w-full', logoClassName)} alt="TOOK Logo" priority />
       </div>
       {withText && <span
-        className={cn('uppercase  leading-[1.2] text-theme-text-primary', textClassName)}
+        className={cn('uppercase  leading-tight text-theme-text-primary', textClassName)}
       >
         TOOK
       </span>}

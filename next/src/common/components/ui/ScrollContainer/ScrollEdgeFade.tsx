@@ -6,18 +6,13 @@ interface Props {
   visible: boolean;
 }
 
-const gradientClass = {
-  top: "mask-scroll-fade-top",
-  bottom: "mask-scroll-fade-bottom",
-} as const;
-
 export const ScrollEdgeFade = ({ className, edge, visible }: Props) => {
   return (
     <div
       className={cn(
-        "pointer-events-none bg-theme-accent-light transition-[opacity,background-color] duration-1000 ease-in-out",
+        "pointer-events-none bg-theme-surface transition-[opacity,background-color] duration-[400ms] ease-out motion-reduce:transition-none",
         visible ? "opacity-100" : "opacity-0",
-        gradientClass[edge],
+        edge === 'top' ? "mask-scroll-fade-top" : "mask-scroll-fade-bottom",
         className,
       )}
     />

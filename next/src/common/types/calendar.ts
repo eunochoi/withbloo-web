@@ -7,6 +7,8 @@ export interface DiaryHabitDayData {
   emotion: number | null;
   diaryCreatedAt: number | null;
   completedHabitCount: number;
+  countedHabitCount: number;
+  totalHabitCount: number;
 }
 
 export interface DiaryHabitMonthData {
@@ -21,7 +23,7 @@ export interface DiaryHabitMonthData {
 export interface HabitMonthData {
   month: MonthKey;
   today: DateKey;
-  createdDate: DateKey;
+  startedDate: DateKey;
   editableFrom: DateKey;
   daysByDate: Partial<Record<DateKey, true>>;
   summary: {
@@ -30,6 +32,7 @@ export interface HabitMonthData {
     targetDays: number;
     completedCount: number;
     completionRate: number | null;
-    missedCount: number;
+    missedCount: number | null;
+    averageInterval: number | null;
   };
 }

@@ -12,7 +12,7 @@ export const THEME_ACCENT_LIST = [
   '131 198 182',
   '151 159 199',
   '237 165 177',
-  '249 199 79',
+  '98 158 154',
   '143 143 143',
 ] as const;
 
@@ -64,8 +64,8 @@ export const THEME_VALUE: Record<
     bg: THEME_BG,
   },
   yellow: {
-    accent: '249 199 79',
-    accentLight: '255 250 240',
+    accent: '98 158 154',
+    accentLight: '239 247 246',
     bg: THEME_BG,
   },
   grey: {

@@ -7,14 +7,13 @@ import { THEME_BG_DARK_MODE, THEME_LOCAL_STORAGE_KEY, THEME_VALUE } from "@/comm
 
 export const metadata: Metadata = {
   title: {
-    default: 'took',
-    template: '%s - took',
+    default: '위블 | withBloo',
+    template: '%s - 위블',
   },
-  description: "감정도 툭! 습관도 툭! 조금 더 나은 나로 To OK. 습관과 감정을 기록하고 나만의 속도로 하루를 쌓아가요.",
+  description: "어떤 하루든, 모두 나의 기록으로. 오늘의 감정과 작은 습관을 기록하고 달력과 통계로 돌아보세요.",
   manifest: "/manifest.json",
   icons: {
     icon: [
-      { url: '/favicon.ico', sizes: '16x16 32x32 48x48', type: 'image/x-icon' },
       { url: '/favicon.png', sizes: '32x32', type: 'image/png' },
       { url: '/icon/icon-48x48.png', sizes: '48x48', type: 'image/png' },
     ],
@@ -83,23 +82,12 @@ export default function RootLayout({
         <link rel="preload" href="/fonts/Fredoka[wdth,wght].ttf" as="font" type="font/ttf" crossOrigin="anonymous" />
         <script dangerouslySetInnerHTML={{ __html: localThemeInitScript }} />
         <meta name="google-site-verification" content="MSSWdnca2PMfsNV3MPmssa5cjQqycFJmdrj04DFx5fU" />
-        {/* iOS 스플래시 이미지 (portrait only) */}
-        <link rel="apple-touch-startup-image" media="screen and (device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3)" href="/splash_screens/iPhone_15_Pro_Max__iPhone_15_Plus__iPhone_14_Pro_Max_portrait.png" />
-        <link rel="apple-touch-startup-image" media="screen and (device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3)" href="/splash_screens/iPhone_15_Pro__iPhone_15__iPhone_14_Pro_portrait.png" />
-        <link rel="apple-touch-startup-image" media="screen and (device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3)" href="/splash_screens/iPhone_14_Plus__iPhone_13_Pro_Max__iPhone_12_Pro_Max_portrait.png" />
-        <link rel="apple-touch-startup-image" media="screen and (device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3)" href="/splash_screens/iPhone_14__iPhone_13_Pro__iPhone_13__iPhone_12_Pro__iPhone_12_portrait.png" />
-        <link rel="apple-touch-startup-image" media="screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)" href="/splash_screens/iPhone_13_mini__iPhone_12_mini__iPhone_11_Pro__iPhone_XS__iPhone_X_portrait.png" />
-        <link rel="apple-touch-startup-image" media="screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)" href="/splash_screens/iPhone_11_Pro_Max__iPhone_XS_Max_portrait.png" />
-        <link rel="apple-touch-startup-image" media="screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)" href="/splash_screens/iPhone_11__iPhone_XR_portrait.png" />
-        <link rel="apple-touch-startup-image" media="screen and (device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3)" href="/splash_screens/iPhone_8_Plus__iPhone_7_Plus__iPhone_6s_Plus__iPhone_6_Plus_portrait.png" />
-        <link rel="apple-touch-startup-image" media="screen and (device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)" href="/splash_screens/iPhone_8__iPhone_7__iPhone_6s__iPhone_6__4.7__iPhone_SE_portrait.png" />
-        <link rel="apple-touch-startup-image" media="screen and (device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)" href="/splash_screens/4__iPhone_SE__iPod_touch_5th_generation_and_later_portrait.png" />
 
         <meta name="mobile-web-app-capable" content="yes" />
 
-        <meta property="og:title" content="took - 감정일기 · 습관관리 · 할일" />
-        <meta property="og:description" content="감정도 툭! 습관도 툭! 조금 더 나은 나로 To OK. 습관과 감정을 기록하고 나만의 속도로 하루를 쌓아가요." />
-        <meta property="og:image" content={process.env.OG_IMAGE_URL || 'https://to-ok.me/img/share/og-image.png'} />
+        <meta property="og:title" content="위블 - 감정 일기와 습관 관리" />
+        <meta property="og:description" content="어떤 하루든, 모두 나의 기록으로. 오늘의 감정과 작은 습관을 기록하고 달력과 통계로 돌아보세요." />
+        <meta property="og:image" content={process.env.OG_IMAGE_URL || 'https://to-ok.me/icon/icon-512x512.png'} />
       </head>
 
       <body>

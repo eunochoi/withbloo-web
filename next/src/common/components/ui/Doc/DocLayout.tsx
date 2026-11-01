@@ -13,7 +13,7 @@ const DocLayout = ({ children }: Props) => {
     <ScrollContainer
       className="h-[100dvh] w-[100dvw] bg-theme-accent-light static-theme-blue"
       showScrollFade
-      showScrollToTop
+
     >
       <main className={docMainClass}>{children}</main>
     </ScrollContainer>
