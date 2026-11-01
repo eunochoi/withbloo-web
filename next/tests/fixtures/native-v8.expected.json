@@ -1,0 +1,68 @@
+{
+  "password": "compatibility-test-only",
+  "records": {
+    "diaries": [
+      {
+        "id": 11,
+        "date": "2024-02-29",
+        "emotion": 10,
+        "text": "Native compatibility sample",
+        "created_at": "2024-01-01T00:00:00.000Z",
+        "updated_at": "2024-01-01T00:00:00.000Z"
+      }
+    ],
+    "habits": [
+      {
+        "id": 21,
+        "name": "Read for twenty minutes",
+        "priority": 0,
+        "icon_key": "reading",
+        "icon_color": "lavender",
+        "initial_started_at": "2024-01-01T00:00:00.000Z",
+        "created_at": "2024-01-01T00:00:00.000Z",
+        "updated_at": "2024-01-01T00:00:00.000Z"
+      }
+    ],
+    "sobers": [
+      {
+        "id": 41,
+        "name": "Social media",
+        "description": null,
+        "icon_key": "phone",
+        "icon_color": "theme",
+        "is_priority": 1,
+        "initial_started_at": "2024-01-01T00:00:00.000Z",
+        "goal_mode": "AUTO",
+        "goal_days": null,
+        "created_at": "2024-01-01T00:00:00.000Z",
+        "updated_at": "2024-01-01T00:00:00.000Z"
+      }
+    ],
+    "soberRestarts": [
+      {
+        "id": 51,
+        "sober_id": 41,
+        "restarted_at": "2024-01-10T00:00:00.000Z",
+        "memo": "A fresh start",
+        "created_at": "2024-01-01T00:00:00.000Z",
+        "updated_at": "2024-01-01T00:00:00.000Z"
+      }
+    ],
+    "completions": [
+      {
+        "habit_id": 21,
+        "date": "2024-03-01",
+        "created_at": "2024-01-01T00:00:00.000Z"
+      }
+    ],
+    "images": [
+      {
+        "id": 31,
+        "diary_id": 11,
+        "file_name": "synthetic.jpg",
+        "position": 0
+      }
+    ],
+    "preferences": null
+  }
+}
