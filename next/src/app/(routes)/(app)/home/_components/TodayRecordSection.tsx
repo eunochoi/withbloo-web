@@ -203,10 +203,10 @@ const TodayRecordSection = ({ initialDate }: { initialDate: string }) => {
             <span className="h-14 w-14 animate-pulse rounded-full bg-theme-skeleton motion-reduce:animate-none" />
           ) : sober && !soberQuery.isError ? (
             <span
-              className="text-2xl desktop:text-3xl font-bold leading-tight"
+              className="whitespace-nowrap text-2xl desktop:text-3xl font-bold leading-tight"
               style={{ color: resolveHabitIconColor(sober.iconColor) }}
             >
-              {soberDays}일차
+              {soberDays}<span className="text-sm desktop:text-base font-normal text-theme-text-secondary">일차</span>
             </span>
           ) : (
             <SoberIcon
