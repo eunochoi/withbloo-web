@@ -5,12 +5,12 @@ import ScrollableName from '@/common/components/ui/ScrollableName';
 import { HabitStats } from "@/common/actions/stats";
 import { AppSection, AppSectionHeader, AppSectionMeta, AppSectionTitle } from "@/common/components/ui/AppSection";
 import AppUnderlineTabs, { titleMarkerClass, underlineTitleClass } from "@/common/components/ui/AppUnderlineTabs";
-import InfoNotice from '@/common/components/ui/InfoNotice';
-import HabitIcon from "@/common/components/ui/HabitIcon";
 import { HabitPriority } from '@/common/components/ui/Habit/HabitPriority';
-import HabitFlow from '../../habit/_components/HabitFlow';
+import HabitIcon from "@/common/components/ui/HabitIcon";
+import InfoNotice from '@/common/components/ui/InfoNotice';
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import HabitFlow from '../../habit/_components/HabitFlow';
 
 interface Props {
   stats?: HabitStats;
@@ -86,7 +86,7 @@ const HabitAnalysis = ({ stats, year, today }: Props) => {
               {year}년에 완료한 집계 대상 습관이 없어요.
             </p>}
           <div className="flex flex-col gap-2">
-            <InfoNotice>7일 흐름은 집계 대상 습관이 있었던 날의 실천율을 평균으로 계산해요.</InfoNotice>
+            <InfoNotice>7일 흐름은 습관이 있었던 날의 실천율을 평균으로 계산해요.</InfoNotice>
             <InfoNotice>습관 순위와 7일 흐름에는 자유 기록이 포함되지 않아요.</InfoNotice>
           </div>
         </div>
