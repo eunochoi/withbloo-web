@@ -73,7 +73,7 @@ export const calculateDiaryStreak = async (diaryDates: string[]): Promise<DiaryS
 
 export const computeDiaryStreakByEmail = async (email: string) => {
   const diaries = await prisma.diary.findMany({
-    where: { email, visible: true },
+    where: { email },
     select: { date: true },
   });
 

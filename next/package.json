@@ -3,11 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "BROWSER=none next dev",
+    "dev": "BROWSER=none next dev --port 3000",
     "prebuild": "prisma generate --schema ./prisma",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "test:habit": "node --test tests/habit-record-options.test.cjs",
+    "test:habit:integration": "node --test tests/habit-record-options.integration.test.cjs",
     "prisma:generate": "prisma generate --schema ./prisma",
     "prisma:db:push": "prisma db push --schema ./prisma",
     "prisma:validate": "prisma validate --schema ./prisma"
@@ -26,6 +28,7 @@
     "@types/crypto-js": "^4.2.2",
     "crypto-js": "^4.2.0",
     "date-fns": "^3.6.0",
+    "fflate": "0.8.2",
     "framer-motion": "^12.43.0",
     "jsonwebtoken": "^9.0.3",
     "next": "14.2.3",
@@ -36,6 +39,7 @@
     "react-icons": "^5.5.0",
     "react-intersection-observer": "^9.10.3",
     "sharp": "^0.33.4",
+    "sql.js": "1.14.2",
     "tailwind-merge": "^3.7.0"
   },
   "devDependencies": {
@@ -44,6 +48,7 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/sql.js": "1.4.11",
     "eslint": "^8",
     "eslint-config-next": "14.2.3",
     "postcss": "^8",

@@ -10,19 +10,11 @@ export const getAvailableYears = async (): Promise<ActionResult<number[]>> => {
     const auth = await getAuth();
     if (!auth.ok) return createAuthErrorResult(auth);
 
-    const diaries = await prisma.diary.findMany({
-      where: {
-        email: auth.email,
-        OR: [
-          { visible: true },
-          { habits: { some: {} } },
-        ],
-      },
-      select: { date: true },
-    });
-
-    const years = Array.from(new Set(diaries.map((diary) => parseInt(diary.date.split('-')[0], 10))))
-      .sort((a, b) => b - a);
+    const [diaries, completions] = await Promise.all([
+      prisma.diary.findMany({ where: { userId: auth.userId }, select: { date: true } }),
+      prisma.habitCompletion.findMany({ where: { habit: { userId: auth.userId } }, distinct: ['date'], select: { date: true } }),
+    ]);
+    const years = Array.from(new Set([...diaries, ...completions].map((record) => Number(record.date.slice(0, 4))))).sort((a, b) => b - a);
 
     return { ok: true, data: years };
   } catch (error) {

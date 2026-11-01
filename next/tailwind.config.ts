@@ -115,7 +115,7 @@ const config: Config = {
   },
   plugins: [
     plugin(({ addVariant, addUtilities }) => {
-      addVariant("landscape-short", "@media (orientation: landscape) and (max-height: 600px)");
+      addVariant("landscape-short", "@media (orientation: landscape) and (max-height: 650px)");
       addUtilities({
         ".mask-scroll-fade-top": { maskImage: `linear-gradient(in oklch to bottom, ${scrollFadeStops})` },
         ".mask-scroll-fade-bottom": { maskImage: `linear-gradient(in oklch to top, ${scrollFadeStops})` },

@@ -16,6 +16,7 @@ interface UseSortToggleProps<K extends SortableSortKey> {
 interface UseSortToggleResult<K extends SortableSortKey> {
   sortValue: SortValueByKey[K];
   onToggle: () => void;
+  setSort: (value: SortValueByKey[K]) => void;
 }
 
 export const useSortToggle = <K extends SortableSortKey>(
@@ -48,5 +49,9 @@ export const useSortToggle = <K extends SortableSortKey>(
     });
   }, [setSortPreferences, sortKey]);
 
-  return { sortValue, onToggle };
+  const setSort = useCallback((value: SortValueByKey[K]) => {
+    setSortPreferences((previous) => ({ ...previous, [sortKey]: value }));
+  }, [setSortPreferences, sortKey]);
+
+  return { sortValue, onToggle, setSort };
 };
