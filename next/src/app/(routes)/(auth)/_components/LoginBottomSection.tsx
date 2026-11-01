@@ -33,7 +33,7 @@ const LoginBottomSection = () => {
   return (
     <section
       aria-labelledby="login-title"
-      className="flex flex-col items-center gap-10 bg-theme-surface px-6 py-16">
+      className="flex min-h-full flex-col items-center gap-10 bg-theme-surface px-6 py-16">
       <div className="flex w-full max-w-[340px] flex-1 flex-col items-center justify-center gap-9 desktop:gap-11">
         <div className="flex flex-col gap-3 text-center desktop:gap-6">
           <h2 id="login-title" className="text-[24px] font-bold leading-tight tracking-tight desktop:text-[28px]">

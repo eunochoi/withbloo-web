@@ -4,7 +4,7 @@ import cat from '/public/img/bloolog/cats/cat-blue.png';
 
 
 const LoginTopSection = () => (
-  <div className='relative'>
+  <div className='relative flex min-h-full flex-col'>
     <section
       aria-labelledby="login-intro-title"
       className={`w-full flex flex-col gap-12 px-6 pt-12 pb-0 tablet:px-10 desktop:gap-24 desktop:px-12 desktop:pt-10 desktop:pb-0 xl:px-20`}>
@@ -27,7 +27,7 @@ const LoginTopSection = () => (
 
       </div>
     </section>
-    <Image priority src={cat} alt="고양이 블루" sizes="(min-width: 1024px) 40vw, (min-width: 480px) 60vw, 68vw" className="mt-6 tablet:mt-0 desktop:absolute desktop:bottom-0 desktop:right-0 ml-auto block w-3/4 tablet:w-2/3 " />
+    <Image priority src={cat} alt="고양이 블루" sizes="(min-width: 1024px) 40vw, (min-width: 480px) 60vw, 68vw" className="mt-6 tablet:mt-auto ml-auto block w-3/4 tablet:w-2/3 " />
   </div>
 );
 
