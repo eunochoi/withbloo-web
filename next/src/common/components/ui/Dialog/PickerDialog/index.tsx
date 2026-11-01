@@ -6,6 +6,7 @@ import { cn } from '@/common/utils/cn';
 import { DIALOG_ROOT_CLASS } from '../constants';
 import { DialogBackdrop } from '../DialogBackdrop';
 import { SheetHandle } from '../SheetHandle';
+import { useSheetDismiss } from '../useSheetDismiss';
 
 interface PickerDialogProps {
   children: ReactNode;
@@ -21,6 +22,7 @@ export const PickerDialog = ({ children, labelledBy, describedBy, onClose, fixed
   const contentRef = useRef<HTMLDivElement>(null);
   const isPresent = useIsPresent();
   const reduceMotion = useReducedMotion();
+  const y = useSheetDismiss({ contentRef, enabled: isPresent, reducedMotion: reduceMotion, onClose });
   const offset = reduceMotion ? 0 : 'var(--picker-offset)';
   const transition = { duration: reduceMotion ? 0 : 0.3, ease: 'easeInOut' as const };
 
@@ -59,13 +61,14 @@ export const PickerDialog = ({ children, labelledBy, describedBy, onClose, fixed
       />
       <motion.div
         ref={contentRef}
+        style={{ y }}
         className={cn(
           "absolute inset-x-0 bottom-0 mx-auto flex max-h-[95dvh] w-full max-w-[550px] desktop:max-w-[650px] flex-col overflow-hidden rounded-t-[2rem] border border-theme-border bg-theme-surface pt-2 shadow-theme-modal [--picker-offset:50px]",
           fixedHeight && "h-[95dvh]",
         )}
         initial={{ opacity: 0, y: offset }}
         animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: offset }}
+        exit={{ opacity: 0, y: y.get() > 0 && !reduceMotion ? '100%' : offset }}
         transition={transition}
       >
         <SheetHandle onClose={onClose} />

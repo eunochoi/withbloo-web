@@ -5,6 +5,7 @@ import { ReactNode, useLayoutEffect, useRef } from 'react';
 import { DIALOG_ROOT_CLASS } from '../constants';
 import { DialogBackdrop } from '../DialogBackdrop';
 import { SheetHandle } from '../SheetHandle';
+import { useSheetDismiss } from '../useSheetDismiss';
 
 interface PanelDialogProps {
   ariaLabel: string;
@@ -28,6 +29,7 @@ export const PanelDialog = ({
   const contentRef = useRef<HTMLDivElement>(null);
   const isPresent = useIsPresent();
   const reduceMotion = useReducedMotion();
+  const y = useSheetDismiss({ contentRef, enabled: dismissible && isPresent, reducedMotion: reduceMotion, onClose });
   const offset = reduceMotion ? 0 : 50;
   const transition = { duration: reduceMotion ? 0 : 0.3, ease: 'easeInOut' as const };
 
@@ -64,10 +66,11 @@ export const PanelDialog = ({
       />
       <motion.div
         ref={contentRef}
+        style={{ y }}
         className={`absolute inset-x-0 bottom-0 mx-auto flex ${height === 'auto' ? 'h-auto' : 'h-[95dvh]'} max-h-[95dvh] w-full max-w-[550px] desktop:max-w-[650px] flex-col overflow-hidden rounded-t-[2rem] border border-theme-border bg-theme-surface pt-2 shadow-theme-modal`}
         initial={{ opacity: 0, y: offset }}
         animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: offset }}
+        exit={{ opacity: 0, y: y.get() > 0 && !reduceMotion ? '100%' : offset }}
         transition={transition}
       >
         {dismissible && <SheetHandle onClose={onClose} color={handleColor} />}
