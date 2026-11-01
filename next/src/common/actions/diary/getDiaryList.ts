@@ -1,10 +1,12 @@
 'use server';
 
+import { EMOTIONS } from '@/common/constants/emotions';
 import { prisma } from '../../../../lib/prisma';
 import { getAuth } from '../../auth/getAuth';
+import { DIARY_EMOTION_GROUPS, DIARY_SEASONS, type DiaryEmotionGroup, type DiarySeason } from '../../constants/diaryFilters';
 import type { ActionResult } from '../types';
 import type { DiaryData, DiaryListParams } from './types';
-import { createAuthErrorResult, createServerErrorResult, formatDiaryData } from './utils';
+import { createAuthErrorResult, createServerErrorResult, formatDiaryList } from './utils';
 
 export const getDiaryList = async ({
   sortType,
@@ -13,6 +15,8 @@ export const getDiaryList = async ({
   limit,
   selectedYear,
   selectedMonth,
+  seasons = [],
+  emotionGroups = [],
 }: DiaryListParams): Promise<ActionResult<DiaryData[]>> => {
   try {
     const auth = await getAuth();
@@ -38,15 +42,20 @@ export const getDiaryList = async ({
     }
 
     const emotionFilter = Number(search);
+    const validSeasons = seasons.filter((season): season is DiarySeason => Object.hasOwn(DIARY_SEASONS, season));
+    const validGroups = emotionGroups.filter((group): group is DiaryEmotionGroup => Object.hasOwn(DIARY_EMOTION_GROUPS, group));
+    const seasonDates = validSeasons.flatMap((season) => DIARY_SEASONS[season].months.map((month) => {
+      const monthText = String(month).padStart(2, '0');
+      if (nYear === null) return { contains: `-${monthText}-` };
+      const year = nYear + (season === 'winter' && month < 3 ? 1 : 0);
+      return { startsWith: `${year}-${monthText}-` };
+    }));
+    const groupEmotions = validGroups.flatMap((group) => [...DIARY_EMOTION_GROUPS[group].emotions]);
     const diaries = await prisma.diary.findMany({
       where: {
         email: auth.email,
-        visible: true,
-        date: {
-          gte: rangeStart,
-          lte: rangeEnd,
-        },
-        ...(emotionFilter !== 10 && emotionFilter >= 0 && emotionFilter <= 9
+        ...(seasonDates.length ? { OR: seasonDates.map((date) => ({ date })) } : { date: { gte: rangeStart, lte: rangeEnd } }),
+        ...(groupEmotions.length ? { emotion: { in: groupEmotions } } : Number.isInteger(emotionFilter) && emotionFilter >= 0 && emotionFilter < EMOTIONS.length
           ? { emotion: emotionFilter }
           : {}),
       },
@@ -59,16 +68,13 @@ export const getDiaryList = async ({
           },
           orderBy: { order: 'asc' },
         },
-        habits: {
-          orderBy: { priority: 'desc' },
-        },
       },
       orderBy: [
         { date: sortType.toLowerCase() as 'asc' | 'desc' },
       ],
     });
 
-    return { ok: true, data: await Promise.all(diaries.map(formatDiaryData)) };
+    return { ok: true, data: await formatDiaryList(diaries) };
   } catch (error) {
     console.error(error);
     return createServerErrorResult();

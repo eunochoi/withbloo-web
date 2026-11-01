@@ -1,3 +1,5 @@
+import { prisma } from '../../../../../lib/prisma';
+import type { Habit } from '@prisma/client';
 import CryptoJS from 'crypto-js';
 import type { Prisma } from '@prisma/client';
 
@@ -91,7 +93,8 @@ export const validateAccessibleImageContents = async (
   }
 };
 
-export const formatDiaryData = async (diary: DiaryWithRelations): Promise<DiaryData> => {
+export const formatDiaryData = async (diary: DiaryWithRelations, completedHabits?: Habit[]): Promise<DiaryData> => {
+  const habits = completedHabits ?? (await prisma.habitCompletion.findMany({ where: { date: diary.date, habit: { userId: diary.userId } }, include: { habit: true }, orderBy: [{ habit: { priority: 'desc' } }, { habit: { createdAt: 'desc' } }, { habitId: 'desc' }] })).map((record) => record.habit);
   const images = await Promise.all(diary.images.map(async (image) => ({
     id: String(image.id),
     imageContentId: image.imageContentId,
@@ -105,13 +108,14 @@ export const formatDiaryData = async (diary: DiaryWithRelations): Promise<DiaryD
     date: diary.date,
     text: decryptDiaryText(diary.text),
     emotion: diary.emotion,
-    visible: diary.visible,
     Images: images,
-    Habits: diary.habits.map((habit) => ({
+    Habits: habits.map((habit) => ({
       UserId: habit.userId,
       id: habit.id,
       email: habit.email,
       name: habit.name,
+      iconKey: habit.iconKey,
+      iconColor: habit.iconColor,
       priority: habit.priority,
     })),
   };
@@ -119,4 +123,20 @@ export const formatDiaryData = async (diary: DiaryWithRelations): Promise<DiaryD
 
 export const recomputeStreak = async (email: string) => {
   await recomputeUserDiaryStreak(email);
+};
+
+// Batch date joins for diary lists so a page does not issue one query per diary.
+export const formatDiaryList = async (diaries: DiaryWithRelations[]): Promise<DiaryData[]> => {
+  if (!diaries.length) return [];
+  const records = await prisma.habitCompletion.findMany({
+    where: { date: { in: diaries.map((diary) => diary.date) }, habit: { userId: diaries[0].userId } },
+    include: { habit: true },
+    orderBy: [{ habit: { priority: 'desc' } }, { habit: { createdAt: 'desc' } }, { habitId: 'desc' }],
+  });
+  const byDate = new Map<string, Habit[]>();
+  for (const record of records) {
+    if (!byDate.has(record.date)) byDate.set(record.date, []);
+    byDate.get(record.date)!.push(record.habit);
+  }
+  return Promise.all(diaries.map((diary) => formatDiaryData(diary, byDate.get(diary.date) ?? [])));
 };

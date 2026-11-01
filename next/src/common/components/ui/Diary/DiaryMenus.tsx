@@ -2,7 +2,6 @@ import { deleteDiary } from "@/common/actions/diary";
 import { authAction } from "@/common/auth/authAction";
 import Menus from '@/common/components/ui/Menus';
 import { showNotice } from '@/common/components/ui/Notice/notice';
-import { EMOTIONS } from "@/common/constants/emotions";
 import type { DiaryMenuData } from "@/common/types/diary";
 import { parseLocalDate } from "@/common/utils/date/parseLocalDate";
 import { useQueryClient } from "@tanstack/react-query";
@@ -15,9 +14,10 @@ interface Props {
   setMenuOpen: Dispatch<SetStateAction<boolean>>;
   diaryData: DiaryMenuData;
   onDeleted?: () => void;
+  showDetail?: boolean;
 }
 
-const DiaryMenus = ({ isMenuOpen, setMenuOpen, diaryData, onDeleted }: Props) => {
+const DiaryMenus = ({ isMenuOpen, setMenuOpen, diaryData, onDeleted, showDetail = false }: Props) => {
   const queryClient = useQueryClient();
   const router = useRouter();
   const onDelete = async () => {
@@ -38,8 +38,9 @@ const DiaryMenus = ({ isMenuOpen, setMenuOpen, diaryData, onDeleted }: Props) =>
     <Menus
       isOpen={isMenuOpen}
       onClose={() => setMenuOpen(false)}
-      title={`${dateLabel} (${EMOTIONS[diaryData.emotion]?.nameKr ?? EMOTIONS[9].nameKr})`}
-      message="내 감정의 기록을 언제든 편하게 다듬어 보세요"
+      title={`${dateLabel} 일기`}
+      kind="diary"
+      onDetail={showDetail ? () => router.push(`/diary/${diaryData.id}`, { scroll: false }) : undefined}
       onEdit={() => router.push(`/diary/${diaryData.id}/edit`, { scroll: false })}
       onDelete={onDelete}
     />

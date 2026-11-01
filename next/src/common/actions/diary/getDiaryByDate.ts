@@ -27,9 +27,6 @@ export const getDiaryByDate = async ({ date }: DateParams): Promise<ActionResult
           },
           orderBy: { order: 'asc' },
         },
-        habits: {
-          orderBy: { priority: 'desc' },
-        },
       },
     });
 

@@ -4,6 +4,7 @@ import type { DiaryData } from '@/common/types/diary';
 
 type UpdateDiaryRequestParams = {
   diaryId: string;
+  date: string;
   text: string;
   emotion: number;
   imageContentIds: string[];
@@ -11,6 +12,7 @@ type UpdateDiaryRequestParams = {
 
 export const updateDiaryRequest = async ({
   diaryId,
+  date,
   text,
   emotion,
   imageContentIds,
@@ -18,6 +20,7 @@ export const updateDiaryRequest = async ({
   authAction(() =>
     updateDiary({
       diaryId,
+      date,
       text,
       emotion,
       imageContentIds,

@@ -1,15 +1,17 @@
 'use server';
 
 import { prisma } from '../../../../lib/prisma';
+import { EMOTIONS } from '@/common/constants/emotions';
 import { DIARY_TEXT_MAX_LENGTH } from '@/common/constants/diary';
 import { getTodayStringInUserTimezone } from '@/common/utils/date/userTimezone';
 import { getAuth } from '../../auth/getAuth';
 import type { ActionResult } from '../types';
 import type { DiaryData, UpdateDiaryParams } from './types';
-import { createAuthErrorResult, createServerErrorResult, encryptDiaryText, formatDiaryData, isValidDiaryText, parseDiaryId, validateAccessibleImageContents } from './utils';
+import { createAuthErrorResult, createServerErrorResult, encryptDiaryText, formatDiaryData, isValidDiaryText, parseDiaryId, validateDateFormat, recomputeStreak, validateAccessibleImageContents } from './utils';
 
 export const updateDiary = async ({
   diaryId,
+  date,
   text,
   imageContentIds,
   emotion,
@@ -22,13 +24,16 @@ export const updateDiary = async ({
     if (!parsedDiaryId) {
       return { ok: false, code: 'INVALID_DIARY_ID', message: 'diaryId는 필수입니다.' };
     }
-    if (emotion === undefined || emotion === null || emotion < 0 || emotion > 9) {
-      return { ok: false, code: 'INVALID_EMOTION', message: '감정 값이 올바르지 않습니다. (0-9)' };
+    if (!Number.isInteger(emotion) || emotion < 0 || emotion >= EMOTIONS.length) {
+      return { ok: false, code: 'INVALID_EMOTION', message: '감정 값이 올바르지 않습니다. (0-11)' };
     }
     if (!isValidDiaryText(text)) {
       return { ok: false, code: 'INVALID_DIARY_INPUT', message: `일기 내용은 공백만 입력할 수 없으며 ${DIARY_TEXT_MAX_LENGTH}자까지 입력할 수 있습니다.` };
     }
     const today = await getTodayStringInUserTimezone();
+    if (date !== undefined && (!validateDateFormat(date) || date < '1900-01-01' || date > today)) {
+      return { ok: false, code: 'INVALID_DIARY_DATE', message: '날짜를 확인해주세요.' };
+    }
 
     const diary = await prisma.$transaction(async (tx) => {
       const user = await tx.user.findUnique({
@@ -48,12 +53,14 @@ export const updateDiary = async ({
       // 기존 이미지 연결을 삭제하기 전에 모든 새 이미지의 소유권을 확인한다.
       await validateAccessibleImageContents(tx, imageContentIds, auth.userId);
 
+      const targetDate = date ?? foundDiary.date;
+      if (targetDate !== foundDiary.date) {
+        const target = await tx.diary.findUnique({ where: { userId_date: { userId: user.id, date: targetDate } } });
+        if (target) throw new Error('DIARY_ALREADY_EXISTS');
+      }
       await tx.diary.update({
         where: { id: foundDiary.id },
-        data: {
-          text: encryptDiaryText(text),
-          emotion,
-        },
+        data: { date: targetDate, text: encryptDiaryText(text), emotion },
       });
 
       await tx.image.deleteMany({
@@ -79,15 +86,19 @@ export const updateDiary = async ({
             },
             orderBy: { order: 'asc' },
           },
-          habits: {
-            orderBy: { priority: 'desc' },
-          },
         },
       });
-    });
+    }, { isolationLevel: 'Serializable' });
 
+    if (date !== undefined) await recomputeStreak(auth.email);
     return { ok: true, data: await formatDiaryData(diary) };
   } catch (error) {
+    if (typeof error === 'object' && error !== null && 'code' in error && (error.code === 'P2002' || error.code === 'P2034')) {
+      return { ok: false, code: 'DIARY_CONFLICT', message: '날짜 또는 기록이 변경되었어요. 다시 확인하고 저장해주세요.' };
+    }
+    if (error instanceof Error && error.message === 'DIARY_ALREADY_EXISTS') {
+      return { ok: false, code: 'DIARY_ALREADY_EXISTS', message: '해당 날짜를 사용할 수 없습니다.' };
+    }
     if (error instanceof Error && error.message === 'FUTURE_DIARY_DATE') {
       return { ok: false, code: 'FUTURE_DIARY_DATE', message: '미래 날짜의 일기는 수정할 수 없습니다.' };
     }

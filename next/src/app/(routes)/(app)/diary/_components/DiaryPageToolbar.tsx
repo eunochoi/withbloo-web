@@ -1,55 +1,31 @@
 'use client';
 
+import Toolbar from '@/common/components/ui/Toolbar';
+
+import { AddIcon, FilterIcon, SortIcon } from '@/common/constants/appIcons';
+
+import ToolbarButton from '@/common/components/ui/ToolbarButton';
+import ToolbarSelectionButton from '@/common/components/ui/ToolbarSelectionButton';
+import { getToolbarSortParts } from '@/common/functions/toolbarSummary';
 import type { DiarySort } from '@/common/types/sort';
 
-import ToolbarButton from "@/common/components/ui/ToolbarButton";
-import { MdCalendarMonth, MdEmojiEmotions, MdSort } from 'react-icons/md';
 
 interface Props {
-  openPeriodFilter: () => void;
-  isPeriodSelected: boolean;
-  selectedPeriodLabel: string;
-  onToggle: () => void;
+  onSort: () => void;
+  onFilter: () => void;
+  onAdd: () => void;
   sortValue: DiarySort;
-  openEmotionFilter: () => void;
-  isEmotionSelected: boolean;
-  selectedEmotionLabel: string;
+  filterLabel: string;
+  filterDescription: string;
   disabled?: boolean;
 }
 
-const DiaryPageToolbar = ({ openPeriodFilter, isPeriodSelected, selectedPeriodLabel, onToggle, sortValue, openEmotionFilter, isEmotionSelected, selectedEmotionLabel, disabled = false }: Props) => {
-  return (
-    <div className='w-full flex justify-between'>
-      <div className='flex gap-2'>
-        <ToolbarButton
-          onClick={onToggle}
-          disabled={disabled}
-        >
-          <MdSort size={18} className="shrink-0" aria-hidden="true" />
-          {sortValue === 'DESC' ? '최신순' : '과거순'}
-        </ToolbarButton>
-      </div>
-      <div className='flex gap-2'>
-        <ToolbarButton
-          aria-label="기간 필터"
-          onClick={openPeriodFilter}
-          disabled={disabled}
-        >
-          <MdCalendarMonth size={18} className="shrink-0" aria-hidden="true" />
-          {isPeriodSelected && selectedPeriodLabel}
-        </ToolbarButton>
-
-        <ToolbarButton
-          aria-label="감정 필터"
-          onClick={openEmotionFilter}
-          disabled={disabled}
-        >
-          <MdEmojiEmotions size={18} className="shrink-0" aria-hidden="true" />
-          {isEmotionSelected && selectedEmotionLabel}
-        </ToolbarButton>
-      </div>
-    </div>
-  );
-};
+const DiaryPageToolbar = ({ onSort, onFilter, onAdd, sortValue, filterLabel, filterDescription, disabled = false }: Props) => (
+  <Toolbar>
+    <ToolbarSelectionButton onClick={onSort} disabled={disabled} icon={<SortIcon size={18} aria-hidden="true" />} parts={getToolbarSortParts(sortValue)} accessibilityLabel={`일기 정렬, 날짜 ${sortValue === 'DESC' ? '최신순' : '과거순'}`} />
+    <ToolbarSelectionButton onClick={onFilter} disabled={disabled} icon={<FilterIcon size={18} aria-hidden="true" />} parts={filterLabel.split(' · ')} accessibilityLabel={`일기 필터, ${filterDescription}`} />
+    <div className="ml-auto shrink-0"><ToolbarButton onClick={onAdd} disabled={disabled} aria-label="일기 추가"><AddIcon size={20} aria-hidden="true" /></ToolbarButton></div>
+  </Toolbar>
+);
 
 export default DiaryPageToolbar;

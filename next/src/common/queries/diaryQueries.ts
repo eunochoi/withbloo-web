@@ -7,9 +7,9 @@ import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
 type DiaryListFilters = Omit<DiaryListParams, 'pageParam' | 'limit'>;
 
 export const diaryQueries = {
-  list: ({ sortType, search, selectedYear, selectedMonth }: DiaryListFilters, runAction: QueryActionRunner) => infiniteQueryOptions({
-    queryKey: ['diary', 'diaryList', 'emotion', search, 'sort', sortType, 'year', selectedYear, 'month', selectedMonth],
-    queryFn: ({ pageParam }) => runAction(() => getDiaryList({ sortType, search, selectedYear, selectedMonth, pageParam, limit: DIARY_LIST_PAGE_SIZE })),
+  list: ({ sortType, search, selectedYear, selectedMonth, seasons, emotionGroups }: DiaryListFilters, runAction: QueryActionRunner) => infiniteQueryOptions({
+    queryKey: ['diary', 'diaryList', 'emotion', search, 'sort', sortType, 'year', selectedYear, 'month', selectedMonth, 'seasons', seasons ?? [], 'emotionGroups', emotionGroups ?? []],
+    queryFn: ({ pageParam }) => runAction(() => getDiaryList({ sortType, search, selectedYear, selectedMonth, seasons, emotionGroups, pageParam, limit: DIARY_LIST_PAGE_SIZE })),
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => (lastPage.length === 0 ? undefined : allPages.length),
     staleTime: 60_000,

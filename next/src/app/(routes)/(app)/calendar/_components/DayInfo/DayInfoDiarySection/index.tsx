@@ -1,3 +1,4 @@
+import { ChevronRightIcon, MoreIcon } from '@/common/constants/appIcons';
 import Carousel from '@/common/components/ui/Carousel';
 import DiaryMenus from '@/common/components/ui/Diary/DiaryMenus';
 import { DIARY_TEXT_PREVIEW_LINE_COUNT } from '@/common/constants/diary';
@@ -5,7 +6,7 @@ import type { DiaryData } from '@/common/types/diary';
 import { cn } from '@/common/utils/cn';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import { MdChevronRight, MdMenuBook, MdMoreVert } from 'react-icons/md';
+
 import DayInfoSectionHeader from '../DayInfoSectionHeader';
 import DayInfoDiaryEmptyState from './DayInfoDiaryEmptyState';
 
@@ -17,7 +18,7 @@ interface Props {
 }
 
 const DayInfoDiarySection = ({ diaryData, isFuture, onAddDiary, onOpenDiary }: Props) => {
-  const hasDiary = diaryData?.visible === true;
+  const hasDiary = !!diaryData;
   const images = diaryData?.Images ?? [];
   const [isMenuOpen, setMenuOpen] = useState(false);
 
@@ -27,21 +28,22 @@ const DayInfoDiarySection = ({ diaryData, isFuture, onAddDiary, onOpenDiary }: P
 
   return (
     <div className="relative min-w-0 p-1">
-      <DayInfoSectionHeader title="감정 일기" icon={<MdMenuBook />}>
+      <DayInfoSectionHeader title="감정 일기">
         {hasDiary && (
           <button
-            className="flex cursor-pointer items-center gap-2 text-xl text-theme-text-tertiary"
+            className="-mr-2 flex cursor-pointer items-center gap-2 text-xl text-theme-text-tertiary"
             onClick={() => setMenuOpen((prev) => !prev)}
             type="button"
             aria-label="일기 메뉴"
             aria-expanded={isMenuOpen}
           >
-            <MdMoreVert />
+            <MoreIcon />
           </button>
         )}
       </DayInfoSectionHeader>
       {hasDiary && (
         <DiaryMenus
+          showDetail
           isMenuOpen={isMenuOpen}
           setMenuOpen={setMenuOpen}
           diaryData={diaryData}
@@ -84,7 +86,7 @@ const DayInfoDiarySection = ({ diaryData, isFuture, onAddDiary, onOpenDiary }: P
                 {diaryData.text}
               </p>
               <button className="flex items-center self-end text-xs text-theme-accent desktop:text-sm" type="button">
-                일기 전체 보기 <MdChevronRight className="text-lg" />
+                일기 전체 보기 <ChevronRightIcon className="text-lg" />
               </button>
             </div>
           </div>

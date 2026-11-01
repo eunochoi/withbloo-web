@@ -10,6 +10,8 @@ import love from '/public/img/emotion/basic/love.png';
 import sad from '/public/img/emotion/basic/sad.png';
 import surprised from '/public/img/emotion/basic/surprised.png';
 import unknown from '/public/img/emotion/basic/unknown.png';
+import tired from '/public/img/emotion/basic/tired.png';
+import mixed from '/public/img/emotion/basic/mixed.png';
 
 export interface Emotion {
   id: number;
@@ -32,5 +34,7 @@ export const EMOTIONS: Emotion[] = [
   { id: 6, name: 'sad', nameKr: '슬픔', src: sad, color: '#8fbffb', emoji: '😢' },
   { id: 7, name: 'angry', nameKr: '화남', src: angry, color: '#ff6b66', emoji: '😠' },
   { id: 8, name: 'confused', nameKr: '혼란', src: confused, color: '#ceb1ef', emoji: '😕' },
-  { id: 9, name: 'unknown', nameKr: '무심', src: unknown, color: '#d9dded', emoji: '😐' },
+  { id: 9, name: 'unknown', nameKr: '무덤덤', src: unknown, color: '#d9dded', emoji: '😐' },
+  { id: 10, name: 'tired', nameKr: '피곤함', src: tired, color: '#B7AAA4', emoji: '😮‍💨' },
+  { id: 11, name: 'mixed', nameKr: '싱숭생숭', src: mixed, color: '#B5BDD5', emoji: '🫤' },
 ];

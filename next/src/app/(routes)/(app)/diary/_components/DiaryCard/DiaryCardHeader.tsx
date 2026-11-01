@@ -1,3 +1,4 @@
+import { MoreIcon } from '@/common/constants/appIcons';
 import DiaryMenus from '@/common/components/ui/Diary/DiaryMenus';
 import EmotionImage from '@/common/components/ui/EmotionImage';
 import { EMOTIONS } from '@/common/constants/emotions';
@@ -7,7 +8,7 @@ import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { MdMoreVert } from 'react-icons/md';
+
 
 interface Props {
   diaryData: DiaryData;
@@ -52,15 +53,16 @@ const DiaryCardHeader = ({ diaryData }: Props) => {
         </div>
       </Link>
       <button
-        className="ml-auto flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-xl text-theme-text-tertiary"
+        className="-mr-5 ml-auto flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-xl text-theme-text-tertiary"
         aria-label="일기 메뉴"
         aria-expanded={isMenuOpen}
         onClick={handleToggleMenu}
         type="button"
       >
-        <MdMoreVert />
+        <MoreIcon />
       </button>
       <DiaryMenus
+          showDetail
         isMenuOpen={isMenuOpen}
         setMenuOpen={setMenuOpen}
         diaryData={diaryData}

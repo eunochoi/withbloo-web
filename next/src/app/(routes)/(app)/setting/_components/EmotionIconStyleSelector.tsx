@@ -1,5 +1,6 @@
 'use client';
 
+import { SettingChoiceGrid } from './SettingChoice';
 import EmotionImage from '@/common/components/ui/EmotionImage';
 import { EMOTIONS } from '@/common/constants/emotions';
 import { useSettingsContext } from '@/common/settings/useSettingsContext';
@@ -12,13 +13,13 @@ export const EmotionIconStyleSelector = () => {
   return (
     <fieldset className="m-0 min-w-0 border-0 p-0">
       <legend className="sr-only">감정 아이콘 스타일</legend>
-      <div className="grid grid-cols-3 gap-2">
+      <SettingChoiceGrid className="my-0">
         {EMOTION_ICON_STYLE_LIST.map((style) => (
           <label
             key={style}
             className={cn(
-              'relative flex min-w-0 cursor-pointer flex-col items-center gap-3 border px-2 py-6 rounded-theme transition-colors',
-              emotionIcon.style === style ? 'border-theme-accent bg-theme-accent/10' : 'border-0',
+              'relative flex h-24 min-w-0 cursor-pointer flex-col items-center justify-center gap-1 border px-2 py-2 rounded-xl transition-colors',
+              emotionIcon.style === style ? 'border-theme-accent bg-theme-accent-light/50' : 'border-0',
             )}
           >
             <input
@@ -37,7 +38,7 @@ export const EmotionIconStyleSelector = () => {
             <span className="whitespace-nowrap text-sm font-medium text-theme-text-primary">{EMOTION_ICON_STYLE_LABELS[style]}</span>
           </label>
         ))}
-      </div>
+      </SettingChoiceGrid>
     </fieldset>
   );
 };

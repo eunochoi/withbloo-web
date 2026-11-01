@@ -1,8 +1,9 @@
+import { ChevronRightIcon, EmotionIcon } from '@/common/constants/appIcons';
 import EmotionImage from '@/common/components/ui/EmotionImage';
 import { EMOTIONS } from '@/common/constants/emotions';
 import { AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
-import { MdChevronRight, MdOutlineEmojiEmotions } from 'react-icons/md';
+
 import DiaryFormEmotionPicker from './DiaryFormEmotionPicker';
 
 interface DiaryFormEmotionSectionProps {
@@ -30,18 +31,18 @@ const DiaryFormEmotionSection = ({
           {selectedEmotion ? (
             <EmotionImage emotion={selectedEmotion} alt="" width={48} height={48} className="h-12 w-12 object-contain" />
           ) : (
-            <MdOutlineEmojiEmotions aria-hidden="true" className="h-11 w-11 text-theme-text-tertiary" />
+            <EmotionIcon aria-hidden="true" className="h-11 w-11 text-theme-text-tertiary" />
           )}
         </span>
         <span className="flex min-w-0 flex-1 flex-col gap-1">
           <span className="text-lg font-semibold text-theme-text-primary">오늘의 감정</span>
           <span className=" text-sm text-theme-text-secondary">
-            {selectedEmotion?.nameKr ?? '감정을 골라주세요'}
+            {selectedEmotion ? (selectedEmotion.id === 9 ? '무덤덤' : selectedEmotion.nameKr) : '감정을 골라주세요'}
           </span>
         </span>
         <span className="flex shrink-0 items-center gap-0.5 text-base text-theme-text-secondary">
           {selectedEmotion ? '변경' : '선택'}
-          <MdChevronRight aria-hidden="true" className="h-5 w-5" />
+          <ChevronRightIcon aria-hidden="true" className="h-5 w-5" />
         </span>
       </button>
       <AnimatePresence>

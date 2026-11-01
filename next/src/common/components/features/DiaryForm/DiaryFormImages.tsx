@@ -1,3 +1,4 @@
+import { AddIcon, CloseIcon, DragIcon } from '@/common/constants/appIcons';
 import { DIARY_IMAGE_ALLOWED_MIME_TYPES, DIARY_IMAGE_MAX_COUNT } from '@/common/constants/image';
 import { cn } from '@/common/utils/cn';
 import { closestCenter, DndContext, DragOverlay, KeyboardSensor, MouseSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core';
@@ -7,7 +8,7 @@ import { useReducedMotion } from 'framer-motion';
 import Image from 'next/image';
 import { useEffect, useRef, useState, type ChangeEvent } from 'react';
 import { createPortal } from 'react-dom';
-import { MdAdd, MdClose, MdDragIndicator } from 'react-icons/md';
+
 import type { DiaryImageDraft } from './types';
 
 const tileClass = 'relative h-28 w-24 shrink-0 overflow-hidden rounded-2xl';
@@ -49,7 +50,7 @@ const SortableDiaryImage = ({ id, src, index, disabled, onRemove }: {
         onClick={onRemove}
         className={cn('absolute right-2 top-2', imageControlClass, isDragging && 'invisible')}
       >
-        <MdClose className="h-4 w-4" />
+        <CloseIcon className="h-4 w-4" />
       </button>
       <button
         ref={setActivatorNodeRef}
@@ -61,7 +62,7 @@ const SortableDiaryImage = ({ id, src, index, disabled, onRemove }: {
         onContextMenu={(event) => event.preventDefault()}
         className={cn('absolute bottom-2 right-2 cursor-grab touch-none active:cursor-grabbing disabled:cursor-default', imageControlClass, isDragging && 'invisible')}
       >
-        <MdDragIndicator className="h-4 w-4" aria-hidden="true" />
+        <DragIcon className="h-4 w-4" aria-hidden="true" />
       </button>
     </div>
   );
@@ -130,7 +131,7 @@ const DiaryFormImages = ({ diaryImages, handleImageChange, getImageUrl, handleRe
             onClick={() => fileInputRef.current?.click()}
             className={cn(tileClass, 'flex flex-col items-center justify-center gap-2 border border-dashed border-theme-accent bg-theme-surface/40 text-theme-text-secondary disabled:opacity-40')}
           >
-            <MdAdd aria-hidden="true" className="h-7 w-7 text-theme-accent" />
+            <AddIcon aria-hidden="true" className="h-7 w-7 text-theme-accent" />
             <span className="text-xs">사진 추가</span>
           </button>
         )}

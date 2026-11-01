@@ -13,11 +13,14 @@ import { ko } from 'date-fns/locale';
 import { AnimatePresence } from 'framer-motion';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
+import Image from 'next/image';
+import standingCat from '/public/img/bloolog/cats/cat-blue-standing.png';
 import { PanelDialog } from '../../ui/Dialog/PanelDialog';
 import { PanelBody } from '../../ui/Dialog/PanelDialog/PanelBody';
 import { PanelFooter } from '../../ui/Dialog/PanelDialog/PanelFooter';
 import { PanelHeader } from '../../ui/Dialog/PanelDialog/PanelHeader';
 import { PanelSubmitButton } from '../../ui/Dialog/PanelDialog/PanelSubmitButton';
+import DiaryDatePicker from './DiaryDatePicker';
 import DiaryFormEmotionSection from './DiaryFormEmotionSection';
 import DiaryFormImagesSection from './DiaryFormImagesSection';
 import DiaryFormTextSection from './DiaryFormTextSection';
@@ -70,11 +73,12 @@ const DiaryFormClientPage = ({ isEdit, diaryId }: DiaryFormClientPageProps) => {
   });
   const imageHandlers = useDiaryImages({ diaryImages, setDiaryImages });
   const dateParam = searchParams.get('date');
-  const date = diaryData?.date
-    ?? (isValidLocalDateString(dateParam)
-      ? dateParam
-      : format(new Date(), 'yyyy-MM-dd'));
-  const headerTitle = format(parseLocalDate(date), 'yyyy. M. d. EEEE', { locale: ko });
+  const allowDateChange = isEdit || searchParams.get('allowDateChange') === 'true';
+  const [selectedDate, setSelectedDate] = useState<string | null>(() => isEdit ? null : isValidLocalDateString(dateParam) ? dateParam : allowDateChange ? null : format(new Date(), 'yyyy-MM-dd'));
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+  const date = isEdit ? selectedDate ?? diaryData?.date ?? null : selectedDate;
+  const effectiveDate = isEdit && diaryData && selectedDate === null ? diaryData.date : date;
+  const headerTitle = effectiveDate ? format(parseLocalDate(effectiveDate), 'yyyy. M. d. EEEE', { locale: ko }) : '날짜를 선택해주세요';
   const saveDiary = isEdit
     ? (imageContentIds: string[]) => {
       if (!diaryId) {
@@ -83,6 +87,7 @@ const DiaryFormClientPage = ({ isEdit, diaryId }: DiaryFormClientPageProps) => {
 
       return updateDiaryRequest({
         diaryId,
+        date: effectiveDate!,
         text,
         emotion,
         imageContentIds,
@@ -90,7 +95,7 @@ const DiaryFormClientPage = ({ isEdit, diaryId }: DiaryFormClientPageProps) => {
     }
     : (imageContentIds: string[]) =>
       createDiaryRequest({
-        date,
+        date: effectiveDate!,
         text,
         emotion,
         imageContentIds,
@@ -100,8 +105,8 @@ const DiaryFormClientPage = ({ isEdit, diaryId }: DiaryFormClientPageProps) => {
     emotion,
     diaryImages,
     saveDiary,
-    successMessage: isEdit ? '일기 수정 완료' : '일기 작성 완료',
-    failureMessage: isEdit ? '일기 수정 실패' : '일기 작성 실패',
+    successMessage: isEdit ? '일기를 수정했어요' : '일기를 저장했어요',
+    failureMessage: isEdit ? '저장하지 못했어요' : '저장하지 못했어요',
     onSuccess: () => setIsDialogMounted(false),
   });
 
@@ -133,9 +138,10 @@ const DiaryFormClientPage = ({ isEdit, diaryId }: DiaryFormClientPageProps) => {
           <PanelHeader
             title={headerTitle}
             onBack={handleBack}
+            onTitleClick={allowDateChange && !isSubmitting ? () => setIsDatePickerOpen(true) : undefined}
           />
-          <PanelBody showScrollFade>
-            <fieldset disabled={isSubmitting} className="m-0 flex min-w-0 w-full flex-col gap-7 border-0 pb-6 pt-2">
+          <PanelBody showScrollFade contentClassName="flex flex-col">
+            <fieldset disabled={isSubmitting} className="m-0 flex min-w-0 w-full flex-1 flex-col gap-7 border-0 pb-6 pt-2">
               <div className="w-full">
                 <DiaryFormEmotionSection
                   emotion={emotion}
@@ -154,19 +160,25 @@ const DiaryFormClientPage = ({ isEdit, diaryId }: DiaryFormClientPageProps) => {
                 onReorder={(from, to) => setDiaryImages((images) => arrayMove(images, from, to))}
                 isLoading={isSubmitting}
               />
+              <div className="flex flex-1 items-center justify-center py-4" aria-hidden="true">
+                <Image src={standingCat} alt="" className="h-auto w-36 max-w-full" sizes="144px" />
+              </div>
             </fieldset>
           </PanelBody>
           <PanelFooter>
             <PanelSubmitButton
               type="button"
               onClick={handleSubmit}
-              disabled={isSubmitting || text.length > DIARY_TEXT_MAX_LENGTH}
+              disabled={isSubmitting || !effectiveDate || text.length > DIARY_TEXT_MAX_LENGTH}
               aria-busy={isSubmitting}
             >
               {isSubmitting && <span aria-hidden="true" className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent motion-reduce:animate-none" />}
               {isSubmitting ? '저장 중...' : isEdit ? '수정한 기록 저장하기' : '기록 저장하기'}
             </PanelSubmitButton>
           </PanelFooter>
+          <AnimatePresence>
+            {isDatePickerOpen && <DiaryDatePicker value={effectiveDate} diaryId={diaryId} onClose={() => setIsDatePickerOpen(false)} onApply={(next) => { setSelectedDate(next); setIsDatePickerOpen(false); }} />}
+          </AnimatePresence>
         </PanelDialog>
       )
       }

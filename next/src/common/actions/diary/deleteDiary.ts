@@ -25,18 +25,7 @@ export const deleteDiary = async ({ id }: DeleteDiaryParams): Promise<ActionResu
 
       if (!diary) throw new Error('DIARY_NOT_FOUND');
 
-      await tx.diary.update({
-        where: { id: diary.id },
-        data: {
-          text: '',
-          visible: false,
-          emotion: 9,
-        },
-      });
-
-      await tx.image.deleteMany({
-        where: { diaryId: diary.id },
-      });
+      await tx.diary.delete({ where: { id: diary.id } });
     });
 
     await recomputeStreak(auth.email);

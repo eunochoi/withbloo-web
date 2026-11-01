@@ -1,5 +1,7 @@
 'use client';
 
+import { MoreIcon } from '@/common/constants/appIcons';
+
 import { authAction } from "@/common/auth/authAction";
 import { diaryQueries } from "@/common/queries/diaryQueries";
 import DiaryMenus from "@/common/components/ui/Diary/DiaryMenus";
@@ -13,7 +15,7 @@ import { ko } from "date-fns/locale";
 import { AnimatePresence } from "framer-motion";
 import { notFound, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { MdMoreVert } from 'react-icons/md';
+
 import { DiaryDetailContent } from "./DiaryDetailContent";
 import { DiaryDetailGallery } from "./DiaryDetailGallery";
 
@@ -53,13 +55,13 @@ const DiaryDetailClientPage = ({ diaryId }: DiaryDetailClientPageProps) => {
             rightAction={(
               <>
                 <button
-                  className="-mr-2 flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-xl text-theme-text-tertiary"
+                  className="-mr-5 flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-xl text-theme-text-tertiary"
                   aria-label="일기 메뉴"
                   aria-expanded={isMenuOpen}
                   onClick={() => setMenuOpen((prev) => !prev)}
                   type="button"
                 >
-                  <MdMoreVert />
+                  <MoreIcon />
                 </button>
                 <DiaryMenus
                   isMenuOpen={isMenuOpen}
@@ -71,7 +73,7 @@ const DiaryDetailClientPage = ({ diaryId }: DiaryDetailClientPageProps) => {
             )}
           />
           <PanelBody>
-            <div className="flex w-full min-w-0 flex-col gap-8 pt-5 pb-[max(2rem,env(safe-area-inset-bottom))] landscape-short:gap-6 landscape-short:pt-2">
+            <div className="flex w-full min-w-0 flex-col gap-12 pt-5 pb-[max(2rem,env(safe-area-inset-bottom))] landscape-short:gap-6 landscape-short:pt-2">
               <DiaryDetailContent diaryData={diaryData} />
               {hasImages && <DiaryDetailGallery key={diaryData.id} images={diaryData.Images} />}
             </div>

@@ -1,4 +1,5 @@
 import type { DiaryData } from '@/common/types/diary';
+import { EMOTIONS } from '@/common/constants/emotions';
 import { DIARY_TEXT_MAX_LENGTH } from '@/common/constants/diary';
 import { useQueryClient } from '@tanstack/react-query';
 import { showNotice } from '@/common/components/ui/Notice/notice';
@@ -31,7 +32,7 @@ export const useDiarySubmission = ({
   const handleSubmit = async () => {
     if (isSubmitting) return;
 
-    if (emotion < 0 || emotion > 9) {
+    if (!Number.isInteger(emotion) || emotion < 0 || emotion >= EMOTIONS.length) {
       showNotice('감정을 선택해주세요');
       return;
     }
@@ -55,6 +56,9 @@ export const useDiarySubmission = ({
       queryClient.setQueryData(['diary', 'date', savedDiary.date], savedDiary);
       queryClient.setQueryData(['diary', 'id', String(savedDiary.id)], savedDiary);
       await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['diary', 'date'] }),
+        queryClient.invalidateQueries({ queryKey: ['habit'] }),
+        queryClient.invalidateQueries({ queryKey: ['habits'] }),
         queryClient.invalidateQueries({ queryKey: ['diary-habit', 'month'] }),
         queryClient.invalidateQueries({ queryKey: ['diary', 'diaryList'] }),
         queryClient.invalidateQueries({ queryKey: ['stats'] }),
@@ -66,7 +70,7 @@ export const useDiarySubmission = ({
       setTimeout(() => showNotice(completedMessage), 300);
     } catch (error) {
       console.error(failureMessage, error);
-      showNotice(failureMessage);
+      showNotice(error instanceof Error ? error.message : failureMessage);
     } finally {
       setIsSubmitting(false);
     }

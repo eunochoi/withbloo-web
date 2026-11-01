@@ -18,7 +18,6 @@ export const getDiaryById = async ({ id }: IdParams): Promise<ActionResult<Diary
       where: {
         userId: auth.userId,
         id: diaryId,
-        visible: true,
       },
       include: {
         images: {
@@ -26,9 +25,6 @@ export const getDiaryById = async ({ id }: IdParams): Promise<ActionResult<Diary
             imageContent: true,
           },
           orderBy: { order: 'asc' },
-        },
-        habits: {
-          orderBy: { priority: 'desc' },
         },
       },
     });

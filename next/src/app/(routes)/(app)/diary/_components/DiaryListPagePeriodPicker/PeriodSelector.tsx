@@ -1,7 +1,8 @@
+import { ChevronLeftIcon, ChevronRightIcon } from '@/common/constants/appIcons';
 import { getDefaultYear, MONTH_UNSELECTED } from "@/common/constants/filterDefaults";
 import { cn } from "@/common/utils/cn";
 import { useState } from "react";
-import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
+
 
 interface Props {
   selectedYear: number | null;
@@ -32,7 +33,7 @@ const PeriodSelector = ({ selectedYear, setSelectedYear, selectedMonth, setSelec
       <div className="flex flex-col gap-3">
         <div className="flex items-center gap-2">
           <button type="button" onClick={() => selectYear(displayYear - 1)} aria-label="이전 연도 선택" className={cn(optionClass, "flex w-12 shrink-0 items-center justify-center")}>
-            <MdKeyboardArrowLeft aria-hidden="true" className="h-5 w-5" />
+            <ChevronLeftIcon aria-hidden="true" className="h-5 w-5" />
           </button>
           <button
             type="button"
@@ -48,7 +49,7 @@ const PeriodSelector = ({ selectedYear, setSelectedYear, selectedMonth, setSelec
             {displayYear}년
           </button>
           <button type="button" onClick={() => selectYear(displayYear + 1)} aria-label="다음 연도 선택" className={cn(optionClass, "flex w-12 shrink-0 items-center justify-center")}>
-            <MdKeyboardArrowRight aria-hidden="true" className="h-5 w-5" />
+            <ChevronRightIcon aria-hidden="true" className="h-5 w-5" />
           </button>
         </div>
       </div>

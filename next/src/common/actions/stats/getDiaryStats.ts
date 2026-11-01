@@ -1,5 +1,6 @@
 'use server';
 
+import { EMOTIONS } from '@/common/constants/emotions';
 import { prisma } from '../../../../lib/prisma';
 import { getAuth } from '../../auth/getAuth';
 import type { ActionResult } from '../types';
@@ -15,7 +16,6 @@ export const getDiaryStats = async ({ year }: YearParams): Promise<ActionResult<
     const diaries = await prisma.diary.findMany({
       where: {
         email: auth.email,
-        visible: true,
         date: {
           gte: startDate,
           lte: endDate,
@@ -33,18 +33,18 @@ export const getDiaryStats = async ({ year }: YearParams): Promise<ActionResult<
       return { ok: false, code: 'USER_NOT_FOUND', message: '유저를 찾을 수 없습니다.' };
     }
 
-    const emotionCounts = Array(10).fill(0);
+    const emotionCounts = Array(EMOTIONS.length).fill(0);
     const monthlyCount = Array(12).fill(0);
-    const halfYearEmotionCounts = Array(2).fill(null).map(() => Array(10).fill(0));
+    const halfYearEmotionCounts = Array(2).fill(null).map(() => Array(EMOTIONS.length).fill(0));
 
     diaries.forEach((diary) => {
-      if (diary.emotion >= 0 && diary.emotion <= 9) {
+      if (diary.emotion >= 0 && diary.emotion < EMOTIONS.length) {
         emotionCounts[diary.emotion] += 1;
       }
 
       const month = parseInt(diary.date.split('-')[1], 10) - 1;
       monthlyCount[month] += 1;
-      if (diary.emotion >= 0 && diary.emotion <= 9) {
+      if (diary.emotion >= 0 && diary.emotion < EMOTIONS.length) {
         const halfYear = Math.floor(month / 6);
         halfYearEmotionCounts[halfYear][diary.emotion] += 1;
       }

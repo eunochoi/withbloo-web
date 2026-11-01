@@ -1,4 +1,5 @@
-import { MdAdd } from 'react-icons/md';
+import { AddIcon } from '@/common/constants/appIcons';
+
 
 interface Props {
   isFuture: boolean;
@@ -14,9 +15,9 @@ const DayInfoDiaryEmptyState = ({ isFuture, onAddDiary }: Props) => (
     ) : (
       <>
         <p className="mt-1 text-sm text-theme-text-tertiary desktop:text-sm">아직 작성한 일기가 없어요.</p>
-        <p className="mt-1 text-sm text-theme-text-tertiary desktop:text-sm">하루의 이야기를 남겨보세요.</p>
+        <p className="mt-1 text-sm text-theme-text-tertiary desktop:text-sm">하루의 이야기를 가볍게 남겨보세요.</p>
         <button className="mt-6 flex min-h-9 items-center gap-1.5 rounded-full bg-theme-accent px-4 text-xs text-theme-text-on-accent desktop:text-sm" onClick={onAddDiary} type="button">
-          <MdAdd className="text-lg" /> 일기 쓰기
+          <AddIcon className="text-lg" /> 일기 쓰기
         </button>
       </>
     )}

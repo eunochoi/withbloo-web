@@ -3,7 +3,7 @@
 import DiaryPageContent from "./_components/DiaryPageContent";
 import DiaryPageSkeleton from "./_components/DiaryPageSkeleton";
 import DiaryPageToolbar from "./_components/DiaryPageToolbar";
-import DiaryPageTopSection from "./_components/DiaryPageTopSection";
+import AppPageTitle from '@/common/components/layout/AppPageTitle';
 
 import { AnimatePresence } from "framer-motion";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -13,11 +13,13 @@ import { useEffect, useRef, useState } from "react";
 import { useInView } from "react-intersection-observer";
 
 
-import DiaryListPageEmotionPicker from "@/app/(routes)/(app)/diary/_components/DiaryListPageEmotionPicker";
-import DiaryListPagePeriodPicker from "@/app/(routes)/(app)/diary/_components/DiaryListPagePeriodPicker";
+import DiaryFilterPicker from './_components/DiaryFilterPicker';
 import { authAction } from "@/common/auth/authAction";
+import SortPicker from '@/common/components/ui/SortPicker';
 import AppPageLayout from "@/common/components/layout/AppPageLayout";
+import { getSelectionSummary } from '@/common/functions/toolbarSummary';
 import { EMOTIONS } from "@/common/constants/emotions";
+import { DIARY_EMOTION_GROUPS, DIARY_SEASONS, type DiaryEmotionGroup, type DiarySeason } from "@/common/constants/diaryFilters";
 import { EMOTION_UNSELECTED, MONTH_UNSELECTED } from "@/common/constants/filterDefaults";
 import { useCurrentUser } from "@/common/hooks/useCurrentUser";
 import { usePrefetchPage } from "@/common/hooks/usePrefetchPage";
@@ -39,54 +41,43 @@ const DiaryClientPage = () => {
   const { ref: inViewRef, inView } = useInView({ root: wrapperRef.current, threshold: 0, delay: 0 });
 
   const { selectedYear, selectedMonth, emotionToggle, setSelectedYear, setSelectedMonth, setEmotionToggle } = useDiaryListFilter();
-  const [isEmotionPickerOpen, setIsEmotionPickerOpen] = useState(false);
-  const [isPeriodPickerOpen, setIsPeriodPickerOpen] = useState(false);
-  const { sortValue, onToggle } = useSortToggle({ sortKey: 'diary' });
+  const [isFilterOpen, setFilterOpen] = useState(false);
+  const [isSortOpen, setIsSortOpen] = useState(false);
+  const { sortValue, setSort } = useSortToggle({ sortKey: 'diary' });
   const [statsYear, setStatsYear] = useState(new Date().getFullYear());
-  const isEmotionSelected = emotionToggle !== EMOTION_UNSELECTED;
-  const isPeriodSelected = selectedYear !== null;
-  const selectedEmotionLabel = EMOTIONS[emotionToggle]?.nameKr ?? '';
-  const selectedPeriodLabel = selectedYear === null
-    ? '전체 기간'
-    : selectedMonth === MONTH_UNSELECTED ? `${selectedYear}년` : `${selectedYear}년 ${selectedMonth}월`;
+  const seasons = (searchParams.get('seasons')?.split(',') ?? []).filter((value): value is DiarySeason => Object.prototype.hasOwnProperty.call(DIARY_SEASONS, value));
+  const emotionGroups = (searchParams.get('groups')?.split(',') ?? []).filter((value): value is DiaryEmotionGroup => Object.prototype.hasOwnProperty.call(DIARY_EMOTION_GROUPS, value));
+  const isEmotionSelected = emotionToggle !== EMOTION_UNSELECTED || (emotionGroups.length > 0 && emotionGroups.length < 3);
+  const isPeriodSelected = selectedYear !== null || (seasons.length > 0 && seasons.length < 4);
+  const selectedEmotionLabel = emotionGroups.length
+    ? getSelectionSummary(emotionGroups.map((group) => DIARY_EMOTION_GROUPS[group].label), 3, '전체 감정')
+    : EMOTIONS[emotionToggle]?.nameKr ?? '전체 감정';
+  const seasonSummary = getSelectionSummary(seasons.map((season) => DIARY_SEASONS[season].label), 4, '');
+  const selectedPeriodLabel = [selectedYear === null ? '' : `${selectedYear}년`, selectedMonth === MONTH_UNSELECTED ? '' : `${selectedMonth}월`, seasonSummary].filter(Boolean).join(' · ') || '전체 기간';
+  const filterLabel = [
+    selectedYear === null ? '' : selectedYear === new Date().getFullYear() ? '올해' : `${String(selectedYear % 100).padStart(2, '0')}년`,
+    selectedMonth === MONTH_UNSELECTED ? '' : `${selectedMonth}월`,
+    seasonSummary,
+    getSelectionSummary(emotionGroups.map((group) => DIARY_EMOTION_GROUPS[group].label), 3, '') || (emotionGroups.length ? '' : EMOTIONS[emotionToggle]?.nameKr ?? ''),
+  ].filter(Boolean).join(' · ') || '필터';
 
-  const handleApplyPeriod = (year: number | null, month: number) => {
+  const handleApplyFilter = (year: number | null, nextSeasons: DiarySeason[], groups: DiaryEmotionGroup[]) => {
     const params = new URLSearchParams(searchParams);
-
-    if (year !== null) params.set('year', year.toString());
-    else params.delete('year');
-    if (year !== null && month !== MONTH_UNSELECTED) params.set('month', month.toString());
-    else params.delete('month');
-
+    if (year !== null) params.set('year', String(year)); else params.delete('year');
+    if (nextSeasons.length) params.set('seasons', nextSeasons.join(',')); else params.delete('seasons');
+    if (groups.length) params.set('groups', groups.join(',')); else params.delete('groups');
+    params.delete('month');
+    params.delete('emotion');
     const query = params.toString();
     router.replace(query ? `${pathname}?${query}` : pathname);
     setSelectedYear(year);
-    setSelectedMonth(year === null ? MONTH_UNSELECTED : month);
-    setIsPeriodPickerOpen(false);
-
-    setTimeout(() => {
-      wrapperRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
-    }, 200);
-  };
-
-  const handleApplyEmotion = (emotion: number) => {
-    const params = new URLSearchParams(searchParams);
-
-    if (emotion !== EMOTION_UNSELECTED) params.set('emotion', emotion.toString());
-    else params.delete('emotion');
-
-    const query = params.toString();
-    router.replace(query ? `${pathname}?${query}` : pathname);
-    setEmotionToggle(emotion);
-    setIsEmotionPickerOpen(false);
-
-    setTimeout(() => {
-      wrapperRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
-    }, 200);
+    setSelectedMonth(MONTH_UNSELECTED);
+    setEmotionToggle(EMOTION_UNSELECTED);
+    setFilterOpen(false);
   };
 
   const { data: flatDiaries, fetchNextPage, isFetching, isPlaceholderData, hasNextPage, isError, refetch } = useInfiniteQuery({
-    ...diaryQueries.list({ sortType: sortValue, search: emotionToggle, selectedYear, selectedMonth }, authAction),
+    ...diaryQueries.list({ sortType: sortValue, search: emotionToggle, selectedYear, selectedMonth, seasons, emotionGroups }, authAction),
     placeholderData: keepPreviousData,
     select: (data) => data.pages.flat() as DiaryData[],
   });
@@ -104,23 +95,21 @@ const DiaryClientPage = () => {
   return (
     <>
       <AppPageLayout
-        topSection={<DiaryPageTopSection />}
+        header={<AppPageTitle title="일기 목록" hashtags="#감정 #끄적끄적" />}
 
-        pageRef={wrapperRef}
-        showScrollToTop
+        scrollRef={wrapperRef}
         toolbar={
           <DiaryPageToolbar
-            openPeriodFilter={() => setIsPeriodPickerOpen(true)}
-            isPeriodSelected={isPeriodSelected}
-            selectedPeriodLabel={selectedPeriodLabel}
-            onToggle={onToggle}
+            onSort={() => setIsSortOpen(true)}
+            onFilter={() => setFilterOpen(true)}
+            onAdd={() => router.push('/diary/new?allowDateChange=true', { scroll: false })}
             sortValue={sortValue}
-            openEmotionFilter={() => setIsEmotionPickerOpen(true)}
-            isEmotionSelected={isEmotionSelected}
-            selectedEmotionLabel={selectedEmotionLabel}
+            filterLabel={filterLabel}
+            filterDescription={`${selectedPeriodLabel} · ${selectedEmotionLabel}`}
           />
         }
-        mainSection={flatDiaries === undefined && !isError ? (
+      >
+        {flatDiaries === undefined && !isError ? (
           <DiaryPageSkeleton />
         ) : flatDiaries === undefined ? (
           <div className="flex min-h-64 w-full flex-col items-center justify-center gap-3 text-center text-theme-text-secondary">
@@ -137,25 +126,10 @@ const DiaryClientPage = () => {
             setStatsYear={setStatsYear}
           />
         )}
-      />
+      </AppPageLayout>
       <AnimatePresence>
-        {isEmotionPickerOpen && (
-          <DiaryListPageEmotionPicker
-            key="emotion-picker"
-            selectedEmotion={emotionToggle}
-            onClose={() => setIsEmotionPickerOpen(false)}
-            onApply={handleApplyEmotion}
-          />
-        )}
-        {isPeriodPickerOpen && (
-          <DiaryListPagePeriodPicker
-            key="period-picker"
-            selectedYear={selectedYear}
-            selectedMonth={selectedMonth}
-            onClose={() => setIsPeriodPickerOpen(false)}
-            onApply={handleApplyPeriod}
-          />
-        )}
+        {isSortOpen && <SortPicker title="일기 정렬" value={sortValue} options={[{ value: 'DESC', label: '최신순' }, { value: 'ASC', label: '과거순' }]} onClose={() => setIsSortOpen(false)} onApply={(value) => { setSort(value); setIsSortOpen(false); }} />}
+        {isFilterOpen && <DiaryFilterPicker year={selectedYear} seasons={seasons} emotionGroups={emotionGroups.length ? emotionGroups : (Object.keys(DIARY_EMOTION_GROUPS) as DiaryEmotionGroup[]).filter((group) => (DIARY_EMOTION_GROUPS[group].emotions as readonly number[]).includes(emotionToggle))} onClose={() => setFilterOpen(false)} onApply={handleApplyFilter} />}
       </AnimatePresence>
     </>
   );

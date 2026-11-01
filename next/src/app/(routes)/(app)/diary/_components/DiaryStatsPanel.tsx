@@ -4,6 +4,7 @@ import { authAction } from '@/common/auth/authAction';
 import { statsQueries } from '@/common/queries/statsQueries';
 import MonthlyBarChart from '@/common/components/features/HabitDetail/MonthlyBarChart';
 import { YearRecordHeader } from '@/common/components/ui/YearRecordHeader';
+import { useMonthSwipe } from '@/common/components/ui/Calendar/useMonthSwipe';
 import { cn } from '@/common/utils/cn';
 import { useQuery } from '@tanstack/react-query';
 
@@ -18,31 +19,37 @@ const DiaryStatsPanel = ({ year, onChangeYear, className }: Props) => {
     ...statsQueries.diary(year, authAction),
   });
 
+  const currentYear = new Date().getFullYear();
+  const previous = () => { if (year > 1900) onChangeYear(year - 1); };
+  const next = () => { if (year < currentYear) onChangeYear(year + 1); };
+  const swipeProps = useMonthSwipe(previous, next);
   return (
-    <aside className={cn("hidden w-full flex-col gap-3 desktop:flex desktop:sticky desktop:top-[max(112px,calc(var(--page-toolbar-height,0px)+24px))] desktop:self-start", className)}>
+    <aside {...swipeProps} className={cn("hidden w-full flex-col gap-3 desktop:flex desktop:sticky desktop:top-[max(112px,calc(var(--page-toolbar-height,0px)+24px))] desktop:self-start", className)}>
       <YearRecordHeader
         year={year}
-        onPreviousYear={() => onChangeYear(year - 1)}
+        canPrevious={year > 1900}
+        canNext={year < currentYear}
+        onPreviousYear={previous}
         onCurrentYear={() => onChangeYear(new Date().getFullYear())}
-        onNextYear={() => onChangeYear(year + 1)}
+        onNextYear={next}
       />
-      <div className="text-nowrap grid grid-cols-3 divide-x divide-theme-border/60 py-3 text-center">
+      <div className="grid grid-cols-3 divide-x divide-theme-border/50 rounded-theme border border-theme-accent/20 bg-theme-accent-light/50 py-3 text-center">
         <div className="flex min-w-0 flex-col gap-1 px-2">
           <span className="text-sm text-theme-text-secondary">작성된 일기</span>
-          <strong className=" text-2xl text-theme-accent">
-            {isPending || isError ? '—' : `${data?.totalCount ?? 0}개`}
+          <strong className="text-2xl text-theme-text-primary">
+            {isPending || isError ? '—' : data?.totalCount ?? 0}<span className="ml-0.5 text-sm text-theme-text-secondary">개</span>
           </strong>
         </div>
         <div className="flex min-w-0 flex-col gap-1 px-2">
           <span className="text-sm text-theme-text-secondary">현재 연속 기록</span>
-          <strong className=" text-2xl text-theme-accent">
-            {isPending || isError ? '—' : `${data?.currentStreak.days ?? 0}일`}
+          <strong className="text-2xl text-theme-text-primary">
+            {isPending || isError ? '—' : data?.currentStreak.days ?? 0}<span className="ml-0.5 text-sm text-theme-text-secondary">일</span>
           </strong>
         </div>
         <div className="flex min-w-0 flex-col gap-1 px-2">
           <span className="text-sm text-theme-text-secondary">역대 최고 기록</span>
-          <strong className=" text-2xl text-theme-accent">
-            {isPending || isError ? '—' : `${data?.longestStreak.days ?? 0}일`}
+          <strong className="text-2xl text-theme-text-primary">
+            {isPending || isError ? '—' : data?.longestStreak.days ?? 0}<span className="ml-0.5 text-sm text-theme-text-secondary">일</span>
           </strong>
         </div>
       </div>
