@@ -45,7 +45,8 @@ export default function RootLayout({
           ? preference.theme
           : 'blue';
         var accent = themeValues[themeName];
-        var isDarkMode = preference && preference.mode === '어둡게';
+        var isDarkMode = preference && (preference.mode === '어둡게' ||
+          (preference.mode === '자동' && window.matchMedia('(prefers-color-scheme: dark)').matches));
         var accentLight = isDarkMode
           ? '${THEME_BG_DARK_MODE}'
           : accent.accentLight;

@@ -142,18 +142,8 @@ html[data-font-type='타입2'] {
 }
 
 html[data-font-type='타입3'] {
-  --app-font-family: 'HakgyoansimGeurimilgiTTF-R';
-}
-
-html[data-font-type='타입4'] {
-  --app-font-family: 'Paperozi';
-}
-
-html[data-font-type='타입5'] {
   --app-font-family: 'MaruBuri';
 }
-
-
 
 /* app font size */
 html[data-font-size='작게'] {

@@ -8,9 +8,7 @@ import { FONT_TYPE_LIST, type FontType } from '@/common/types/setting';
 const fontFamilies = {
   타입1: 'TmoneyRoundWind',
   타입2: 'SUIT',
-  타입3: 'HakgyoansimGeurimilgiTTF-R',
-  타입4: 'Paperozi',
-  타입5: 'MaruBuri',
+  타입3: 'MaruBuri',
 } satisfies Record<FontType, string>;
 
 export const FontTypeSelector = () => {

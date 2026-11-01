@@ -20,6 +20,7 @@ export const useUserSettings = () => {
     font: {
       size: '보통',
       type: '타입1',
+      version: 2,
     },
     theme: {
       accent: 'blue',
@@ -34,7 +35,10 @@ export const useUserSettings = () => {
     },
   );
   const fontSize = setting?.font?.size;
-  const fontType = setting?.font?.type;
+  const storedFontType: string | undefined = setting?.font?.type;
+  const fontType: FontType = setting?.font?.version === 2
+    ? (FONT_TYPE_LIST.includes(storedFontType as FontType) ? storedFontType as FontType : '타입1')
+    : storedFontType === '타입5' ? '타입3' : storedFontType === '타입2' ? '타입2' : '타입1';
   const accent = setting?.theme?.accent;
   const mode = setting?.theme?.mode;
   const emotionIconStyle = hasMounted && setting?.emotionIconStyle && EMOTION_ICON_STYLE_LIST.includes(setting.emotionIconStyle)
@@ -78,6 +82,7 @@ export const useUserSettings = () => {
         font: {
           ...(prev.font),
           type,
+          version: 2,
         }
       }));
     }
