@@ -17,14 +17,9 @@ const LoadingScreen = ({ message, showLogo = true }: LoadingScreenProps) => {
     >
       {showLogo && (
         <div className="flex flex-col items-center gap-12">
-          <div className="flex flex-col items-center gap-4">
+          <div className="flex flex-col items-center gap-6">
             <Image src={cat} alt="" priority sizes="144px" className="h-auto w-64 max-w-full" />
-            <Wordmark accentColor="var(--loading-indicator)" className="text-[36px]" />
-          </div>
-          <div className="flex gap-3">
-            <div className="h-4 w-4 animate-pulse rounded-full" style={{ backgroundColor: 'var(--loading-indicator)' }} />
-            <div className="h-4 w-4 animate-pulse rounded-full [animation-delay:200ms]" style={{ backgroundColor: 'var(--loading-indicator)' }} />
-            <div className="h-4 w-4 animate-pulse rounded-full [animation-delay:400ms]" style={{ backgroundColor: 'var(--loading-indicator)' }} />
+            <Wordmark accentColor="var(--loading-indicator)" className="text-[32px]" />
           </div>
         </div>
       )}
