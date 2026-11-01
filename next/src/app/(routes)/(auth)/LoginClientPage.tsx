@@ -25,7 +25,7 @@ const LoginClientPage = () => {
       showScrollFade
       scrollFadeClassName='desktop:hidden'
     >
-      <div className="grid min-h-[100dvh] desktop:grid-cols-[1.35fr_1fr]">
+      <div className="grid min-h-[100dvh] desktop:grid-cols-[4fr_3fr]">
         <LoginTopSection />
         <LoginBottomSection />
       </div>

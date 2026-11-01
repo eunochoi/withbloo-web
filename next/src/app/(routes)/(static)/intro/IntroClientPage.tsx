@@ -2,91 +2,63 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { MdLockOutline, MdLogin, MdPalette } from 'react-icons/md';
-
 import { ScrollContainer } from '@/common/components/ui/ScrollContainer';
 import Wordmark from '@/common/components/ui/Wordmark';
 import { cn } from '@/common/utils/cn';
-import { twMerge } from 'tailwind-merge';
 import IntroActionButtons from './_components/IntroActionButtons';
 import IntroHero from './_components/IntroHero';
 import IntroSection from './_components/IntroSection';
-import IntroVisual from './_components/IntroVisual';
-import { introContainerClass, introDescriptionClass, introIconClass, introSectionClass, introTitleClass } from './_styles/classes';
-import cat from '/public/img/hiding-cat/hiding-cat-home.png';
-import introSection1 from '/public/img/intro/intro-section-1.png';
-import introSection2 from '/public/img/intro/intro-section-2.png';
-import introSection3 from '/public/img/intro/intro-section-3.png';
-
-
-const featureItemClass = 'inline-flex items-center gap-2';
+import { introContainerClass, introDescriptionClass, introSectionClass, introTitleClass } from './_styles/classes';
+import positive from '/public/img/bloolog/cats/cat-blue-p.png';
+import neutral from '/public/img/bloolog/cats/cat-blue.png';
+import negative from '/public/img/bloolog/cats/cat-blue-n.png';
 
 const IntroClientPage = () => (
-  <ScrollContainer
-    className="static-theme-blue h-[100dvh] w-full bg-theme-bg text-theme-text-primary"
-    showScrollFade
-    scrollFadeClassName="desktop:hidden"
-  >
+  <ScrollContainer className="static-theme-blue h-[100dvh] w-full bg-theme-bg text-theme-text-primary" showScrollFade scrollFadeClassName="desktop:hidden">
     <IntroHero />
-
-    <IntroSection
-      title="하루를 가볍게 남겨요"
-      description={'오늘의 감정 일기를 남기고,\n작은 습관을 하나씩 체크해요.'}
-    >
-      <IntroVisual src={introSection1} alt="intro-section-1" />
+    <IntroSection title="안녕, 나는 블루야!" description={'마음에 따라 털색이 달라지는\n조금 특별한 고양이야.\n예전엔 파란 무늬를 지우고 싶었어.\n하지만 작은 고래 파인과 함께하며,\n파란 마음도 나의 일부임을 알아가고 있어.'}>
+      <div className="grid grid-cols-3 gap-3 text-center text-sm text-theme-text-secondary">
+        {[
+          { src: positive, text: '기쁘고 설레는 날' },
+          { src: neutral, text: '평범한 날' },
+          { src: negative, text: '마음이 무거운 날' },
+        ].map(({ src, text }) => (
+          <div key={text}><Image src={src} alt="" sizes="(min-width: 1024px) 18vw, 30vw" className="w-full" /><p>{text}</p></div>
+        ))}
+      </div>
     </IntroSection>
-
-    <IntroSection
-      reverse
-      title="쌓인 하루를 돌아봐요"
-      description={'하루하루의 기록이 쌓이면\n내가 어떤 시간을 보내왔는지 보여요.'}
-    >
-      <IntroVisual src={introSection2} alt="intro-section-2" />
+    <IntroSection reverse title="오늘의 마음을 기록해요" description={'감정을 고르고, 글과 사진으로\n나만의 하루를 남겨요.'}>
+      <div className="rounded-[20px] bg-theme-accent-light p-8 text-center text-theme-text-secondary">감정 일기 · 사진 · 기록 필터</div>
     </IntroSection>
-
+    <IntroSection title="나를 돌보는 작은 실천" description={'이어가고 싶은 습관은 더하고,\n줄이고 싶은 행동과는 잠시 거리를 둬요.'}>
+      <div className="rounded-[20px] bg-theme-accent-light p-8 text-center text-theme-text-secondary">습관 관리 · 자유 기록 · 거리두기</div>
+    </IntroSection>
+    <IntroSection reverse title="하루하루 쌓아온 나의 발자취" description={'달력과 통계에서 지난 감정과\n습관 기록을 돌아봐요.'}>
+      <div className="rounded-[20px] bg-theme-accent-light p-8 text-center text-theme-text-secondary">월간 기록 · 감정 통계 · 연속 기록</div>
+    </IntroSection>
     <section className={cn(introSectionClass, 'bg-theme-surface')}>
-      <div className={cn(introContainerClass, 'flex max-w-[760px] flex-col items-center gap-7 text-center')}>
-        <h2 className="m-0 break-keep text-xl font-bold desktop:text-2xl">휴대폰 · 태블릿 · PC에서 함께</h2>
-        <IntroVisual
-          src={introSection3}
-          className="!aspect-[2/1]"
-          alt="intro-section-3"
-        />
-        <ul className="m-0 flex list-none flex-wrap justify-center gap-x-6 gap-y-3 p-0 text-sm text-theme-text-secondary desktop:text-base">
-          <li className={featureItemClass}><MdLogin className={introIconClass} aria-hidden="true" />간편 로그인</li>
-          <li className={featureItemClass}><MdPalette className={introIconClass} aria-hidden="true" />다양한 커스텀 설정</li>
-          <li className={featureItemClass}><MdLockOutline className={introIconClass} aria-hidden="true" />개인 일기 기록</li>
-        </ul>
+      <div className={cn(introContainerClass, 'flex max-w-[760px] flex-col gap-8')}>
+        <h2 className={introTitleClass}>웹과 앱에서 만나는 &apos;위블&apos;</h2>
+        <div className="grid gap-6 tablet:grid-cols-2 text-theme-text-secondary leading-relaxed">
+          <p><strong className="text-theme-text-primary">웹</strong><br />계정으로 로그인하고 서버에 기록을 저장해요. 휴대폰, 태블릿, PC에서 감정 일기와 습관, 거리두기를 기록해요.</p>
+          <p><strong className="text-theme-text-primary">앱</strong><br />계정 없이 기기에 기록해요. 백업 파일로 기록을 보관하고 복원할 수 있어요.</p>
+        </div>
+        <p className={introDescriptionClass}>웹과 앱의 기록은 자동으로 연동되지 않아요.</p>
       </div>
     </section>
-
-    <section className={twMerge(introSectionClass, 'bg-theme-accent-light !pb-0')}>
+    <section className={cn(introSectionClass, 'bg-theme-accent-light')}>
       <div className={cn(introContainerClass, 'flex flex-col items-center gap-10 text-center')}>
         <Wordmark className="text-5xl desktop:text-6xl" />
-        <h2 className={introTitleClass}>툭, 남기다 보면<br />조금씩 괜찮아질 거예요.</h2>
-        <p className={introDescriptionClass}>took — 하루를 툭, To OK.</p>
-        <IntroActionButtons className="mt-2" />
+        <h2 className={introTitleClass}>어떤 색의 하루라도, 블루와 함께.</h2>
+        <p className={introDescriptionClass}>Bloom with Bloo and Blue.</p>
+        <IntroActionButtons />
+        <nav aria-label="서비스 정책" className="flex flex-wrap justify-center gap-6 text-sm text-theme-text-secondary">
+          <Link href="/privacy" className="hover:underline">개인정보처리방침</Link>
+          <Link href="/account-deletion" className="hover:underline">계정 삭제</Link>
+        </nav>
+        <p className="text-sm text-theme-text-secondary">eooooostudio</p>
       </div>
     </section>
-    <footer className="bg-theme-accent-light flex flex-col items-center gap-4 px-6 pt-32 text-sm text-theme-text-secondary">
-      <nav aria-label="서비스 정책" className="flex flex-wrap justify-center gap-x-6 gap-y-3">
-        <Link href="/privacy" className="hover:underline focus-visible:outline-2 focus-visible:outline-theme-accent">
-          개인정보처리방침
-        </Link>
-        <Link href="/account-deletion" className="hover:underline focus-visible:outline-2 focus-visible:outline-theme-accent">
-          계정 삭제
-        </Link>
-      </nav>
-      <p>eooooostudio</p>
-    </footer>
-    <div className='w-full bg-theme-accent-light'>
-      <Image
-        src={cat}
-        alt="화면 아래에서 고개를 내민 블루 고양이"
-        sizes="(min-width: 1196px) 622px, (min-width: 1024px) calc(60vw - 96px), (min-width: 480px) calc(100vw - 64px), calc(100vw - 40px)"
-        className="ml-auto w-1/2 max-w-[300px]"
-      />
-    </div>
   </ScrollContainer>
 );
 

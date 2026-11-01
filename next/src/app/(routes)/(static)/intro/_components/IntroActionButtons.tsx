@@ -1,8 +1,10 @@
 'use client';
 
+import { ArrowRightIcon } from '@/common/constants/appIcons';
+
 import Link from 'next/link';
 import { FaGooglePlay } from 'react-icons/fa';
-import { MdArrowForward, MdInstallMobile } from 'react-icons/md';
+import { MdInstallMobile } from 'react-icons/md';
 
 import { cn } from '@/common/utils/cn';
 import { usePwaInstall } from '../_hooks/usePwaInstall';
@@ -27,7 +29,7 @@ const IntroActionButtons = ({ className }: IntroActionButtonsProps) => {
         )}
       >
         웹에서 시작하기
-        <MdArrowForward className={introIconClass} aria-hidden="true" />
+        <ArrowRightIcon className={introIconClass} aria-hidden="true" />
       </Link>
       <div className="flex flex-wrap items-center justify-center gap-x-3">
         <a href={PLAY_STORE_URL} className={secondaryActionClass}>

@@ -22,7 +22,7 @@ const IntroVisual = ({ alt, className, priority = false, src = sad }: IntroVisua
       height={src.height}
       priority={priority}
       sizes="(min-width: 1196px) 622px, (min-width: 1024px) calc(60vw - 96px), (min-width: 480px) calc(100vw - 64px), calc(100vw - 40px)"
-      className="h-full w-full rounded-theme object-contain"
+      className="h-full w-full rounded-[20px] object-contain"
     />
   </div>
 );
