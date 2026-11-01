@@ -562,8 +562,8 @@ export const SoberDetail = ({
       <ConfirmDialog
         isOpen={deleting !== null}
         title="기록을 삭제하시겠어요?"
-        message="이 다시 시작 기록과 메모가 삭제되고, 경과 시간과 통계가 다시 계산돼요. 삭제한 뒤에는 되돌릴 수 없어요."
         confirmLabel="삭제하기"
+        confirmDescription="기록과 메모가 삭제되고 통계가 다시 계산돼요. 삭제 후 되돌릴 수 없어요."
         danger
         onClose={() => {
           pendingDelete.current = deleting;

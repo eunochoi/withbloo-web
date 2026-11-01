@@ -141,12 +141,8 @@ const Menus = ({
             ? '이 거리두기를 삭제할까요?'
             : '정말 삭제하시겠어요?'
         }
-        message={
-          kind === 'sober'
-            ? `‘${title}’의 거리두기와 모든 다시 시작 기록이 삭제돼요. 삭제한 뒤에는 되돌릴 수 없어요.`
-            : '삭제한 뒤에는 되돌릴 수 없어요.'
-        }
         confirmLabel="삭제하기"
+        confirmDescription={kind === 'diary' ? '일기와 사진이 삭제되며 되돌릴 수 없어요.' : kind === 'sober' ? '거리두기와 모든 다시 시작 기록이 삭제되며 되돌릴 수 없어요.' : '습관과 모든 기록이 삭제되며 되돌릴 수 없어요.'}
         danger
         onClose={() => setIsConfirmingDelete(false)}
         onConfirm={onDelete}
