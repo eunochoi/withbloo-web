@@ -13,7 +13,9 @@ import { DIARY_IMAGE_MAX_COUNT } from '../../../constants/image';
 import { createImageSignedUrl } from '../../image/utils';
 import type { DiaryData, DiaryWithRelations } from '../types';
 
-export const createAuthErrorResult = (error: Extract<AuthResult, { ok: false }>): ActionResult<never> => {
+export const createAuthErrorResult = (
+  error: Extract<AuthResult, { ok: false }>,
+): ActionResult<never> => {
   return {
     ok: false,
     code: error.code,
@@ -34,9 +36,11 @@ export const validateDateFormat = (dateString: string | undefined) => {
 };
 
 export const isValidDiaryText = (text: unknown): text is string => {
-  return typeof text === 'string'
-    && text.trim().length > 0
-    && text.length <= DIARY_TEXT_MAX_LENGTH;
+  return (
+    typeof text === 'string' &&
+    text.trim().length > 0 &&
+    text.length <= DIARY_TEXT_MAX_LENGTH
+  );
 };
 
 export const encryptDiaryText = (text: string) => {
@@ -44,7 +48,9 @@ export const encryptDiaryText = (text: string) => {
 };
 
 const decryptDiaryText = (text: string) => {
-  return CryptoJS.AES.decrypt(text, getEnvValue('DATA_SECRET_KEY')).toString(CryptoJS.enc.Utf8);
+  return CryptoJS.AES.decrypt(text, getEnvValue('DATA_SECRET_KEY')).toString(
+    CryptoJS.enc.Utf8,
+  );
 };
 
 export const parseDiaryId = (id: string | number | null | undefined) => {
@@ -62,11 +68,19 @@ export const validateAccessibleImageContents = async (
   imageContentIds: unknown,
   userId: number,
 ) => {
-  if (!Array.isArray(imageContentIds) || imageContentIds.length > DIARY_IMAGE_MAX_COUNT) {
+  if (
+    !Array.isArray(imageContentIds) ||
+    imageContentIds.length > DIARY_IMAGE_MAX_COUNT
+  ) {
     throw new Error('INVALID_IMAGE_LIST');
   }
 
-  if (imageContentIds.some((imageContentId) => typeof imageContentId !== 'string' || imageContentId.length === 0)) {
+  if (
+    imageContentIds.some(
+      (imageContentId) =>
+        typeof imageContentId !== 'string' || imageContentId.length === 0,
+    )
+  ) {
     throw new Error('INVALID_IMAGE_LIST');
   }
 
@@ -93,14 +107,31 @@ export const validateAccessibleImageContents = async (
   }
 };
 
-export const formatDiaryData = async (diary: DiaryWithRelations, completedHabits?: Habit[]): Promise<DiaryData> => {
-  const habits = completedHabits ?? (await prisma.habitCompletion.findMany({ where: { date: diary.date, habit: { userId: diary.userId } }, include: { habit: true }, orderBy: [{ habit: { priority: 'desc' } }, { habit: { createdAt: 'desc' } }, { habitId: 'desc' }] })).map((record) => record.habit);
-  const images = await Promise.all(diary.images.map(async (image) => ({
-    id: String(image.id),
-    imageContentId: image.imageContentId,
-    src: await createImageSignedUrl(image.imageContent.storagePath),
-    order: image.order,
-  })));
+export const formatDiaryData = async (
+  diary: DiaryWithRelations,
+  completedHabits?: Habit[],
+): Promise<DiaryData> => {
+  const habits =
+    completedHabits ??
+    (
+      await prisma.habitCompletion.findMany({
+        where: { date: diary.date, habit: { userId: diary.userId } },
+        include: { habit: true },
+        orderBy: [
+          { habit: { priority: 'desc' } },
+          { habit: { createdAt: 'desc' } },
+          { habitId: 'desc' },
+        ],
+      })
+    ).map((record) => record.habit);
+  const images = await Promise.all(
+    diary.images.map(async (image) => ({
+      id: String(image.id),
+      imageContentId: image.imageContentId,
+      src: await createImageSignedUrl(image.imageContent.storagePath),
+      order: image.order,
+    })),
+  );
 
   return {
     email: diary.email,
@@ -126,17 +157,30 @@ export const recomputeStreak = async (email: string) => {
 };
 
 // Batch date joins for diary lists so a page does not issue one query per diary.
-export const formatDiaryList = async (diaries: DiaryWithRelations[]): Promise<DiaryData[]> => {
+export const formatDiaryList = async (
+  diaries: DiaryWithRelations[],
+): Promise<DiaryData[]> => {
   if (!diaries.length) return [];
   const records = await prisma.habitCompletion.findMany({
-    where: { date: { in: diaries.map((diary) => diary.date) }, habit: { userId: diaries[0].userId } },
+    where: {
+      date: { in: diaries.map((diary) => diary.date) },
+      habit: { userId: diaries[0].userId },
+    },
     include: { habit: true },
-    orderBy: [{ habit: { priority: 'desc' } }, { habit: { createdAt: 'desc' } }, { habitId: 'desc' }],
+    orderBy: [
+      { habit: { priority: 'desc' } },
+      { habit: { createdAt: 'desc' } },
+      { habitId: 'desc' },
+    ],
   });
   const byDate = new Map<string, Habit[]>();
   for (const record of records) {
     if (!byDate.has(record.date)) byDate.set(record.date, []);
     byDate.get(record.date)!.push(record.habit);
   }
-  return Promise.all(diaries.map((diary) => formatDiaryData(diary, byDate.get(diary.date) ?? [])));
+  return Promise.all(
+    diaries.map((diary) =>
+      formatDiaryData(diary, byDate.get(diary.date) ?? []),
+    ),
+  );
 };

@@ -1,10 +1,7 @@
 'use client';
 
 import type { DiaryData } from '@/common/actions/diary';
-import {
-  checkHabit,
-  uncheckHabit,
-} from '@/common/actions/habit';
+import { checkHabit, uncheckHabit } from '@/common/actions/habit';
 import { authAction } from '@/common/auth/authAction';
 import { habitQueries } from '@/common/queries/habitQueries';
 import { EMOTIONS } from '@/common/constants/emotions';
@@ -56,24 +53,12 @@ const DayInfo = ({
 
   const isPending = isDiaryPending || isHabitPending;
 
-  const isTransitioning =
-    isPending ||
-    isDiaryPlaceholder ||
-    isHabitPlaceholder;
+  const isTransitioning = isPending || isDiaryPlaceholder || isHabitPlaceholder;
 
-  const emotion = diaryData
-    ? EMOTIONS[diaryData.emotion]
-    : undefined;
+  const emotion = diaryData ? EMOTIONS[diaryData.emotion] : undefined;
 
-  const onToggleHabit = async (
-    habitId: number,
-    completed: boolean,
-  ) => {
-    if (
-      isTransitioning ||
-      !habitData?.canEdit ||
-      pendingHabitId !== null
-    ) {
+  const onToggleHabit = async (habitId: number, completed: boolean) => {
+    if (isTransitioning || !habitData?.canEdit || pendingHabitId !== null) {
       return;
     }
 
@@ -113,9 +98,7 @@ const DayInfo = ({
       ]);
     } catch (error) {
       showNotice(
-        error instanceof Error
-          ? error.message
-          : '습관 체크 변경 실패',
+        error instanceof Error ? error.message : '습관 체크 변경 실패',
       );
     } finally {
       setPendingHabitId(null);
@@ -138,51 +121,84 @@ const DayInfo = ({
 
   return (
     <section className="box-border flex w-full flex-col gap-3 desktop:min-h-0 desktop:flex-1">
-      <div className="hidden desktop:block"><DayInfoHeader date={date} emotion={emotion} /></div>
-      {emotion && !isTransitioning && !isDiaryError && !isHabitError && <div className="mx-auto flex w-16 flex-col gap-2 desktop:hidden"><EmotionImage emotion={emotion} alt="" width={64} height={64} className="h-16 w-16" /><div className="mx-2 h-1 overflow-hidden rounded-full bg-theme-border"><div className="h-full bg-theme-accent" style={{ width: `${habitData?.summary.total ? habitData.summary.completed / habitData.summary.total * 100 : 0}%` }} /></div></div>}
-      {(isDiaryError || isHabitError) && !isTransitioning && <button type="button" className="min-h-16 text-sm text-theme-danger" onClick={() => { if (isDiaryError) onRetryDiary(); if (isHabitError) void refetchHabits(); }}>기록을 불러오지 못했어요. 다시 시도</button>}
-
-      {!(isDiaryError || isHabitError) && <AnimatePresence mode="wait" initial={false}>
-        <motion.div
-          key={date}
-          className="desktop:flex desktop:min-h-0 desktop:flex-1 desktop:flex-col"
-          initial={{
-            opacity: 0,
-            y: 4,
-          }}
-          animate={{
-            opacity: 1,
-            y: 0,
-          }}
-          exit={{
-            opacity: 0,
-            y: -4,
-          }}
-          transition={{
-            duration: 0.18,
-            ease: 'easeOut',
+      <div className="hidden desktop:block">
+        <DayInfoHeader date={date} emotion={emotion} />
+      </div>
+      {emotion && !isTransitioning && !isDiaryError && !isHabitError && (
+        <div className="mx-auto flex w-16 flex-col gap-2 desktop:hidden">
+          <EmotionImage
+            emotion={emotion}
+            alt=""
+            width={64}
+            height={64}
+            className="h-16 w-16"
+          />
+          <div className="mx-2 h-1 overflow-hidden rounded-full bg-theme-border">
+            <div
+              className="h-full bg-theme-accent"
+              style={{
+                width: `${habitData?.summary.total ? (habitData.summary.completed / habitData.summary.total) * 100 : 0}%`,
+              }}
+            />
+          </div>
+        </div>
+      )}
+      {(isDiaryError || isHabitError) && !isTransitioning && (
+        <button
+          type="button"
+          className="min-h-16 text-sm text-theme-danger"
+          onClick={() => {
+            if (isDiaryError) onRetryDiary();
+            if (isHabitError) void refetchHabits();
           }}
         >
-          <fieldset
-            disabled={isTransitioning}
-            aria-busy={isTransitioning}
-            className="m-0 flex min-w-0 flex-col gap-6 desktop:min-h-0 desktop:flex-1"
-          >
-            <DayInfoDiarySection
-              diaryData={diaryData}
-              isFuture={habitData?.isFuture === true}
-              onAddDiary={onAddDiary}
-              onOpenDiary={onOpenDiary}
-            />
+          기록을 불러오지 못했어요. 다시 시도
+        </button>
+      )}
 
-            <DayInfoHabitSection
-              habitData={habitData}
-              pendingHabitId={pendingHabitId}
-              onToggleHabit={onToggleHabit}
-            />
-          </fieldset>
-        </motion.div>
-      </AnimatePresence>}
+      {!(isDiaryError || isHabitError) && (
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            key={date}
+            className="desktop:flex desktop:min-h-0 desktop:flex-1 desktop:flex-col"
+            initial={{
+              opacity: 0,
+              y: 4,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            exit={{
+              opacity: 0,
+              y: -4,
+            }}
+            transition={{
+              duration: 0.18,
+              ease: 'easeOut',
+            }}
+          >
+            <fieldset
+              disabled={isTransitioning}
+              aria-busy={isTransitioning}
+              className="m-0 flex min-w-0 flex-col gap-6 desktop:min-h-0 desktop:flex-1"
+            >
+              <DayInfoDiarySection
+                diaryData={diaryData}
+                isFuture={habitData?.isFuture === true}
+                onAddDiary={onAddDiary}
+                onOpenDiary={onOpenDiary}
+              />
+
+              <DayInfoHabitSection
+                habitData={habitData}
+                pendingHabitId={pendingHabitId}
+                onToggleHabit={onToggleHabit}
+              />
+            </fieldset>
+          </motion.div>
+        </AnimatePresence>
+      )}
     </section>
   );
 };
