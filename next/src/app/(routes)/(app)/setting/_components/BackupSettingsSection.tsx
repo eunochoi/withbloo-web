@@ -30,7 +30,7 @@ export function BackupSettingsSection() {
                 {busy && <PiSpinnerGapBold aria-label="백업 작업 중…" className="h-5 w-5 shrink-0 animate-spin text-theme-accent" />}
               </button>
             </div>
-            <InfoNotice className="break-keep [text-wrap:pretty]">최대 1GB의 .bloo 파일로 백업되며 &apos;위블&apos; 앱에서만 복원 가능해요.</InfoNotice>
+            <InfoNotice className="break-keep [text-wrap:pretty]">&apos;.bloo&apos; 파일로 저장되며 &apos;위블&apos; 앱에서 복원 가능해요.</InfoNotice>
           </div>
         </section>
       </SettingSectionCard>
