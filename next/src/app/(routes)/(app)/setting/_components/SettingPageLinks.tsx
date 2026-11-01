@@ -1,35 +1,25 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useOpenOnboarding } from '@/common/components/features/Onboarding/OnboardingProvider';
+import Toolbar from '@/common/components/ui/Toolbar';
 
-import { FaGooglePlay } from 'react-icons/fa';
-import { MdPrivacyTip } from "react-icons/md";
-import { SettingSubsection } from "./SettingSubsection";
+import { ExternalLinkIcon, InfoIcon, PrivacyIcon } from '@/common/constants/appIcons';
+
+import ToolbarButton from '@/common/components/ui/ToolbarButton';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+
 
 const SettingPageLinks = () => {
   const router = useRouter();
-  const onOpenStore = () => router.push('https://play.google.com/store/apps/details?id=com.everstamp&pcampaignid=web_share');
-  const onOpenPrivacy = () => router.push('/privacy');
-
+  const openOnboarding = useOpenOnboarding();
   return (
-    <SettingSubsection title="관련 링크">
-      <button
-        type="button"
-        onClick={onOpenStore}
-        className="flex w-full items-center justify-between gap-2 text-left text-base text-theme-text-secondary"
-      >
-        <span>PlayStore</span>
-        <FaGooglePlay className="shrink-0 text-xl text-theme-accent" aria-hidden="true" />
-      </button>
-      <button
-        type="button"
-        onClick={onOpenPrivacy}
-        className="flex w-full items-center justify-between gap-2 text-left text-base text-theme-text-secondary"
-      >
-        <span>개인정보 처리방침</span>
-        <MdPrivacyTip className="shrink-0 text-xl text-theme-accent" aria-hidden="true" />
-      </button>
-    </SettingSubsection>
+    <Toolbar className="flex-wrap gap-x-3 gap-y-1">
+      <ToolbarButton onClick={openOnboarding} aria-label="사용 안내 다시 보기"><InfoIcon size={18} aria-hidden="true" /><span className="whitespace-nowrap">안내</span></ToolbarButton>
+      <ToolbarButton onClick={() => router.push('/privacy')} aria-label="개인정보처리방침"><PrivacyIcon size={18} aria-hidden="true" /><span className="whitespace-nowrap">개인정보처리방침</span></ToolbarButton>
+      <Link href="/intro" aria-label="서비스 소개 웹사이트 열기" title="서비스 소개 웹사이트 열기"
+        className="ml-auto flex min-h-10 shrink-0 items-center justify-center rounded-md px-1 text-theme-accent hover:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-theme-accent"><ExternalLinkIcon size={18} aria-hidden="true" /></Link>
+    </Toolbar>
   );
 };
 
