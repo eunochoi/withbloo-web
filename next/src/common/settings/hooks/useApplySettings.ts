@@ -2,7 +2,7 @@
 
 import { FontSize, FontType, } from '@/common/types/setting';
 import { ThemeMode, ThemeName } from '@/common/types/theme';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 interface useApplySettingsProps {
   accent: ThemeName;
@@ -21,13 +21,25 @@ export const useApplySettings = ({ accent, mode, fontSize, fontType }: useApplyS
   useEffect(() => {
     document.documentElement.dataset.fontType = fontType;
   }, [fontType]);
-  // apply accent Color
+  const previousTheme = useRef({ accent, mode });
   useEffect(() => {
-    document.documentElement.dataset.themeAccent = accent;
-  }, [accent]);
-
-  //apply theme mode
-  useEffect(() => {
-    document.documentElement.dataset.themeMode = mode;
-  }, [mode]);
+    const root = document.documentElement;
+    const changed = previousTheme.current.accent !== accent || previousTheme.current.mode !== mode;
+    previousTheme.current = { accent, mode };
+    if (changed) {
+      root.style.setProperty('--previous-wordmark-image', window.getComputedStyle(root).getPropertyValue('--wordmark-image'));
+      root.classList.add('theme-transitioning');
+    }
+    root.dataset.themeAccent = accent;
+    root.dataset.themeMode = mode;
+    const timeout = changed ? window.setTimeout(() => {
+      root.classList.remove('theme-transitioning');
+      root.style.removeProperty('--previous-wordmark-image');
+    }, 450) : undefined;
+    return () => {
+      if (timeout !== undefined) window.clearTimeout(timeout);
+      root.classList.remove('theme-transitioning');
+      root.style.removeProperty('--previous-wordmark-image');
+    };
+  }, [accent, mode]);
 };

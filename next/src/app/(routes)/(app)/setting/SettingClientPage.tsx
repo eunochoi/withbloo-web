@@ -5,8 +5,9 @@ import { useCurrentUser } from '@/common/hooks/useCurrentUser';
 import { usePrefetchPage } from '@/common/hooks/usePrefetchPage';
 import { format } from 'date-fns';
 import { useRouter } from 'next/navigation';
+import SettingPageLinks from './_components/SettingPageLinks';
 import SettingPageContent from './_components/SettingPageContent';
-import SettingPageTopSection from './_components/SettingPageTopSection';
+import AppPageTitle from '@/common/components/layout/AppPageTitle';
 
 const SettingClientPage = () => {
   usePrefetchPage();
@@ -19,17 +20,16 @@ const SettingClientPage = () => {
 
   return (
     <AppPageLayout
-      topSection={<SettingPageTopSection />}
-      showScrollToTop={false}
-      mainSection={
-        <SettingPageContent
-          email={email}
-          provider={provider}
-          createAt={createAt}
-          onDeleteAccount={() => router.push('/account-deletion')}
-        />
-      }
-    />
+      header={<AppPageTitle title="앱 설정" hashtags="#맞춤 #취향" />}
+      toolbar={<SettingPageLinks />}
+    >
+      <SettingPageContent
+        email={email}
+        provider={provider}
+        createAt={createAt}
+        onDeleteAccount={() => router.push('/account-deletion')}
+      />
+    </AppPageLayout>
   );
 };
 

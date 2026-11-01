@@ -1,35 +1,17 @@
 'use client';
 
-import { MdCheck } from 'react-icons/md';
+import { CheckIcon } from '@/common/constants/appIcons';
 
-import { useSettingsContext } from "@/common/settings/useSettingsContext";
+import { useSettingsContext } from '@/common/settings/useSettingsContext';
 import { THEME_NAME_LIST, THEME_VALUE } from '@/common/types/theme';
-import { cn } from "@/common/utils/cn";
 
+
+const labels = { blue: '파랑', green: '초록', purple: '보라', pink: '분홍', yellow: '딥 청록', grey: '회색' };
 export const ThemeColorSelector = () => {
   const { theme } = useSettingsContext();
-  const currentThemeName = theme.accent;
-  const setThemeName = theme.setAccent;
   return (
-    <div className="flex items-center justify-between gap-2">
-      {THEME_NAME_LIST.map((themeName) => {
-        const selected = themeName === currentThemeName;
-
-        return (
-          <button
-            key={themeName}
-            className={cn(
-              "bg-theme-accent flex h-[24px] w-[24px] items-center justify-center rounded-full transition-transform duration-200 ease-in-out",
-              selected ? "scale-[1.3]" : "scale-100",
-            )}
-            onClick={() => setThemeName(themeName)}
-            style={{ backgroundColor: `rgb(${THEME_VALUE[themeName].accent})` }}
-            type="button"
-          >
-            {selected && <MdCheck className="text-lg text-theme-text-on-accent drop-shadow-[0_1px_1px_rgb(var(--theme-shadow-color)/0.2)]" />}
-          </button>
-        );
-      })}
+    <div role="radiogroup" aria-label="강조 색상" className="my-2 flex w-full items-center gap-3 py-2 tablet:gap-6">
+      {THEME_NAME_LIST.map((name) => <button key={name} type="button" role="radio" aria-checked={theme.accent === name} aria-label={labels[name]} onClick={() => theme.setAccent(name)} className="flex aspect-square min-w-0 flex-1 items-center justify-center rounded-full border border-black/10" style={{ backgroundColor: `rgb(${THEME_VALUE[name].accent})` }}>{theme.accent === name && <CheckIcon className="text-2xl text-theme-text-on-accent" aria-hidden="true" />}</button>)}
     </div>
   );
 };

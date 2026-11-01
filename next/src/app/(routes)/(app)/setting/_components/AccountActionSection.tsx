@@ -1,9 +1,11 @@
 "use client";
 
+import { DeleteIcon, LogoutIcon } from '@/common/constants/appIcons';
+
 import { logout } from "@/common/auth/logout";
 import { ConfirmDialog } from "@/common/components/ui/Dialog/ConfirmDialog";
 import { useState } from "react";
-import { MdDeleteForever, MdLogout } from "react-icons/md";
+
 import { SettingItem } from "./SettingItem";
 import { SettingSectionCard } from "./SettingSectionCard";
 import { SettingSubsection } from "./SettingSubsection";
@@ -23,7 +25,7 @@ export const AccountActionSection = ({ onDeleteAccount }: Props) => {
             settingItemKey="로그아웃"
             settingItemValue={
               <button onClick={() => setIsLogoutConfirmOpen(true)} type="button">
-                <MdLogout className="text-xl" />
+                <LogoutIcon className="text-xl" />
               </button>
             }
           />
@@ -31,7 +33,7 @@ export const AccountActionSection = ({ onDeleteAccount }: Props) => {
             settingItemKey="회원 탈퇴"
             settingItemValue={
               <button onClick={onDeleteAccount} type="button">
-                <MdDeleteForever className="text-xl" />
+                <DeleteIcon className="text-xl" />
               </button>
             }
           />
