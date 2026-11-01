@@ -353,7 +353,7 @@ export const SoberDetail = ({
                 </CalendarGrid>
               </div>
             </section>
-            <section className="space-y-4 border-t border-theme-border/50 pt-8">
+            <section className="space-y-4 border-t border-theme-border/30 pt-8">
               <h3 className="text-lg font-semibold">상위 기록</h3>
               <div className="px-1">
                 {summary.records

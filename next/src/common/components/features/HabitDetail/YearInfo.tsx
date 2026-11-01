@@ -79,7 +79,7 @@ const YearInfo = ({
   return (
     <AppSection
       {...swipeProps}
-      className="border-t border-theme-border/50 px-1 pt-8"
+      className="border-t border-theme-border/30 px-1 pt-8"
     >
       <h2 className="text-lg font-semibold">연간 기록</h2>
       <div className="flex h-10 items-center justify-between">
