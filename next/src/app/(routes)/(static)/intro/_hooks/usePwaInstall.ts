@@ -31,7 +31,7 @@ export const usePwaInstall = () => {
       window.matchMedia('(display-mode: window-controls-overlay)').matches ||
       (navigator as Navigator & { standalone?: boolean }).standalone === true;
 
-    if (isStandalone || navigator.userAgent.includes('TOOK_APP')) {
+    if (isStandalone) {
       alert('이미 앱으로 실행 중입니다. 별도로 설치하지 않아도 됩니다.');
       return;
     }

@@ -11,11 +11,9 @@ import {
 /**
  * 리프레시 토큰을 검증하고 현재 로그인 세션을 rotation한다.
  */
-export const POST = async (request: Request) => {
+export const POST = async () => {
   const requestId = randomUUID();
   const startedAt = Date.now();
-  const userAgent = request.headers.get('user-agent') ?? '';
-  const client = userAgent.includes('TOOK_APP') ? 'expo-webview' : 'browser';
   // 1. refresh token은 HttpOnly 쿠키이므로 서버에서 직접 읽는다.
   const cookieStore = await cookies();
   const refreshToken = cookieStore.get("refreshToken")?.value;
@@ -23,14 +21,13 @@ export const POST = async (request: Request) => {
 
   console.info('[auth.refresh]', {
     requestId,
-    client,
     outcome: 'started',
     hasAccessToken,
     hasRefreshToken: Boolean(refreshToken),
   });
 
   const logResult = (outcome: 'success' | 'rejected' | 'error', reason: string, status: number) => {
-    const details = { requestId, client, outcome, reason, status, durationMs: Date.now() - startedAt };
+    const details = { requestId, outcome, reason, status, durationMs: Date.now() - startedAt };
     if (outcome === 'error') console.error('[auth.refresh]', details);
     else if (outcome === 'rejected') console.warn('[auth.refresh]', details);
     else console.info('[auth.refresh]', details);

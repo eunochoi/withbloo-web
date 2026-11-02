@@ -13,10 +13,6 @@ const STATIC_THEME_PATHS = new Set([
 
 const STATIC_THEME_COLOR = '240 247 255';
 
-type WebViewBridge = {
-  postMessage: (message: string) => void;
-};
-
 export const SystemBars = () => {
   const pathname = usePathname();
 
@@ -29,7 +25,7 @@ export const SystemBars = () => {
       const colorParts = isStaticThemePage
         ? STATIC_THEME_COLOR
         : getComputedStyle(root)
-          .getPropertyValue('--theme-accent-light')
+          .getPropertyValue(pathname === '/home' ? '--theme-accent-light' : '--theme-surface')
           .trim();
 
       const color = `rgb(${colorParts.split(/\s+/).join(', ')})`;
@@ -37,26 +33,6 @@ export const SystemBars = () => {
       document
         .getElementById('theme-color')
         ?.setAttribute('content', color);
-
-      const bridge = (
-        window as Window & {
-          ReactNativeWebView?: WebViewBridge;
-        }
-      ).ReactNativeWebView;
-
-      if (!bridge) return;
-
-      const useLightStatusBarIcons =
-        !isStaticThemePage &&
-        root.dataset.themeMode === '어둡게';
-
-      bridge.postMessage(
-        JSON.stringify({
-          type: 'THEME_CHANGE',
-          color,
-          style: useLightStatusBarIcons ? 'light' : 'dark',
-        }),
-      );
     };
 
     applySystemBars();

@@ -58,17 +58,13 @@ export default function RootLayout({
         document.documentElement.style.setProperty('--loading-indicator', 'rgb(' + accent.accent + ')');
 
         var isFixedLightPage = ['/', '/login', '/intro', '/privacy', '/account-deletion'].includes(location.pathname);
-        var statusBarColor = isFixedLightPage ? 'rgb(240 247 255)' : themeColor;
+        var statusBarColor = isFixedLightPage
+          ? 'rgb(240 247 255)'
+          : location.pathname === '/home'
+            ? 'rgb(' + (isDarkMode ? '60 60 60' : accent.accentLight) + ')'
+            : 'rgb(' + (isDarkMode ? '${THEME_BG_DARK_MODE}' : '255 255 255') + ')';
         var metaThemeColor = document.getElementById('theme-color');
         if (metaThemeColor) metaThemeColor.setAttribute('content', statusBarColor);
-
-        if (window.ReactNativeWebView) {
-          window.ReactNativeWebView.postMessage(JSON.stringify({
-            type: 'THEME_CHANGE',
-            color: statusBarColor,
-            style: isDarkMode && !isFixedLightPage ? 'light' : 'dark'
-          }));
-        }
       } catch (error) {
         document.documentElement.style.setProperty('--loading-background', 'rgb(240 247 255)');
         document.documentElement.style.setProperty('--loading-indicator', 'rgb(140 173 226)');
