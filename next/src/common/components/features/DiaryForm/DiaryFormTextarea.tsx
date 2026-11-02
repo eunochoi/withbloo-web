@@ -4,9 +4,10 @@ import { cn } from '@/common/utils/cn';
 interface DiaryFormTextareaProps {
   text: string;
   setText: (v: string) => void;
+  onFocusChange: (focused: boolean) => void;
 }
 
-const DiaryFormTextarea = ({ text, setText }: DiaryFormTextareaProps) => {
+const DiaryFormTextarea = ({ text, setText, onFocusChange }: DiaryFormTextareaProps) => {
   const isOverLimit = text.length > DIARY_TEXT_MAX_LENGTH;
 
   return (
@@ -17,6 +18,8 @@ const DiaryFormTextarea = ({ text, setText }: DiaryFormTextareaProps) => {
         aria-describedby="diary-text-count"
         aria-invalid={isOverLimit}
         className="min-h-[170px] w-full flex-1 resize-none border-none bg-transparent text-base leading-8 text-theme-text-primary placeholder:text-theme-text-tertiary"
+        onFocus={() => onFocusChange(true)}
+        onBlur={() => onFocusChange(false)}
         onChange={(event) => setText(event.target.value)}
         value={text}
         maxLength={DIARY_TEXT_MAX_LENGTH}

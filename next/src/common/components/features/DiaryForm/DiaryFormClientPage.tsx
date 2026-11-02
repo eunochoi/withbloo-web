@@ -43,6 +43,7 @@ interface DiaryFormClientPageProps {
 const DiaryFormClientPage = ({ isEdit, diaryId }: DiaryFormClientPageProps) => {
   const router = useRouter();
   const [isDialogMounted, setIsDialogMounted] = useState(true);
+  const [isTextFocused, setIsTextFocused] = useState(false);
   const searchParams = useSearchParams();
   const {
     data: diaryData,
@@ -150,27 +151,28 @@ const DiaryFormClientPage = ({ isEdit, diaryId }: DiaryFormClientPageProps) => {
           />
           <PanelBody showScrollFade contentClassName="flex h-full min-h-full flex-col">
             <fieldset disabled={isSubmitting} className="m-0 flex h-full min-h-0 w-full flex-1 flex-col justify-between border-0 pt-2">
-              <DiaryFormEmotionSection
+              {!isTextFocused && <DiaryFormEmotionSection
                 emotion={emotion}
                 setEmotion={setEmotion}
-              />
+              />}
               <div className="flex min-h-0 w-full flex-1 flex-col">
                 <DiaryFormTextSection
                   text={text}
                   setText={setText}
+                  onFocusChange={setIsTextFocused}
                 />
               </div>
-              <DiaryFormImagesSection
+              {!isTextFocused && <DiaryFormImagesSection
                 diaryImages={diaryImages}
                 handleImageChange={imageHandlers.handleImageChange}
                 getImageUrl={imageHandlers.getImageUrl}
                 handleRemoveImage={imageHandlers.handleRemoveImage}
                 onReorder={(from, to) => setDiaryImages((images) => arrayMove(images, from, to))}
                 isLoading={isSubmitting}
-              />
-              <div className="flex shrink-0 items-center justify-center pt-2" aria-hidden="true">
+              />}
+              {!isTextFocused && <div className="flex shrink-0 items-center justify-center pt-2" aria-hidden="true">
                 <Image src={cat} alt="" className="h-auto w-44 max-w-full" sizes="176px" />
-              </div>
+              </div>}
             </fieldset>
           </PanelBody>
           <PanelFooter>
