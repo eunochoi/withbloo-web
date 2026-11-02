@@ -40,7 +40,7 @@ export function StartPage() {
       </div>
 
       <a
-        href="https://to-ok.me"
+        href={`https://${process.env.NEXT_PUBLIC_DOMAIN}`}
         target="_blank"
         rel="noreferrer"
         className="flex min-h-12 items-center justify-start gap-2 rounded-xl text-[13px] text-theme-text-secondary/75"

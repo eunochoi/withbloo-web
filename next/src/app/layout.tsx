@@ -84,7 +84,7 @@ export default function RootLayout({
 
         <meta property="og:title" content="위블 - 감정 일기와 습관 관리" />
         <meta property="og:description" content="어떤 하루든, 모두 나의 기록으로. 오늘의 감정과 작은 습관을 기록하고 달력과 통계로 돌아보세요." />
-        <meta property="og:image" content={process.env.OG_IMAGE_URL || 'https://to-ok.me/icon/icon-512x512.png'} />
+        <meta property="og:image" content={process.env.OG_IMAGE_URL || `https://${process.env.NEXT_PUBLIC_DOMAIN}/icon/icon-512x512.png`} />
       </head>
 
       <body>
