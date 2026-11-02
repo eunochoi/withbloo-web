@@ -20,6 +20,9 @@ import negative from '/public/img/bloolog/cats/cat-blue-n.png';
 import positive from '/public/img/bloolog/cats/cat-blue-p.png';
 import standingCat from '/public/img/bloolog/cats/cat-blue-standing.png';
 import neutral from '/public/img/bloolog/cats/cat-blue.png';
+import introImage1 from '/public/img/intro/intro-image-1.png';
+import introImage2 from '/public/img/intro/intro-image-2.png';
+import introImage3 from '/public/img/intro/intro-image-3.png';
 
 const moods = [
   {
@@ -136,8 +139,8 @@ const IntroClientPage = () => {
           '그 마음을 있는 그대로 기록해요.',
         ]}
       >
-        <div className="rounded-[20px] bg-theme-accent-light p-8 text-center text-theme-text-secondary">
-          감정 일기 · 사진 · 기록 필터
+        <div className="overflow-hidden rounded-[20px] bg-theme-accent-light">
+          <Image src={introImage1} alt="감정 일기와 사진 기록" sizes="(min-width: 1024px) 520px, 90vw" className="h-auto w-full" />
         </div>
       </IntroSection>
       <IntroSection
@@ -149,8 +152,8 @@ const IntroClientPage = () => {
           '줄이고 싶은 것과는 거리를 둬요.',
         ]}
       >
-        <div className="rounded-[20px] bg-theme-accent-light p-8 text-center text-theme-text-secondary">
-          습관 관리 · 자유 기록 · 거리두기
+        <div className="overflow-hidden rounded-[20px] bg-theme-accent-light">
+          <Image src={introImage2} alt="습관과 거리두기 기록" sizes="(min-width: 1024px) 520px, 90vw" className="h-auto w-full" />
         </div>
       </IntroSection>
       <IntroSection
@@ -163,8 +166,8 @@ const IntroClientPage = () => {
           '나와 블루가 걸어온 길이 보여요.',
         ]}
       >
-        <div className="rounded-[20px] bg-theme-accent-light p-8 text-center text-theme-text-secondary">
-          월간 기록 · 감정 통계 · 연속 기록
+        <div className="overflow-hidden rounded-[20px] bg-theme-accent-light">
+          <Image src={introImage3} alt="월간 기록과 감정 통계" sizes="(min-width: 1024px) 520px, 90vw" className="h-auto w-full" />
         </div>
       </IntroSection>
       <section className={cn(introSectionClass, 'border-t border-theme-border/50')}>
