@@ -11,5 +11,3 @@ export const introDescriptionClass =
 export const introVisualClass =
   'relative flex w-full items-center justify-center overflow-hidden';
 export const introIconClass = 'h-5 w-5 shrink-0';
-export const introActionClass =
-  'inline-flex min-h-12 items-center justify-center gap-2 rounded-theme px-5 text-base transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-theme-accent-text';
