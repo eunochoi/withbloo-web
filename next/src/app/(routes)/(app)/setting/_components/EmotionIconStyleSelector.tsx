@@ -7,7 +7,7 @@ import { useSettingsContext } from '@/common/settings/useSettingsContext';
 import { EMOTION_ICON_STYLE_LABELS, EMOTION_ICON_STYLE_LIST } from '@/common/types/setting';
 import { cn } from '@/common/utils/cn';
 
-export const EmotionIconStyleSelector = ({ compact = false, choiceClassName }: { compact?: boolean; choiceClassName?: string }) => {
+export const EmotionIconStyleSelector = ({ compact = false, choiceClassName, labelClassName }: { compact?: boolean; choiceClassName?: string; labelClassName?: string }) => {
   const { emotionIcon } = useSettingsContext();
 
   return (
@@ -37,7 +37,7 @@ export const EmotionIconStyleSelector = ({ compact = false, choiceClassName }: {
                 <EmotionImage key={emotion.id} emotion={emotion} iconStyle={style} alt="" width={28} height={28} className={cn('object-contain', compact ? 'h-[1.75rem] w-[1.75rem]' : 'h-7 w-7')} />
               ))}
             </span>
-            <span className={cn('whitespace-nowrap font-medium text-theme-text-primary', compact ? 'text-base' : 'text-sm')}>{EMOTION_ICON_STYLE_LABELS[style]}</span>
+            <span className={cn('whitespace-nowrap font-medium text-theme-text-primary', labelClassName ?? (compact ? 'text-base' : 'text-sm'))}>{EMOTION_ICON_STYLE_LABELS[style]}</span>
           </label>
         ))}
       </SettingChoiceGrid>

@@ -11,14 +11,14 @@ const fontFamilies = {
   타입3: 'MaruBuri',
 } satisfies Record<FontType, string>;
 
-export const FontTypeSelector = ({ choiceClassName }: { choiceClassName?: string }) => {
+export const FontTypeSelector = ({ choiceClassName, previewClassName, labelClassName }: { choiceClassName?: string; previewClassName?: string; labelClassName?: string }) => {
   const { font } = useSettingsContext();
   return (
     <SettingChoiceGrid role="radiogroup" aria-label="글꼴">
       {FONT_TYPE_LIST.map((type) => (
         <SettingChoice key={type} className={choiceClassName} aria-label={`글꼴 ${type}`} aria-checked={font.type === type} onClick={() => font.setFontType(type)}>
-          <span aria-hidden="true" className="flex h-9 items-center whitespace-nowrap text-lg" style={{ fontFamily: fontFamilies[type] }}>가나다</span>
-          <span className="text-sm">{type}</span>
+          <span aria-hidden="true" className={`flex h-9 items-center whitespace-nowrap ${previewClassName ?? 'text-lg'}`} style={{ fontFamily: fontFamilies[type] }}>가나다</span>
+          <span className={labelClassName ?? 'text-sm'}>{type}</span>
         </SettingChoice>
       ))}
     </SettingChoiceGrid>
