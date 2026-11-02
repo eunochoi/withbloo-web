@@ -16,16 +16,14 @@ const IntroHero = () => (
     <div
       className={cn(
         introContainerClass,
-        'relative grid items-center gap-10 desktop:min-h-[560px] desktop:grid-cols-2 desktop:gap-16',
+        'relative grid items-center gap-10 desktop:gap-12 desktop:grid-cols-2',
       )}
     >
-      <div className={cn(introContentClass, '!gap-16')}>
-        <div className="flex gap-4 items-center">
-          <Wordmark className="text-6xl" />
-          <span className="font-bold text-xl desktop:text-2xl">-</span>
-          <span className="font-bold text-xl desktop:text-2xl">위블</span>
+      <div className={cn(introContentClass)}>
+        <div className="flex gap-4 mb-8 items-center">
+          <Wordmark className="text-5xl desktop:text-6xl" />
         </div>
-        <h1 className="flex flex-col gap-3 desktop:gap-6 m-0 break-keep text-4xl font-bold leading-[1.3] tracking-tight desktop:text-6xl">
+        <h1 className="flex flex-col gap-3 desktop:gap-6 m-0 break-keep text-4xl font-bold leading-[1.3] tracking-tight desktop:text-5xl">
           <span className="block">어떤 색의 하루도</span>
           <span className="block text-theme-accent">나의 기록으로</span>
         </h1>
@@ -34,7 +32,7 @@ const IntroHero = () => (
           src={cat}
           alt="고양이 블루"
           sizes="(min-width: 1024px) 45vw, 80vw"
-          className="mx-auto w-full max-w-[200px] desktop:absolute desktop:right-0 desktop:top-1/2 desktop:w-[calc(50%-2rem)] desktop:max-w-[500px] desktop:-translate-y-1/2"
+          className="mx-auto w-full max-w-[200px] desktop:absolute desktop:right-0 desktop:top-1/2 desktop:w-[calc(50%-2rem)] desktop:max-w-[400px] desktop:-translate-y-1/2"
         />
         <div
           className={twMerge(

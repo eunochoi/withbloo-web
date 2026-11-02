@@ -215,7 +215,7 @@ const IntroClientPage = () => {
             sizes="(min-width: 1024px) 45vw, 80vw"
             className="mx-auto w-full max-w-[175px] desktop:max-w-[200px]"
           />
-          <Wordmark className="text-5xl desktop:text-6xl" />
+          <Wordmark className="text-4xl desktop:text-5xl" />
           <h1 className="flex flex-col gap-3 desktop:gap-6 m-0 break-keep text-3xl font-bold leading-[1.3] tracking-tight desktop:text-4xl">
             <span>모든 색의 하루가 </span>
             <span>나의 이야기가 되도록</span>

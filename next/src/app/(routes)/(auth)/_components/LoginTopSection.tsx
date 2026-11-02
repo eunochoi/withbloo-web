@@ -10,7 +10,6 @@ const LoginTopSection = () => (
       className={`w-full flex flex-col gap-12 px-6 pt-12 pb-0 tablet:px-10 desktop:gap-24 desktop:px-12 desktop:pt-10 desktop:pb-0 xl:px-20`}>
       <div className="flex items-center gap-4">
         <Wordmark className="text-5xl desktop:text-6xl" />
-        <span className="text-xl font-bold desktop:text-2xl">- 위블</span>
       </div>
 
       <div className="flex flex-col gap-6">
