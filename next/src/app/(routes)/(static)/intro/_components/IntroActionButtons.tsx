@@ -39,14 +39,14 @@ const IntroActionButtons = ({ className }: IntroActionButtonsProps) => {
         >
           <MdLanguage className={introIconClass} aria-hidden="true" />
           <span className="flex min-w-0 flex-col gap-1">
-            <span>WEB 서비스 시작</span>
+            <span className='font-semibold'>WEB 서비스 시작</span>
             <span className="text-xs leading-4 opacity-80">로그인 후 기록을 서버에 저장해요.</span>
           </span>
         </button>
         <a href={PLAY_STORE_URL} className={twMerge(actionClass, 'border-theme-border bg-theme-surface text-theme-text-primary hover:bg-theme-accent/20')}>
           <FaGooglePlay className={introIconClass} aria-hidden="true" />
           <span className="flex min-w-0 flex-col gap-1">
-            <span>APP 서비스 시작</span>
+            <span className='font-semibold'>APP 서비스 시작</span>
             <span className="text-xs leading-4 opacity-80">로그인 없이 기록을 기기에 저장해요.</span>
           </span>
         </a>
