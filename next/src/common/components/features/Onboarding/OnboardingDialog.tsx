@@ -20,7 +20,7 @@ const pages = [
   StartPage,
 ];
 const buttonClass =
-  'min-h-12 flex-1 rounded-full border px-4 py-3 text-base font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-theme-accent';
+  'min-h-12 flex-1 rounded-full border px-4 py-3 text-[13px] font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-theme-accent';
 
 export function OnboardingDialog({
   firstRun,
@@ -88,16 +88,16 @@ export function OnboardingDialog({
         </AnimatePresence>
       </ScrollContainer>
 
-      <footer className="shrink-0 px-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-4">
+      <footer style={{ lineHeight: 'normal' }} className="shrink-0 px-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-4">
         <div className="mx-auto w-full max-w-lg">
           {error && (
-            <p role="alert" className="mb-3 text-sm text-theme-text-secondary">
+            <p role="alert" className="mb-3 text-[11px] text-theme-text-secondary">
               {error}
             </p>
           )}
 
           {sessionOnly && (
-            <div className="mb-3 text-sm text-theme-text-secondary">
+            <div className="mb-3 text-[11px] text-theme-text-secondary">
               <p>저장하지 않고 시작하면 다음 접속 때 안내가 다시 표시돼요.</p>
               <button
                 type="button"

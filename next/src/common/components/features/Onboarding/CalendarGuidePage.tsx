@@ -56,7 +56,7 @@ export function CalendarGuidePage() {
                   key={item.label}
                   className="flex flex-col gap-4 text-center"
                 >
-                  <p className="text-base text-theme-text-secondary">
+                  <p className="text-[13px] text-theme-text-secondary">
                     {item.label}
                   </p>
                   <div

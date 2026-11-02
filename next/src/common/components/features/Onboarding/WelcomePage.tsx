@@ -26,25 +26,26 @@ const moods = [
   },
 ];
 const choiceClass =
-  'min-h-11 min-w-0 rounded-xl border px-2 py-2 text-base focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-theme-accent';
+  'min-h-11 min-w-0 rounded-xl border px-2 py-2 text-[13px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-theme-accent';
 export function WelcomePage() {
   const [mood, setMood] = useState(1);
   return (
     <section
+      style={{ lineHeight: 'normal' }}
       aria-labelledby="onboarding-welcome-title"
-      className="mx-auto flex w-full max-w-lg flex-1 flex-col justify-evenly gap-6 break-keep px-6 py-6 text-base leading-[1.5] text-theme-text-primary"
+      className="mx-auto flex w-full max-w-lg flex-1 flex-col justify-evenly gap-6 break-keep px-6 py-6 text-[13px] text-theme-text-primary"
     >
       <header className="flex shrink-0 flex-col gap-1 text-center">
         <h2
           id="onboarding-welcome-title"
-          className="mb-4 text-3xl font-semibold leading-7 tracking-tight"
+          className="mb-4 text-[24px] font-semibold tracking-tight"
         >
           안녕, 나는 &apos;블루&apos;야!
         </h2>
-        <p className="text-base whitespace-pre-line text-theme-text-secondary">
+        <p className="text-[13px] whitespace-pre-line text-theme-text-secondary">
           {'나는 마음에 따라 털색이 달라지는'}
         </p>
-        <p className="text-base whitespace-pre-line text-theme-text-secondary">
+        <p className="text-[13px] whitespace-pre-line text-theme-text-secondary">
           {'조금 특별한 고양이야.'}
         </p>
       </header>
@@ -104,16 +105,16 @@ export function WelcomePage() {
         </div>
       </div>
       <div className="flex flex-col text-center gap-1">
-        <p className="mb-2 text-xl font-semibold leading-7">
+        <p className="mb-2 text-[16px] font-semibold">
           어떤 색의 하루라도 괜찮아요.
         </p>
-        <p className="text-base whitespace-pre-line text-theme-text-secondary">
+        <p className="text-[13px] whitespace-pre-line text-theme-text-secondary">
           {"'위블'에서 오늘의 마음을 기록하고"}
         </p>
-        <p className="text-base whitespace-pre-line text-theme-text-secondary">
+        <p className="text-[13px] whitespace-pre-line text-theme-text-secondary">
           {'좋은 습관을 더하고, 줄이고 싶은 습관은 덜어내요.'}
         </p>
-        <p className="mt-2 text-base whitespace-pre-line text-theme-accent-deep">
+        <p className="mt-2 text-[13px] whitespace-pre-line text-theme-accent-deep">
           {'withBloo - Bloom with Bloo & Blue.'}
         </p>
       </div>

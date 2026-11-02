@@ -18,21 +18,22 @@ export function OnboardingFrame({
   const titleId = useId();
   return (
     <section
+      style={{ lineHeight: 'normal' }}
       aria-labelledby={titleId}
-      className="mx-auto flex w-full max-w-lg flex-1 flex-col gap-12 break-keep px-6 py-6 text-base leading-[1.5] text-theme-text-primary"
+      className="mx-auto flex w-full max-w-lg flex-1 flex-col gap-12 break-keep px-6 py-6 text-[13px] text-theme-text-primary"
     >
       <header className="flex shrink-0 flex-col gap-2 text-center">
         <h2
           id={titleId}
-          className="text-2xl font-semibold leading-7 tracking-tight"
+          className="text-[20px] font-semibold tracking-tight"
         >
           {title}
         </h2>
-        <p className="text-base text-theme-text-secondary">{description}</p>
+        <p className="text-[13px] text-theme-text-secondary">{description}</p>
       </header>
       <div className="flex shrink-0 flex-col gap-8">
         {children}
-        {info && <InfoNotice className="shrink-0 text-xs">{info}</InfoNotice>}
+        {info && <InfoNotice autoLineHeight className="shrink-0 text-[10px]">{info}</InfoNotice>}
       </div>
     </section>
   );

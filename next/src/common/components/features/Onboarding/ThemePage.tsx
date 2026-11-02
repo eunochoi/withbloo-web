@@ -9,7 +9,7 @@ import { THEME_MODE_LIST } from '@/common/types/theme';
 import { sectionTitleClassName } from './styles';
 import { OnboardingFrame } from './OnboardingFrame';
 const choiceClass =
-  'h-24 min-w-0 rounded-xl border px-2 py-2 text-base focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-theme-accent';
+  'h-24 min-w-0 rounded-xl border px-2 py-2 text-[13px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-theme-accent';
 
 export function ThemePage() {
   const { font, theme } = useSettingsContext();
@@ -25,7 +25,7 @@ export function ThemePage() {
       </section>
       <section className="space-y-3">
         <h3 className={sectionTitleClassName}>감정 아이콘</h3>
-        <EmotionIconStyleSelector compact choiceClassName="h-24" />
+        <EmotionIconStyleSelector compact choiceClassName="h-24" labelClassName="text-[13px]" />
       </section>
       <fieldset>
         <legend className={`mb-3 w-full ${sectionTitleClassName}`}>배경</legend>
@@ -45,7 +45,7 @@ export function ThemePage() {
       </fieldset>
       <section className="space-y-3">
         <h3 className={sectionTitleClassName}>폰트 종류</h3>
-        <FontTypeSelector choiceClassName="text-theme-text-primary" />
+        <FontTypeSelector choiceClassName="text-theme-text-primary" previewClassName="text-[15px]" labelClassName="text-[11px]" />
       </section>
       <fieldset>
         <legend className={`mb-3 w-full ${sectionTitleClassName}`}>

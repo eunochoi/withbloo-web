@@ -26,14 +26,14 @@ const ViewToggleExample = ({
       className={twMerge(exampleClassName, 'flex items-center justify-between')}
     >
       <div className="flex-1 flex justify-center items-center gap-2">
-        <span className="text-base font-semibold">{leftText}</span>
+        <span className="text-[13px] font-semibold">{leftText}</span>
       </div>
       <LeftRightIcon
         aria-hidden="true"
-        className="shrink-0 text-lg text-theme-text-tertiary"
+        className="shrink-0 text-[15px] text-theme-text-tertiary"
       />
       <div className="flex-1 flex justify-center items-center gap-2">
-        <span className="text-base font-semibold">{rightText}</span>
+        <span className="text-[13px] font-semibold">{rightText}</span>
       </div>
     </div>
   );

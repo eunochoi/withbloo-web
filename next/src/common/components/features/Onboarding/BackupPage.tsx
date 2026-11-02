@@ -31,10 +31,10 @@ export function BackupPage() {
               accentColor="var(--loading-indicator)"
               className="text-[36px]"
             />
-            <span className="font-semibold text-2xl text-theme-text-primary">
+            <span className="font-semibold text-[20px] text-theme-text-primary">
               -
             </span>
-            <span className="font-semibold text-2xl text-theme-text-primary">
+            <span className="font-semibold text-[20px] text-theme-text-primary">
               Web
             </span>
           </div>
@@ -61,10 +61,10 @@ export function BackupPage() {
               accentColor="var(--loading-indicator)"
               className="text-[36px]"
             />
-            <span className="font-semibold text-2xl text-theme-text-primary">
+            <span className="font-semibold text-[20px] text-theme-text-primary">
               -
             </span>
-            <span className="font-semibold text-2xl text-theme-text-primary">
+            <span className="font-semibold text-[20px] text-theme-text-primary">
               App
             </span>
           </div>

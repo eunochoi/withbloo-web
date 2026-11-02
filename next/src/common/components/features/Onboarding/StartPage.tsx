@@ -7,13 +7,13 @@ import standingCat from '/public/img/bloolog/cats/cat-blue-standing.png';
 
 export function StartPage() {
   return (
-    <div className="w-full flex-1 px-6 py-6 flex flex-col justify-evenly items-center gap-4">
-      <span className="text-3xl font-semibold">이제, 시작해볼까요?</span>
+    <div style={{ lineHeight: 'normal' }} className="w-full flex-1 px-6 py-6 flex flex-col justify-evenly items-center gap-4">
+      <span className="text-[24px] font-semibold">이제, 시작해볼까요?</span>
       <div className="w-full h-auto flex flex-col justify-center items-center gap-2">
-        <span className="text-lg text-theme-text-secondary">
+        <span className="text-[15px] text-theme-text-secondary">
           오늘의 감정도, 쌓아갈 습관도,
         </span>
-        <span className="text-lg text-theme-text-secondary">
+        <span className="text-[15px] text-theme-text-secondary">
           멀리하고 싶은 것들도 블루와 함께해요.
         </span>
       </div>
@@ -31,10 +31,10 @@ export function StartPage() {
         />
       </div>
       <div className="w-full h-auto flex flex-col justify-center items-center gap-2">
-        <span className="text-lg text-theme-text-secondary">
+        <span className="text-[15px] text-theme-text-secondary">
           {"오늘부터 '블루'가 함께할게요."}
         </span>
-        <span className="mt-2 text-base whitespace-pre-line text-theme-accent-deep">
+        <span className="mt-2 text-[13px] whitespace-pre-line text-theme-accent-deep">
           {'withBloo - Bloom with Bloo & Blue.'}
         </span>
       </div>
@@ -43,7 +43,7 @@ export function StartPage() {
         href="https://to-ok.me"
         target="_blank"
         rel="noreferrer"
-        className="flex min-h-12 items-center justify-start gap-2 rounded-xl text-base text-theme-text-secondary/75"
+        className="flex min-h-12 items-center justify-start gap-2 rounded-xl text-[13px] text-theme-text-secondary/75"
       >
         &apos;위블&apos; 서비스 페이지 둘러보기
         <ArrowRightIcon aria-hidden="true" />
