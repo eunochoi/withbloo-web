@@ -17,7 +17,7 @@ export const PanelHeader = ({
   headerLeft,
   headerRight,
   onTitleClick,
-}: PanelHeaderProps) => (
+}: PanelHeaderProps) => title || headerLeft || headerRight ? (
   <div
     className={`relative mb-4 flex min-h-12 w-full shrink-0 items-center justify-center ${PANEL_HORIZONTAL_PADDING_CLASS}`}
   >
@@ -47,4 +47,4 @@ export const PanelHeader = ({
       </div>
     )}
   </div>
-);
+) : null;
