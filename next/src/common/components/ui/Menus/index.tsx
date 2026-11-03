@@ -88,16 +88,16 @@ const Menus = ({
         }}
       >
         {isOpen && (
-          <PickerDialog labelledBy={`${id}-title`} onClose={onClose}>
-            <div className="flex w-full flex-col gap-6 pb-[max(1rem,env(safe-area-inset-bottom))]">
-              <div className="flex flex-col items-center gap-2">
+          <PickerDialog labelledBy={`${id}-title`} onClose={onClose} header={<div className="flex flex-col items-center gap-2">
                 <h2
                   id={`${id}-title`}
                   className="text-center text-lg font-semibold tracking-tight text-theme-text-primary"
                 >
                   {title}
                 </h2>
-              </div>
+              </div>}>
+            <div className="flex w-full flex-col gap-6 pb-[max(1rem,env(safe-area-inset-bottom))]">
+
               <div className="flex flex-col gap-3">
                 {actions.map(
                   ({ key, icon: Icon, title: actionTitle, description }) => (

@@ -58,12 +58,7 @@ const DiaryFormEmotionPicker = ({
   const category = categories[categoryIndex];
 
   return (
-    <PickerDialog labelledBy="diary-emotion-picker-title" onClose={onClose}>
-      <fieldset
-        disabled={!isPresent}
-        className="m-0 flex w-full min-w-0 flex-col gap-4 border-0 pb-[max(24px,env(safe-area-inset-bottom))]"
-      >
-        <div className="relative flex min-h-11 items-center justify-center">
+    <PickerDialog labelledBy="diary-emotion-picker-title" onClose={onClose} header={<div className="relative flex min-h-11 items-center justify-center">
           <h2
             id="diary-emotion-picker-title"
             className="text-center text-lg font-semibold text-theme-text-primary"
@@ -72,13 +67,18 @@ const DiaryFormEmotionPicker = ({
           </h2>
         <button
           type="button"
-          disabled={!EMOTIONS.some((item) => item.id === draftEmotion)}
+          disabled={!isPresent || !EMOTIONS.some((item) => item.id === draftEmotion)}
           onClick={() => onConfirm(draftEmotion)}
           className="absolute right-0 min-h-11 px-2 text-lg font-normal text-theme-accent disabled:opacity-40"
         >
           완료
         </button>
-        </div>
+        </div>}>
+      <fieldset
+        disabled={!isPresent}
+        className="m-0 flex w-full min-w-0 flex-col gap-4 border-0 pb-[max(24px,env(safe-area-inset-bottom))]"
+      >
+
         <div
           className="flex flex-wrap gap-2"
           role="group"

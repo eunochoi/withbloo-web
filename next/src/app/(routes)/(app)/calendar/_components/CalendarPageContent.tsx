@@ -71,9 +71,7 @@ const CalendarPageContent = ({
           <PickerDialog
             labelledBy="calendar-day-title"
             onClose={() => setIsOpen(false)}
-          >
-            <div className="mx-auto pb-[calc(2rem+env(safe-area-inset-bottom))]">
-              <header className="flex min-h-12 items-center justify-center gap-4">
+           header={<header className="flex min-h-12 items-center justify-center gap-4">
                 <h2 id="calendar-day-title" className="text-lg font-semibold">
                   {selectedDate === today
                     ? '오늘'
@@ -81,7 +79,9 @@ const CalendarPageContent = ({
                         locale: ko,
                       })}
                 </h2>
-              </header>
+              </header>}>
+            <div className="mx-auto pb-[calc(2rem+env(safe-area-inset-bottom))]">
+
               {dayInfo}
             </div>
           </PickerDialog>

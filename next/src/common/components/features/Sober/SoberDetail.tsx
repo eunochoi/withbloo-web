@@ -507,14 +507,14 @@ export const SoberDetail = ({
           <PickerDialog
             labelledBy="sober-record-menu"
             onClose={() => setRecordMenu(null)}
-          >
-            <div className="flex flex-col gap-6 pb-6">
-              <h2
+           header={<h2
                 id="sober-record-menu"
                 className="text-center text-lg font-semibold"
               >
                 다시 시작 기록
-              </h2>
+              </h2>}>
+            <div className="flex flex-col gap-6 pb-6">
+
               <button
                 type="button"
                 onClick={() => {

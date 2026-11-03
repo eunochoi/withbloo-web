@@ -57,9 +57,7 @@ const DiaryDatePicker = ({
     query.isFetching;
 
   return (
-    <PickerDialog labelledBy="diary-date-title" onClose={onClose}>
-      <div className="flex flex-col gap-6 pb-6">
-        <PickerHeader
+    <PickerDialog labelledBy="diary-date-title" onClose={onClose} header={<PickerHeader
           headerLeft={
             <button
               type="button"
@@ -87,7 +85,9 @@ const DiaryDatePicker = ({
           >
             완료
           </button>
-        </PickerHeader>
+        </PickerHeader>}>
+      <div className="flex flex-col gap-6 pb-6">
+
 
         <CalendarHeader
           monthLabel={calendar.monthLabel}

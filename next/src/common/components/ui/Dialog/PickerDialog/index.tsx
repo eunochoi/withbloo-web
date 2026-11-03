@@ -10,6 +10,7 @@ import { useSheetDismiss } from '../useSheetDismiss';
 
 interface PickerDialogProps {
   children: ReactNode;
+  header: ReactNode;
   labelledBy: string;
   describedBy?: string;
   fixedHeight?: boolean;
@@ -17,7 +18,7 @@ interface PickerDialogProps {
 }
 
 // 히스토리에 남기지 않는 임시 선택 UI다. 열림 상태와 적용된 값은 상위 컴포넌트가 관리한다.
-export const PickerDialog = ({ children, labelledBy, describedBy, onClose, fixedHeight = false }: PickerDialogProps) => {
+export const PickerDialog = ({ children, header, labelledBy, describedBy, onClose, fixedHeight = false }: PickerDialogProps) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const isPresent = useIsPresent();
@@ -72,7 +73,8 @@ export const PickerDialog = ({ children, labelledBy, describedBy, onClose, fixed
         transition={transition}
       >
         <SheetHandle onClose={onClose} />
-        <div className={cn("min-h-0 px-5 tablet:px-12 desktop:px-[81px]", fixedHeight ? "flex flex-1 flex-col overflow-hidden" : "overflow-y-auto overscroll-contain")}>{children}</div>
+        <div className="shrink-0 px-5 tablet:px-12 desktop:px-[81px]">{header}</div>
+        <div className={cn("min-h-0 px-5 py-8 tablet:px-12 desktop:px-[81px]", fixedHeight ? "flex flex-1 flex-col overflow-hidden" : "overflow-y-auto overscroll-contain")}>{children}</div>
       </motion.div>
     </dialog>
   );

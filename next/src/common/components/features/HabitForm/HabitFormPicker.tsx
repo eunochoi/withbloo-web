@@ -8,14 +8,14 @@ const HabitFormPicker = ({ title, id, children, onClose, onApply, fixedContent, 
   fixedContent?: ReactNode;
   fixedHeight?: boolean;
 }) => (
-  <PickerDialog labelledBy={id} onClose={onClose} fixedHeight={fixedHeight}>
-    <div className={cn("flex flex-col", fixedHeight && "min-h-0 flex-1")}>
-      <header className="relative flex min-h-14 shrink-0 items-center justify-center px-12">
+  <PickerDialog labelledBy={id} onClose={onClose} fixedHeight={fixedHeight} header={<header className="relative flex min-h-14 shrink-0 items-center justify-center px-12">
         <h2 id={id} className="text-center text-lg font-semibold">{title}</h2>
         <button type="button" onClick={onApply} className="absolute right-0 min-h-11 px-2 text-lg font-normal text-theme-accent">완료</button>
-      </header>
+      </header>}>
+    <div className={cn("flex flex-col", fixedHeight && "min-h-0 flex-1")}>
+
       {fixedContent}
-      <div className={cn("pb-7 pt-4", fixedHeight && "min-h-0 flex-1 overflow-y-auto overscroll-contain")}>{children}</div>
+      <div className={cn("pb-7", fixedHeight && "min-h-0 flex-1 overflow-y-auto overscroll-contain")}>{children}</div>
     </div>
   </PickerDialog>
 );

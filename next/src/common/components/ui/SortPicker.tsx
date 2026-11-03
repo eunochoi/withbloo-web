@@ -36,9 +36,7 @@ const SortPicker = <T extends string>({
   const [records, setRecords] = useState(recordSort);
   const [priority, setPriority] = useState(priorityFirst ?? false);
   return (
-    <PickerDialog labelledBy="sort-picker-title" onClose={onClose}>
-      <div className="flex flex-col gap-7 pb-6">
-        <PickerHeader
+    <PickerDialog labelledBy="sort-picker-title" onClose={onClose} header={<PickerHeader
           headerLeft={
             <button
               type="button"
@@ -72,7 +70,9 @@ const SortPicker = <T extends string>({
           >
             적용
           </button>
-        </PickerHeader>
+        </PickerHeader>}>
+      <div className="flex flex-col gap-7 pb-6">
+
 
         {priorityFirst !== undefined && (
           <label className="flex items-center justify-between gap-3 text-lg font-semibold">

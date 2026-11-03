@@ -21,9 +21,7 @@ const HabitFilterPicker = ({
   const [completed, setCompleted] = useState(completedOnly);
   const [selected, setSelected] = useState(priorities);
   return (
-    <PickerDialog labelledBy="habit-filter-title" onClose={onClose}>
-      <div className="flex flex-col gap-7 pb-6">
-        <PickerHeader
+    <PickerDialog labelledBy="habit-filter-title" onClose={onClose} header={<PickerHeader
           headerLeft={
             <button
               type="button"
@@ -50,7 +48,9 @@ const HabitFilterPicker = ({
           >
             적용
           </button>
-        </PickerHeader>
+        </PickerHeader>}>
+      <div className="flex flex-col gap-7 pb-6">
+
 
         <label className="flex items-center justify-between gap-3 text-lg font-semibold">
           완료한 항목만 보기

@@ -278,9 +278,7 @@ function SoberFilterPicker({
         onClose={() => {
           if (!periodOpen) onClose();
         }}
-      >
-        <div className="flex flex-col gap-7 pb-6">
-          <PickerHeader
+       header={<PickerHeader
             headerLeft={
               <button
                 type="button"
@@ -304,7 +302,9 @@ function SoberFilterPicker({
             >
               적용
             </button>
-          </PickerHeader>
+          </PickerHeader>}>
+        <div className="flex flex-col gap-7 pb-6">
+
 
           <label className="flex min-h-12 items-center justify-between gap-3 font-semibold">
             중요한 항목만 보기
@@ -339,14 +339,14 @@ function SoberFilterPicker({
           <PickerDialog
             labelledBy="sober-period-title"
             onClose={() => setPeriodOpen(false)}
-          >
-            <div className="flex flex-col gap-3 pb-6">
-              <h2
+           header={<h2
                 id="sober-period-title"
-                className="mb-3 text-center text-lg font-semibold"
+                className="text-center text-lg font-semibold"
               >
                 최소 유지 기간
-              </h2>
+              </h2>}>
+            <div className="flex flex-col gap-3 pb-6">
+
               {periods.map((entry) => (
                 <button
                   key={entry.days}

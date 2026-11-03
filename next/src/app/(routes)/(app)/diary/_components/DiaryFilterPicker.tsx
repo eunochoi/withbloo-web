@@ -45,9 +45,7 @@ const DiaryFilterPicker = ({
     enabled: yearOpen,
   });
   return (
-    <PickerDialog labelledBy="diary-filter-title" onClose={onClose}>
-      <div className="flex flex-col gap-7 pb-6">
-        <PickerHeader
+    <PickerDialog labelledBy="diary-filter-title" onClose={onClose} header={<PickerHeader
           headerLeft={
             <button
               type="button"
@@ -77,7 +75,9 @@ const DiaryFilterPicker = ({
           >
             적용
           </button>
-        </PickerHeader>
+        </PickerHeader>}>
+      <div className="flex flex-col gap-7 pb-6">
+
 
         <section className="flex flex-col gap-4">
           <h3 className="text-lg font-semibold">연도</h3>
@@ -178,14 +178,14 @@ const DiaryFilterPicker = ({
           <PickerDialog
             labelledBy="diary-year-title"
             onClose={() => setYearOpen(false)}
-          >
-            <div className="flex flex-col gap-3 pb-6">
-              <h2
+           header={<h2
                 id="diary-year-title"
-                className="pb-3 text-center text-xl font-semibold"
+                className="text-center text-xl font-semibold"
               >
                 연도 선택
-              </h2>
+              </h2>}>
+            <div className="flex flex-col gap-3 pb-6">
+
               {[null, ...(yearsQuery.data ?? [])].map((value) => (
                 <button
                   key={value ?? "all"}

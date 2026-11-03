@@ -28,9 +28,9 @@ export const ConfirmDialog = ({ isOpen, title, confirmLabel, confirmDescription,
       if (confirmed.current) { confirmed.current = false; onConfirmed?.(); }
     }}>
       {isOpen && (
-        <PickerDialog labelledBy={`${id}-title`} onClose={close}>
+        <PickerDialog labelledBy={`${id}-title`} onClose={close} header={<h2 id={`${id}-title`} className="text-center text-lg font-semibold tracking-tight text-theme-text-primary">{title}</h2>}>
           <div className="flex w-full flex-col gap-6 pb-[max(1rem,env(safe-area-inset-bottom))]">
-            <h2 id={`${id}-title`} className="text-center text-lg font-semibold tracking-tight text-theme-text-primary">{title}</h2>
+
             <div className="flex flex-col gap-3">
               <button type="button" disabled={busy} className="flex min-h-16 w-full items-center gap-4 rounded-2xl border border-theme-border p-4 text-left transition-opacity hover:opacity-70 disabled:opacity-40" onClick={async () => {
                 if (pending.current) return;

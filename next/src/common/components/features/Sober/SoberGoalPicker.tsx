@@ -46,14 +46,14 @@ export default function SoberGoalPicker({
         onClose={() => {
           if (!editor) onClose();
         }}
-      >
-        <div className="flex flex-col gap-6 pb-6">
-          <h2
+       header={<h2
             id="sober-goal-title"
             className="text-center text-lg font-semibold"
           >
             얼마 동안 거리를 두고 싶나요?
-          </h2>
+          </h2>}>
+        <div className="flex flex-col gap-6 pb-6">
+
           <div className="flex flex-col gap-3">
             {(
               [
@@ -134,9 +134,7 @@ export default function SoberGoalPicker({
           <PickerDialog
             labelledBy="sober-goal-editor"
             onClose={() => setEditor(null)}
-          >
-            <div className="flex flex-col gap-6 pb-6">
-              <div className="relative flex min-h-11 items-center justify-center px-12">
+           header={<div className="relative flex min-h-11 items-center justify-center px-12">
               <h2
                 id="sober-goal-editor"
                 className="text-center text-lg font-semibold"
@@ -156,7 +154,9 @@ export default function SoberGoalPicker({
               >
                 완료
               </button>
-              </div>
+              </div>}>
+            <div className="flex flex-col gap-6 pb-6">
+
               {editor.kind === 'PERIOD' ? (
                 <div className="grid grid-cols-3 gap-1.5">
                   {SOBER_GOALS.map((day) => (
