@@ -57,10 +57,10 @@ export default function SoberInfoCarousel({
                 behavior: 'smooth',
               });
             }}
-            className="flex h-8 w-8 items-center justify-center"
+            className="relative flex h-8 items-center justify-center px-[3px] after:absolute after:-inset-x-2 after:inset-y-0 after:content-['']"
           >
             <span
-              className={`h-2 w-2 rounded-full ${page === index ? 'opacity-100' : 'opacity-25'}`}
+              className={`h-2 rounded-full ${page === index ? 'w-5 opacity-100' : 'w-2 opacity-25'}`}
               style={{ backgroundColor: color }}
             />
           </button>

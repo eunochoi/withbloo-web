@@ -25,7 +25,7 @@ const Indicator = ({
             key={`indicator${i}`}
             className={cn(
               "m-[3px] h-2 rounded-[20px] transition-all duration-200 ease-in-out",
-              current ? "bg-theme-accent w-5" : "bg-theme-accent/80 w-2",
+              current ? "bg-theme-accent w-5" : "bg-theme-accent/25 w-2",
             )}
             aria-current={current ? 'step' : undefined}
           />
