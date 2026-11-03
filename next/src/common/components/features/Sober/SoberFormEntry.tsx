@@ -22,7 +22,7 @@ export default function SoberFormEntry({ id }: { id?: string }) {
       <PanelDialog ariaLabel="거리두기 수정" onClose={close}>
         <PanelHeader title="거리두기 수정" />
         <PanelBody>
-          <div className="py-12 text-center text-sm text-theme-text-secondary">
+          <div className="pb-12 text-center text-sm text-theme-text-secondary">
             {query.isPending ? (
               '기록을 불러오는 중이에요.'
             ) : query.isError ? (

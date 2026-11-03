@@ -69,7 +69,7 @@ const HomeClientPage = ({ initialDate }: { initialDate: string }) => {
         {isAnalysisOpen && <PanelDialog ariaLabel="기록 분석" onClose={() => setAnalysisOpen(false)}>
           <PanelHeader title="기록 분석" />
           <PanelBody showScrollFade>
-            <div className="pt-6 pb-[max(2rem,env(safe-area-inset-bottom))]">{isStatsError ? (
+            <div className="pb-[max(2rem,env(safe-area-inset-bottom))]">{isStatsError ? (
               <div className="flex min-h-64 w-full flex-col items-center justify-center gap-3 text-center text-theme-text-secondary">
                 <span>홈 기록을 불러오지 못했어요.</span>
                 <button type="button" className="text-theme-accent" onClick={() => {

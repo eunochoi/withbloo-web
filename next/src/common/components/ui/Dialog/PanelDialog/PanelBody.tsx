@@ -19,7 +19,7 @@ export const PanelBody = ({
   return (
     <ScrollContainer
       className="flex min-h-0 flex-1"
-      contentClassName={cn(PANEL_HORIZONTAL_PADDING_CLASS, contentClassName)}
+      contentClassName={cn(PANEL_HORIZONTAL_PADDING_CLASS, 'py-8', contentClassName)}
       showScrollFade={showScrollFade}
 
     >

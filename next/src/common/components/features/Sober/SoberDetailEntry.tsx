@@ -30,7 +30,7 @@ export default function SoberDetailEntry({ id }: { id: string }) {
       <PanelDialog ariaLabel="거리두기 상세 정보" onClose={close}>
         <PanelHeader title="상세 정보" />
         <PanelBody>
-          <div className="py-12 text-center text-sm text-theme-text-secondary">
+          <div className="pb-12 text-center text-sm text-theme-text-secondary">
             {isPending ? (
               '기록을 불러오는 중이에요.'
             ) : isError ? (

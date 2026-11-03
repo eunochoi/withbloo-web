@@ -38,7 +38,7 @@ export default function SoberMemos({
       <PanelDialog ariaLabel={`${name} 기록`} onClose={onClose}>
         <PanelHeader title={`${name} 기록`} />
         <PanelBody showScrollFade>
-          <div className="flex flex-col gap-3 pb-7 pt-6">
+          <div className="flex flex-col gap-3 pb-7">
             <button
               type="button"
               aria-label={`다시 시작 기록 정렬, ${sort === 'DESC' ? '최신순' : '과거순'}`}

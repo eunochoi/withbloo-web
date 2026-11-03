@@ -146,7 +146,7 @@ const DiaryFormClientPage = ({ isEdit, diaryId }: DiaryFormClientPageProps) => {
               </PanelSubmitButton>}
           />
           <PanelBody showScrollFade>
-            <fieldset disabled={isSubmitting} className="m-0 flex w-full flex-col gap-6 border-0 pb-[max(1rem,env(safe-area-inset-bottom))] pt-2">
+            <fieldset disabled={isSubmitting} className="m-0 flex w-full flex-col gap-6 border-0 pb-[max(1rem,env(safe-area-inset-bottom))]">
               <DiaryFormEmotionSection
                 emotion={emotion}
                 setEmotion={setEmotion}

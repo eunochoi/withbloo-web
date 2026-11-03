@@ -73,7 +73,7 @@ const DiaryDetailClientPage = ({ diaryId }: DiaryDetailClientPageProps) => {
             )}
           />
           <PanelBody>
-            <div className="flex w-full min-w-0 flex-col gap-12 pt-5 pb-[max(2rem,env(safe-area-inset-bottom))] landscape-short:gap-6 landscape-short:pt-2">
+            <div className="flex w-full min-w-0 flex-col gap-12 pb-[max(2rem,env(safe-area-inset-bottom))] landscape-short:gap-6">
               <DiaryDetailContent diaryData={diaryData} />
               {hasImages && <DiaryDetailGallery key={diaryData.id} images={diaryData.Images} />}
             </div>

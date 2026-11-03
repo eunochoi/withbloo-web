@@ -137,7 +137,7 @@ const HabitFormClientPage = ({ isEdit, habitId }: HabitFormClientPageProps) => {
             </PanelSubmitButton>}
           />
           <PanelBody showScrollFade>
-            <fieldset disabled={isSubmitting} className="m-0 flex min-w-0 w-full flex-col gap-7 border-0 pb-6 pt-2">
+            <fieldset disabled={isSubmitting} className="m-0 flex min-w-0 w-full flex-col gap-7 border-0 pb-6">
               <div className="flex w-full flex-col gap-7">
                 <HabitFormNameSection name={name} setName={setName} />
                 <HabitFormPrioritySection priority={priority} onOpen={() => setPicker('priority')} />

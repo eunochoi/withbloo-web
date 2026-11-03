@@ -127,7 +127,7 @@ export const SoberForm = ({
         <PanelBody showScrollFade>
           <fieldset
             disabled={saving}
-            className="m-0 flex min-w-0 flex-col gap-7 border-0 pb-8 pt-4"
+            className="m-0 flex min-w-0 flex-col gap-7 border-0 pb-8"
           >
             <label className="flex min-h-12 items-center justify-between gap-3 text-lg font-semibold">
               중요 항목으로 저장

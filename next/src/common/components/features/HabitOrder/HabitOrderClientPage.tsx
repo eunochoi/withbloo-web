@@ -98,7 +98,7 @@ export const HabitOrderClientPage = () => {
             </PanelSubmitButton>}
           />
           <PanelBody showScrollFade>
-            <div className="flex w-full flex-col gap-4 py-6">
+            <div className="flex w-full flex-col gap-4 pb-6">
               <div className="flex gap-3">
                 <button
                   className="flex min-h-12 min-w-0 flex-1 items-center justify-center gap-2 rounded-xl border border-theme-accent/30 px-2 py-2 text-sm text-theme-accent-text transition-opacity hover:opacity-65 disabled:opacity-40"

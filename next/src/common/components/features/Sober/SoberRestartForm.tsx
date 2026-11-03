@@ -84,7 +84,7 @@ export default function SoberRestartForm({
       <PanelBody showScrollFade>
         <fieldset
           disabled={saving}
-          className="m-0 flex min-w-0 flex-col gap-5 border-0 pb-6 pt-4"
+          className="m-0 flex min-w-0 flex-col gap-5 border-0 pb-6"
         >
           <CalendarHeader
             monthLabel={calendar.monthLabel}

@@ -160,9 +160,9 @@ export const SoberDetail = ({
           }
         />
         <PanelBody showScrollFade>
-          <div className="flex flex-col gap-8 pb-8 pt-2">
+          <div className="flex flex-col gap-8 pb-8">
             <div className="flex flex-col gap-7">
-              <div className="flex flex-col items-center gap-3 pt-2">
+              <div className="flex flex-col items-center gap-3">
                 <SoberIcon
                   name={item.iconKey}
                   color={item.iconColor}
@@ -419,7 +419,7 @@ export const SoberDetail = ({
               title={format(new Date(`${selectedDay}T12:00`), 'yyyy년 M월 d일')}
             />
             <PanelBody>
-              <div className="flex flex-col gap-3 pb-8 pt-4">
+              <div className="flex flex-col gap-3 pb-8">
                 <button
                   type="button"
                   onClick={() => openRestart(undefined, selectedDay)}

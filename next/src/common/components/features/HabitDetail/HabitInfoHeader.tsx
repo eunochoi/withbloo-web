@@ -12,7 +12,7 @@ interface Props {
 const HabitInfoHeader = ({ habitData }: Props) => {
   const accent = useItemAccent(habitData?.iconColor);
   return (
-    <header className="flex w-full min-w-0 flex-col items-center gap-4 px-1 py-2">
+    <header className="flex w-full min-w-0 flex-col items-center gap-4 px-1 pb-2">
       <div className="flex w-full flex-col min-w-0 justify-center items-center gap-4">
         <HabitIcon iconKey={habitData?.iconKey} iconColor={habitData?.iconColor} className="shrink-0 text-[4rem]" />
         <h1 className="m-0 w-full min-w-0 text-center text-xl font-semibold leading-tight text-theme-text-primary"><ScrollableName name={habitData?.name ?? '-'} /></h1>
