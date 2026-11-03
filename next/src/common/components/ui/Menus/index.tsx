@@ -108,7 +108,7 @@ const Menus = ({
                         pendingAction.current = key;
                         onClose();
                       }}
-                      className="flex min-h-16 w-full items-center gap-4 rounded-2xl border border-theme-border p-4 text-left transition-opacity hover:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-theme-accent"
+                      className="flex min-h-16 w-full items-center gap-4 rounded-2xl border border-theme-border p-4 text-left transition-opacity hover:opacity-70"
                     >
                       <Icon
                         className={`shrink-0 text-2xl ${key === 'confirm' ? 'text-theme-danger' : 'text-theme-accent'}`}

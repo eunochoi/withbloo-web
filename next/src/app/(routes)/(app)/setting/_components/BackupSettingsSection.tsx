@@ -21,7 +21,7 @@ export function BackupSettingsSection() {
                 type="button"
                 disabled={busy}
                 onClick={() => setOpen(true)}
-                className="flex min-h-16 w-full items-center gap-4 p-4 text-left transition-opacity disabled:opacity-40 active:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-theme-accent"
+                className="flex min-h-16 w-full items-center gap-4 p-4 text-left transition-opacity disabled:opacity-40 active:opacity-70"
               >
                 <span className="flex min-w-0 flex-1 flex-col gap-1">
                   <span className="text-base font-semibold text-theme-text-primary">백업 파일 저장하기</span>

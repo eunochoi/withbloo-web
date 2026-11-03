@@ -140,7 +140,7 @@ export const SoberForm = ({
               />
               <span
                 aria-hidden="true"
-                className="relative h-7 w-12 shrink-0 rounded-full bg-theme-border after:absolute after:left-1 after:top-1 after:h-5 after:w-5 after:rounded-full after:bg-theme-surface after:transition-transform peer-checked:bg-theme-accent peer-checked:after:translate-x-5 peer-focus-visible:ring-2 peer-focus-visible:ring-theme-accent"
+                className="relative h-7 w-12 shrink-0 rounded-full bg-theme-border after:absolute after:left-1 after:top-1 after:h-5 after:w-5 after:rounded-full after:bg-theme-surface after:transition-transform peer-checked:bg-theme-accent peer-checked:after:translate-x-5"
               />
             </label>
             <section className="space-y-3">
@@ -152,7 +152,7 @@ export const SoberForm = ({
                   maxLength={SOBER_NAME_MAX_LENGTH}
                   onChange={(event) => setName(event.target.value)}
                   placeholder="쇼츠 시청"
-                  className="min-h-12 w-full border-0 bg-transparent p-0 text-base leading-8 outline-none placeholder:text-theme-text-tertiary focus-visible:ring-2 focus-visible:ring-theme-accent"
+                  className="min-h-12 w-full border-0 bg-transparent p-0 text-base leading-8 outline-none placeholder:text-theme-text-tertiary"
                 />
                 <p className="text-right text-xs text-theme-text-secondary">
                   {name.length} / {SOBER_NAME_MAX_LENGTH}
@@ -218,7 +218,7 @@ export const SoberForm = ({
                   maxLength={500}
                   onChange={(event) => setDescription(event.target.value)}
                   placeholder="밤에는 속을 편하게 하기"
-                  className="h-28 w-full resize-none border-0 bg-transparent p-0 text-base leading-8 placeholder:text-theme-text-tertiary focus-visible:outline-theme-accent"
+                  className="h-28 w-full resize-none border-0 bg-transparent p-0 text-base leading-8 placeholder:text-theme-text-tertiary"
                 />
                 <p className="text-right text-xs text-theme-text-secondary">
                   {description.length} / 500

@@ -9,7 +9,7 @@ import { THEME_MODE_LIST } from '@/common/types/theme';
 import { sectionTitleClassName } from './styles';
 import { OnboardingFrame } from './OnboardingFrame';
 const choiceClass =
-  'h-24 min-w-0 rounded-xl border px-2 py-2 text-[13px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-theme-accent';
+  'h-24 min-w-0 rounded-xl border px-2 py-2 text-[13px]';
 
 export function ThemePage() {
   const { font, theme } = useSettingsContext();

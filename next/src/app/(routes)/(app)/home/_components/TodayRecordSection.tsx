@@ -23,7 +23,7 @@ import { habitQueries } from '@/common/queries/habitQueries';
 import { soberQueries } from '@/common/queries/soberQueries';
 
 const itemClass =
-  'flex min-w-0 flex-col items-center gap-2 px-2 text-center text-sm desktop:text-base text-theme-text-secondary transition-opacity hover:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-theme-accent';
+  'flex min-w-0 flex-col items-center gap-2 px-2 text-center text-sm desktop:text-base text-theme-text-secondary transition-opacity hover:opacity-70';
 
 const TodayRecordSection = ({ initialDate }: { initialDate: string }) => {
   const [today, setToday] = useState(initialDate);

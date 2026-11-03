@@ -112,7 +112,7 @@ const IntroClientPage = () => {
                 aria-pressed={mood === index}
                 onClick={() => setMood(index)}
                 className={cn(
-                  'flex min-h-11 items-center justify-center gap-2 rounded-xl border px-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-theme-accent',
+                  'flex min-h-11 items-center justify-center gap-2 rounded-xl border px-2',
                   mood === index
                     ? 'border-theme-accent bg-theme-accent-light/50 font-semibold text-theme-accent-text'
                     : 'border-transparent text-theme-text-secondary',

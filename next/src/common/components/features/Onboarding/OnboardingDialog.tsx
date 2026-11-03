@@ -21,7 +21,7 @@ const pages = [
   StartPage,
 ];
 const buttonClass =
-  'min-h-12 flex-1 rounded-full border px-4 py-3 text-[13px] font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-theme-accent';
+  'min-h-12 flex-1 rounded-full border px-4 py-3 text-[13px] font-semibold';
 
 export function OnboardingDialog({
   firstRun,

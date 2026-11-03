@@ -66,7 +66,7 @@ const HabitBoxRecentDays = ({
                   : {}),
               }}
               className={cn(
-                'mt-1 flex h-5 w-5 items-center justify-center rounded-md border peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-theme-accent transition-colors duration-150 motion-reduce:transition-none',
+                'mt-1 flex h-5 w-5 items-center justify-center rounded-md border transition-colors duration-150 motion-reduce:transition-none',
                 checked
                   ? 'border-theme-accent/75 bg-theme-accent/75 text-theme-text-on-accent'
                   : 'border-theme-text-disabled/60 bg-theme-surface',

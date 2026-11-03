@@ -16,9 +16,9 @@ import { introIconClass } from '../_styles/classes';
 const PLAY_STORE_URL =
   'https://play.google.com/store/apps/details?id=com.everstamp&pcampaignid=web_share';
 const actionClass =
-  'inline-flex w-full items-center gap-3 rounded-theme border px-3 py-3 text-left text-base font-normal transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-theme-accent-text';
+  'inline-flex w-full items-center gap-3 rounded-theme border px-3 py-3 text-left text-base font-normal transition-colors';
 const optionClass =
-  'flex min-h-16 w-full items-center gap-4 rounded-2xl border border-theme-border p-4 text-left transition-opacity hover:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-theme-accent';
+  'flex min-h-16 w-full items-center gap-4 rounded-2xl border border-theme-border p-4 text-left transition-opacity hover:opacity-70';
 
 interface IntroActionButtonsProps {
   className?: string;

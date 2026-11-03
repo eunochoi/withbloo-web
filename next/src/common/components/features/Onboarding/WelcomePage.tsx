@@ -26,7 +26,7 @@ const moods = [
   },
 ];
 const choiceClass =
-  'min-h-11 min-w-0 rounded-xl border px-2 py-2 text-[13px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-theme-accent';
+  'min-h-11 min-w-0 rounded-xl border px-2 py-2 text-[13px]';
 export function WelcomePage() {
   const [mood, setMood] = useState(1);
   return (

@@ -33,7 +33,7 @@ const SettingPageLinks = () => {
         href="/intro"
         aria-label="서비스 소개 웹사이트 열기"
         title="서비스 소개 웹사이트 열기"
-        className="ml-auto flex min-h-10 shrink-0 items-center justify-center rounded-md px-1 text-theme-accent hover:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-theme-accent"
+        className="ml-auto flex min-h-10 shrink-0 items-center justify-center rounded-md px-1 text-theme-accent hover:opacity-70"
       >
         <ExternalLinkIcon size={18} aria-hidden="true" />
       </Link>

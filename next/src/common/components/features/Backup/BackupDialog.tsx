@@ -22,7 +22,7 @@ type BackupWindow = Window & {
   }) => Promise<SaveHandle>;
 };
 const inputClass =
-  'min-h-12 w-full rounded-2xl border border-theme-border bg-theme-surface px-4 py-3 text-base text-theme-text-primary outline-none placeholder:text-theme-text-secondary focus:border-theme-accent disabled:opacity-50';
+  'min-h-12 w-full rounded-2xl border border-theme-border bg-theme-surface px-4 py-3 text-base text-theme-text-primary outline-none placeholder:text-theme-text-secondary disabled:opacity-50';
 const buttonClass =
   'flex min-h-12 w-full items-center justify-center rounded-full border border-theme-accent-deep bg-theme-accent px-5 py-3 text-base font-semibold text-theme-text-on-accent active:opacity-65 disabled:opacity-40';
 

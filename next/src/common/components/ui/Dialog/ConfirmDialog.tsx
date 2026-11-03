@@ -32,7 +32,7 @@ export const ConfirmDialog = ({ isOpen, title, confirmLabel, confirmDescription,
           <div className="flex w-full flex-col gap-6 pb-[max(1rem,env(safe-area-inset-bottom))]">
             <h2 id={`${id}-title`} className="text-center text-lg font-semibold tracking-tight text-theme-text-primary">{title}</h2>
             <div className="flex flex-col gap-3">
-              <button type="button" disabled={busy} className="flex min-h-16 w-full items-center gap-4 rounded-2xl border border-theme-border p-4 text-left transition-opacity hover:opacity-70 disabled:opacity-40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-theme-accent" onClick={async () => {
+              <button type="button" disabled={busy} className="flex min-h-16 w-full items-center gap-4 rounded-2xl border border-theme-border p-4 text-left transition-opacity hover:opacity-70 disabled:opacity-40" onClick={async () => {
                 if (pending.current) return;
                 pending.current = true;
                 setBusy(true);
@@ -55,7 +55,7 @@ export const ConfirmDialog = ({ isOpen, title, confirmLabel, confirmDescription,
                 </span>
                 <ChevronRightIcon className="shrink-0 text-xl text-theme-text-tertiary" aria-hidden="true" />
               </button>
-              <button type="button" disabled={busy} onClick={close} className="flex min-h-16 w-full items-center gap-4 rounded-2xl border border-theme-border p-4 text-left transition-opacity hover:opacity-70 disabled:opacity-40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-theme-accent">
+              <button type="button" disabled={busy} onClick={close} className="flex min-h-16 w-full items-center gap-4 rounded-2xl border border-theme-border p-4 text-left transition-opacity hover:opacity-70 disabled:opacity-40">
                 <UndoIcon className="shrink-0 text-2xl text-theme-accent" aria-hidden="true" />
                 <span className="flex min-w-0 flex-1 flex-col gap-1">
                   <span className="text-base font-semibold text-theme-text-primary">취소</span>
