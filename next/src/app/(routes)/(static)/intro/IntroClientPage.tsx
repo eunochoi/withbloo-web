@@ -16,10 +16,10 @@ import {
   introSectionClass,
   introTitleClass,
 } from './_styles/classes';
-import negative from '/public/img/bloolog/cats/cat-blue-n.png';
-import positive from '/public/img/bloolog/cats/cat-blue-p.png';
-import standingCat from '/public/img/bloolog/cats/cat-blue-standing.png';
-import neutral from '/public/img/bloolog/cats/cat-blue.png';
+import negative from '/public/img/cats/cat-blue-n.png';
+import positive from '/public/img/cats/cat-blue-p.png';
+import standingCat from '/public/img/cats/cat-blue-standing.png';
+import neutral from '/public/img/cats/cat-blue.png';
 import introImage1 from '/public/img/intro/intro-image-1.png';
 import introImage2 from '/public/img/intro/intro-image-2.png';
 import introImage3 from '/public/img/intro/intro-image-3.png';

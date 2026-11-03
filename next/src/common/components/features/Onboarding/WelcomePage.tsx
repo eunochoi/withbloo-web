@@ -2,9 +2,9 @@
 
 import Image from 'next/image';
 import { useState } from 'react';
-import negative from '/public/img/bloolog/cats/cat-blue-n.png';
-import positive from '/public/img/bloolog/cats/cat-blue-p.png';
-import neutral from '/public/img/bloolog/cats/cat-blue.png';
+import negative from '/public/img/cats/cat-blue-n.png';
+import positive from '/public/img/cats/cat-blue-p.png';
+import neutral from '/public/img/cats/cat-blue.png';
 const moods = [
   {
     src: positive,

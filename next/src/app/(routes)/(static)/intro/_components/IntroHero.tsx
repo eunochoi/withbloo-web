@@ -9,7 +9,7 @@ import {
   introSectionClass,
 } from '../_styles/classes';
 import IntroActionButtons from './IntroActionButtons';
-import cat from '/public/img/bloolog/cats/cat-blue-standing.png';
+import cat from '/public/img/cats/cat-blue-standing.png';
 
 const IntroHero = () => (
   <section className={cn(introSectionClass, '!bg-theme-accent-light')}>

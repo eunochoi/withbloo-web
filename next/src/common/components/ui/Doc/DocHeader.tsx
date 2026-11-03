@@ -6,7 +6,7 @@ import Wordmark from '@/common/components/ui/Wordmark';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
-import hidingCat from '/public/img/bloolog/cats/cat-blue.png';
+import hidingCat from '/public/img/cats/cat-blue.png';
 
 interface Props {
   description?: string;

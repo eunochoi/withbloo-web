@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import standingCat from '/public/img/bloolog/cats/cat-blue-standing.png';
+import standingCat from '/public/img/cats/cat-blue-standing.png';
 
 interface Props {
   description: string;

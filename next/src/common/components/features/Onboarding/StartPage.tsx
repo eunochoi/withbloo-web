@@ -3,7 +3,7 @@
 import { ArrowRightIcon } from'@/common/constants/appIcons';
 import Image from'next/image';
 import Wordmark from'../../ui/Wordmark';
-import standingCat from'/public/img/bloolog/cats/cat-blue-standing.png';
+import standingCat from'/public/img/cats/cat-blue-standing.png';
 
 export function StartPage() {
   return (

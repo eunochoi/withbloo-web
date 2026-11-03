@@ -1,8 +1,8 @@
 import type { StaticImageData } from 'next/image';
 
-import googleIcon from '/public/img/loginIcon/google.png';
-import kakaoIcon from '/public/img/loginIcon/kakao.png';
-import naverIcon from '/public/img/loginIcon/naver.png';
+import googleIcon from '/public/img/login/google.png';
+import kakaoIcon from '/public/img/login/kakao.png';
+import naverIcon from '/public/img/login/naver.png';
 
 export type LoginProviderId = 'google' | 'naver' | 'kakao';
 

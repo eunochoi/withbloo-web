@@ -1,6 +1,6 @@
 import Wordmark from '@/common/components/ui/Wordmark';
 import Image from 'next/image';
-import cat from '/public/img/bloolog/cats/cat-blue.png';
+import cat from '/public/img/cats/cat-blue.png';
 
 
 const LoginTopSection = () => (

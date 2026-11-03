@@ -1,20 +1,20 @@
 'use client';
 
-import { authAction } from'@/common/auth/authAction';
-import Wordmark from'@/common/components/ui/Wordmark';
-import { DIARY_EMOTION_GROUPS } from'@/common/constants/diaryFilters';
-import { getTodayString } from'@/common/functions/getTodayString';
-import { diaryQueries } from'@/common/queries/diaryQueries';
-import { useQuery } from'@tanstack/react-query';
-import Image from'next/image';
-import { useEffect, useState } from'react';
+import { authAction } from '@/common/auth/authAction';
+import Wordmark from '@/common/components/ui/Wordmark';
+import { DIARY_EMOTION_GROUPS } from '@/common/constants/diaryFilters';
+import { getTodayString } from '@/common/functions/getTodayString';
+import { diaryQueries } from '@/common/queries/diaryQueries';
+import { useQuery } from '@tanstack/react-query';
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
 
-import HomeAnalysisCard from'./HomeAnalysisCard';
-import HomeGreeting from'./HomeGreeting';
-import TodayRecordSection from'./TodayRecordSection';
-import negativeCat from'/public/img/bloolog/cats/cat-blue-n.png';
-import positiveCat from'/public/img/bloolog/cats/cat-blue-p.png';
-import neutralCat from'/public/img/bloolog/cats/cat-blue.png';
+import HomeAnalysisCard from './HomeAnalysisCard';
+import HomeGreeting from './HomeGreeting';
+import TodayRecordSection from './TodayRecordSection';
+import negativeCat from '/public/img/cats/cat-blue-n.png';
+import positiveCat from '/public/img/cats/cat-blue-p.png';
+import neutralCat from '/public/img/cats/cat-blue.png';
 
 const HomePage = ({
   initialDate,

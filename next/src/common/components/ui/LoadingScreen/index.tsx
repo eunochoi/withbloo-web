@@ -2,7 +2,7 @@
 
 import Image from'next/image';
 import Wordmark from'../Wordmark';
-import cat from'/public/img/bloolog/cats/cat-blue-standing.png';
+import cat from'/public/img/cats/cat-blue-standing.png';
 
 interface LoadingScreenProps {
   message?: string;
