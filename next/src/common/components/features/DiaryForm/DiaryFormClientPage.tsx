@@ -4,7 +4,6 @@ import { authAction } from '@/common/auth/authAction';
 import { diaryQueries } from '@/common/queries/diaryQueries';
 import { showNotice } from '@/common/components/ui/Notice/notice';
 import { DIARY_TEXT_MAX_LENGTH } from '@/common/constants/diary';
-import { DIARY_EMOTION_GROUPS } from '@/common/constants/diaryFilters';
 import { isValidLocalDateString } from '@/common/utils/date/isValidLocalDateString';
 import { parseLocalDate } from '@/common/utils/date/parseLocalDate';
 import { arrayMove } from '@dnd-kit/sortable';
@@ -14,13 +13,8 @@ import { ko } from 'date-fns/locale';
 import { AnimatePresence } from 'framer-motion';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
-import Image from 'next/image';
-import neutralCat from '/public/img/bloolog/cats/cat-blue.png';
-import positiveCat from '/public/img/bloolog/cats/cat-blue-p.png';
-import negativeCat from '/public/img/bloolog/cats/cat-blue-n.png';
 import { PanelDialog } from '../../ui/Dialog/PanelDialog';
 import { PanelBody } from '../../ui/Dialog/PanelDialog/PanelBody';
-import { PanelFooter } from '../../ui/Dialog/PanelDialog/PanelFooter';
 import { PanelHeader } from '../../ui/Dialog/PanelDialog/PanelHeader';
 import { PanelSubmitButton } from '../../ui/Dialog/PanelDialog/PanelSubmitButton';
 import DiaryDatePicker from './DiaryDatePicker';
@@ -43,7 +37,6 @@ interface DiaryFormClientPageProps {
 const DiaryFormClientPage = ({ isEdit, diaryId }: DiaryFormClientPageProps) => {
   const router = useRouter();
   const [isDialogMounted, setIsDialogMounted] = useState(true);
-  const [isTextFocused, setIsTextFocused] = useState(false);
   const searchParams = useSearchParams();
   const {
     data: diaryData,
@@ -83,11 +76,6 @@ const DiaryFormClientPage = ({ isEdit, diaryId }: DiaryFormClientPageProps) => {
   const date = isEdit ? selectedDate ?? diaryData?.date ?? null : selectedDate;
   const effectiveDate = isEdit && diaryData && selectedDate === null ? diaryData.date : date;
   const headerTitle = effectiveDate ? format(parseLocalDate(effectiveDate), 'yyyy. M. d. EEEE', { locale: ko }) : '날짜를 선택해주세요';
-  const cat = (DIARY_EMOTION_GROUPS.positive.emotions as readonly number[]).includes(emotion)
-    ? positiveCat
-    : (DIARY_EMOTION_GROUPS.negative.emotions as readonly number[]).includes(emotion)
-      ? negativeCat
-      : neutralCat;
   const saveDiary = isEdit
     ? (imageContentIds: string[]) => {
       if (!diaryId) {
@@ -148,44 +136,33 @@ const DiaryFormClientPage = ({ isEdit, diaryId }: DiaryFormClientPageProps) => {
             title={headerTitle}
             onBack={handleBack}
             onTitleClick={allowDateChange && !isSubmitting ? () => setIsDatePickerOpen(true) : undefined}
+          headerRight={<PanelSubmitButton
+                type="button"
+                onClick={handleSubmit}
+                disabled={isSubmitting || !effectiveDate || text.length > DIARY_TEXT_MAX_LENGTH}
+                aria-busy={isSubmitting}
+              >
+                {isSubmitting ? '저장 중' : '저장'}
+              </PanelSubmitButton>}
           />
-          <PanelBody showScrollFade contentClassName="flex h-full min-h-full flex-col">
-            <fieldset disabled={isSubmitting} className="m-0 flex h-full min-h-0 w-full flex-1 flex-col justify-between border-0 pt-2">
-              {!isTextFocused && <DiaryFormEmotionSection
+          <PanelBody showScrollFade>
+            <fieldset disabled={isSubmitting} className="m-0 flex w-full flex-col gap-6 border-0 pb-[max(1rem,env(safe-area-inset-bottom))] pt-2">
+              <DiaryFormEmotionSection
                 emotion={emotion}
                 setEmotion={setEmotion}
-              />}
-              <div className="flex min-h-0 w-full flex-1 flex-col">
-                <DiaryFormTextSection
-                  text={text}
-                  setText={setText}
-                  onFocusChange={setIsTextFocused}
-                />
-              </div>
-              {!isTextFocused && <DiaryFormImagesSection
+              />
+              <DiaryFormTextSection text={text} setText={setText} />
+              <DiaryFormImagesSection
                 diaryImages={diaryImages}
                 handleImageChange={imageHandlers.handleImageChange}
                 getImageUrl={imageHandlers.getImageUrl}
                 handleRemoveImage={imageHandlers.handleRemoveImage}
                 onReorder={(from, to) => setDiaryImages((images) => arrayMove(images, from, to))}
                 isLoading={isSubmitting}
-              />}
-              {!isTextFocused && <div className="flex shrink-0 items-center justify-center pt-2" aria-hidden="true">
-                <Image src={cat} alt="" className="h-auto w-44 max-w-full" sizes="176px" />
-              </div>}
+              />
+
             </fieldset>
           </PanelBody>
-          <PanelFooter>
-            <PanelSubmitButton
-              type="button"
-              onClick={handleSubmit}
-              disabled={isSubmitting || !effectiveDate || text.length > DIARY_TEXT_MAX_LENGTH}
-              aria-busy={isSubmitting}
-            >
-              {isSubmitting && <span aria-hidden="true" className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent motion-reduce:animate-none" />}
-              {isSubmitting ? '저장 중...' : isEdit ? '수정한 기록 저장하기' : '기록 저장하기'}
-            </PanelSubmitButton>
-          </PanelFooter>
           <AnimatePresence>
             {isDatePickerOpen && <DiaryDatePicker value={effectiveDate} diaryId={diaryId} onClose={() => setIsDatePickerOpen(false)} onApply={(next) => { setSelectedDate(next); setIsDatePickerOpen(false); }} />}
           </AnimatePresence>

@@ -12,7 +12,6 @@ import { useEffect, useState } from 'react';
 import { useHabitSortPreferences } from '@/app/(routes)/(app)/habit/_hooks/useHabitSortPreferences';
 import { PanelDialog } from '@/common/components/ui/Dialog/PanelDialog';
 import { PanelBody } from '@/common/components/ui/Dialog/PanelDialog/PanelBody';
-import { PanelFooter } from '@/common/components/ui/Dialog/PanelDialog/PanelFooter';
 import { PanelHeader } from '@/common/components/ui/Dialog/PanelDialog/PanelHeader';
 import { PanelSubmitButton } from '@/common/components/ui/Dialog/PanelDialog/PanelSubmitButton';
 import { useRouter } from 'next/navigation';
@@ -90,6 +89,13 @@ export const HabitOrderClientPage = () => {
           <PanelHeader
             title="습관 순서 설정"
             onBack={() => setIsDialogMounted(false)}
+          headerRight={<PanelSubmitButton
+              disabled={!hasChanges || isPending || isError}
+              onClick={onSubmit}
+              type="button"
+            >
+              저장
+            </PanelSubmitButton>}
           />
           <PanelBody showScrollFade>
             <div className="flex w-full flex-col gap-4 py-6">
@@ -144,15 +150,7 @@ export const HabitOrderClientPage = () => {
               )}
             </div>
           </PanelBody>
-          <PanelFooter>
-            <PanelSubmitButton
-              disabled={!hasChanges || isPending || isError}
-              onClick={onSubmit}
-              type="button"
-            >
-              순서 저장하기
-            </PanelSubmitButton>
-          </PanelFooter>
+
         </PanelDialog>
       )}
     </AnimatePresence>

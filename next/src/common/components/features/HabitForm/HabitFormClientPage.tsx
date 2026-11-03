@@ -19,7 +19,6 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { PanelDialog } from '../../ui/Dialog/PanelDialog';
 import { PanelBody } from '../../ui/Dialog/PanelDialog/PanelBody';
-import { PanelFooter } from '../../ui/Dialog/PanelDialog/PanelFooter';
 import { PanelHeader } from '../../ui/Dialog/PanelDialog/PanelHeader';
 import { PanelSubmitButton } from '../../ui/Dialog/PanelDialog/PanelSubmitButton';
 import { createHabitRequest } from './functions/createHabitRequest';
@@ -128,6 +127,14 @@ const HabitFormClientPage = ({ isEdit, habitId }: HabitFormClientPageProps) => {
           <PanelHeader
             title={`습관 항목 ${confirmText}`}
             onBack={handleBack}
+          headerRight={<PanelSubmitButton
+              type="button"
+              onClick={handleSubmit}
+              disabled={isSubmitting || !name.trim() || name.length > HABIT_NAME_MAX_LENGTH}
+              aria-busy={isSubmitting}
+            >
+              {isSubmitting ? '저장 중' : '저장'}
+            </PanelSubmitButton>}
           />
           <PanelBody showScrollFade>
             <fieldset disabled={isSubmitting} className="m-0 flex min-w-0 w-full flex-col gap-7 border-0 pb-6 pt-2">
@@ -139,17 +146,7 @@ const HabitFormClientPage = ({ isEdit, habitId }: HabitFormClientPageProps) => {
               </div>
             </fieldset>
           </PanelBody>
-          <PanelFooter>
-            <PanelSubmitButton
-              type="button"
-              onClick={handleSubmit}
-              disabled={isSubmitting || !name.trim() || name.length > HABIT_NAME_MAX_LENGTH}
-              aria-busy={isSubmitting}
-            >
-              {isSubmitting && <span aria-hidden="true" className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent motion-reduce:animate-none" />}
-              {isSubmitting ? '저장 중...' : isEdit ? '수정한 습관 저장하기' : '습관 저장하기'}
-            </PanelSubmitButton>
-          </PanelFooter>
+
         </PanelDialog>
       )}
     </AnimatePresence>

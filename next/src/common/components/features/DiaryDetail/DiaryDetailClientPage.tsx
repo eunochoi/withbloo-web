@@ -52,7 +52,7 @@ const DiaryDetailClientPage = ({ diaryId }: DiaryDetailClientPageProps) => {
             title={headerTitle}
             onBack={() => setIsDialogMounted(false)}
             backLabel="뒤로가기"
-            rightAction={(
+            headerRight={(
               <>
                 <button
                   className="-mr-5 flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-xl text-theme-text-tertiary"

@@ -10,7 +10,6 @@ import { useMonthSwipe } from '@/common/components/ui/Calendar/useMonthSwipe';
 import { PanelDialog } from '@/common/components/ui/Dialog/PanelDialog';
 import { PanelHeader } from '@/common/components/ui/Dialog/PanelDialog/PanelHeader';
 import { PanelBody } from '@/common/components/ui/Dialog/PanelDialog/PanelBody';
-import { PanelFooter } from '@/common/components/ui/Dialog/PanelDialog/PanelFooter';
 import { PanelSubmitButton } from '@/common/components/ui/Dialog/PanelDialog/PanelSubmitButton';
 import { SoberIcon } from './SoberIcon';
 import type { SoberWithRestarts } from './types';
@@ -73,7 +72,15 @@ export default function SoberRestartForm({
   const title = editing ? '다시 시작 기록 수정' : '다시 시작 기록 추가';
   return (
     <PanelDialog ariaLabel={title} dismissible={!saving} onClose={onClose}>
-      <PanelHeader title={title} />
+      <PanelHeader title={title} headerRight={<PanelSubmitButton
+          type="button"
+          disabled={saving}
+          aria-busy={saving}
+          onClick={() => void save()}
+        >
+          {saving ? '저장 중' : editing ? '저장' : '기록'}
+        </PanelSubmitButton>}
+          />
       <PanelBody showScrollFade>
         <fieldset
           disabled={saving}
@@ -177,20 +184,7 @@ export default function SoberRestartForm({
           )}
         </fieldset>
       </PanelBody>
-      <PanelFooter>
-        <PanelSubmitButton
-          type="button"
-          disabled={saving}
-          aria-busy={saving}
-          onClick={() => void save()}
-        >
-          {saving
-            ? '저장 중...'
-            : editing
-              ? '수정한 기록 저장하기'
-              : '다시 시작 기록하기'}
-        </PanelSubmitButton>
-      </PanelFooter>
+
     </PanelDialog>
   );
 }

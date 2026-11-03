@@ -65,7 +65,7 @@ export const useDiarySubmission = ({
       ]);
       onSuccess();
       const completedMessage = duplicateImageCount > 0
-        ? `${successMessage}. 이미 추가된 사진은 한 장만 저장되었습니다.`
+        ? `${successMessage}. 이미 추가된 이미지은 한 장만 저장되었습니다.`
         : successMessage;
       setTimeout(() => showNotice(completedMessage), 300);
     } catch (error) {

@@ -1,6 +1,7 @@
 'use client';
 
 import { PanelDialog } from '@/common/components/ui/Dialog/PanelDialog';
+import { PanelHeader } from '@/common/components/ui/Dialog/PanelDialog/PanelHeader';
 import { ScrollContainer } from '@/common/components/ui/ScrollContainer';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { useRef, useState } from 'react';
@@ -64,6 +65,7 @@ export function OnboardingDialog({
       dismissible={!firstRun}
       onClose={onClose}
     >
+      <PanelHeader headerRight={<button type="button" className="min-h-11 px-1 text-lg font-semibold text-theme-accent" onClick={() => (isLast ? finish() : changePage(page + 1))}>{isLast ? (firstRun ? '시작' : '닫기') : '다음'}</button>} />
       <ScrollContainer
         ref={scrollRef}
         className="min-h-0 flex-1"
@@ -86,9 +88,7 @@ export function OnboardingDialog({
             <Page />
           </motion.div>
         </AnimatePresence>
-      </ScrollContainer>
-
-      <footer style={{ lineHeight: 'normal' }} className="shrink-0 px-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-4">
+      <div style={{ lineHeight: 'normal' }} className="px-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-4">
         <div className="mx-auto w-full max-w-lg">
           {error && (
             <p role="alert" className="mb-3 text-[11px] text-theme-text-secondary">
@@ -120,16 +120,11 @@ export function OnboardingDialog({
               </button>
             )}
 
-            <button
-              type="button"
-              className={`${buttonClass} border-theme-accent bg-theme-accent text-theme-text-on-accent`}
-              onClick={() => (isLast ? finish() : changePage(page + 1))}
-            >
-              {isLast ? (firstRun ? '시작하기' : '닫기') : '다음'}
-            </button>
+
           </div>
         </div>
-      </footer>
+      </div>
+      </ScrollContainer>
     </PanelDialog>
   );
 }

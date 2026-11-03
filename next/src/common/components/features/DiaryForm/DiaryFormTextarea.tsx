@@ -4,22 +4,19 @@ import { cn } from '@/common/utils/cn';
 interface DiaryFormTextareaProps {
   text: string;
   setText: (v: string) => void;
-  onFocusChange: (focused: boolean) => void;
 }
 
-const DiaryFormTextarea = ({ text, setText, onFocusChange }: DiaryFormTextareaProps) => {
+const DiaryFormTextarea = ({ text, setText }: DiaryFormTextareaProps) => {
   const isOverLimit = text.length > DIARY_TEXT_MAX_LENGTH;
 
   return (
-    <div className="flex min-h-0 w-full flex-1 flex-col gap-3 p-2">
+    <div className="flex w-full flex-col gap-3 p-2">
       <textarea
         name="diary-form-text"
         aria-label="일기 내용"
         aria-describedby="diary-text-count"
         aria-invalid={isOverLimit}
-        className="min-h-[170px] w-full flex-1 resize-none border-none bg-transparent text-base leading-8 text-theme-text-primary placeholder:text-theme-text-tertiary"
-        onFocus={() => onFocusChange(true)}
-        onBlur={() => onFocusChange(false)}
+        className="h-[250px] w-full resize-none overflow-y-auto rounded-lg bg-transparent p-2 text-base leading-8 text-theme-text-primary placeholder:text-theme-text-tertiary"
         onChange={(event) => setText(event.target.value)}
         value={text}
         maxLength={DIARY_TEXT_MAX_LENGTH}

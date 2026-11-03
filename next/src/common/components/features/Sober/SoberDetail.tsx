@@ -73,7 +73,6 @@ export const SoberDetail = ({
   const [memosOpen, setMemosOpen] = useState(false);
   const [saving, setSaving] = useState(false);
   const savingRef = useRef(false);
-  const pendingDelete = useRef<number | null>(null);
   const summary = getSoberSummary(item, item.restarts, now);
   const itemAccent = useItemAccent(item.iconColor);
   const accent = itemAccent.color;
@@ -132,15 +131,14 @@ export const SoberDetail = ({
     }
   };
   const remove = async () => {
-    const target = pendingDelete.current;
-    pendingDelete.current = null;
+    const target = deleting;
     try {
       if (typeof target === 'number')
         await authAction(() => deleteSoberRestart(item.id, target));
       await query.invalidateQueries({ queryKey: ['sober'] });
       showNotice('다시 시작 기록을 삭제했어요');
     } catch (error) {
-      showNotice(error instanceof Error ? error.message : '삭제하지 못했어요.');
+      throw error;
     }
   };
   return (
@@ -152,7 +150,7 @@ export const SoberDetail = ({
       >
         <PanelHeader
           title="상세 정보"
-          rightAction={
+          headerRight={
             <SoberMenu
               id={item.id}
               name={item.name}
@@ -565,11 +563,8 @@ export const SoberDetail = ({
         confirmLabel="삭제하기"
         confirmDescription="기록과 메모가 삭제되고 통계가 다시 계산돼요. 삭제 후 되돌릴 수 없어요."
         danger
-        onClose={() => {
-          pendingDelete.current = deleting;
-          setDeleting(null);
-        }}
-        onConfirm={() => void remove()}
+        onClose={() => setDeleting(null)}
+        onConfirm={remove}
       />
     </>
   );

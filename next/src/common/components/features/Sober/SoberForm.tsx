@@ -10,7 +10,6 @@ import HabitFormPicker from '@/common/components/features/HabitForm/HabitFormPic
 import HabitFormPickerRow from '@/common/components/features/HabitForm/HabitFormPickerRow';
 import { PanelDialog } from '@/common/components/ui/Dialog/PanelDialog';
 import { PanelBody } from '@/common/components/ui/Dialog/PanelDialog/PanelBody';
-import { PanelFooter } from '@/common/components/ui/Dialog/PanelDialog/PanelFooter';
 import { PanelHeader } from '@/common/components/ui/Dialog/PanelDialog/PanelHeader';
 import { PanelSubmitButton } from '@/common/components/ui/Dialog/PanelDialog/PanelSubmitButton';
 import InfoNotice from '@/common/components/ui/InfoNotice';
@@ -116,7 +115,15 @@ export const SoberForm = ({
         onClose={onClose}
         dismissible={!saving}
       >
-        <PanelHeader title={item ? '거리두기 수정' : '거리두기 추가'} />
+        <PanelHeader title={item ? '거리두기 수정' : '거리두기 추가'} headerRight={<PanelSubmitButton
+            type="button"
+            onClick={save}
+            disabled={saving || !name.trim()}
+            aria-busy={saving}
+          >
+            {saving ? '저장 중' : '저장'}
+          </PanelSubmitButton>}
+          />
         <PanelBody showScrollFade>
           <fieldset
             disabled={saving}
@@ -220,16 +227,7 @@ export const SoberForm = ({
             </section>
           </fieldset>
         </PanelBody>
-        <PanelFooter>
-          <PanelSubmitButton
-            type="button"
-            onClick={save}
-            disabled={saving || !name.trim()}
-            aria-busy={saving}
-          >
-            {saving ? '저장 중...' : item ? '변경사항 저장하기' : '저장하기'}
-          </PanelSubmitButton>
-        </PanelFooter>
+
       </PanelDialog>
       <AnimatePresence>
         {picker === 'date' && (

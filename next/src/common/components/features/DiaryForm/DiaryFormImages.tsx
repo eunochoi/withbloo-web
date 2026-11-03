@@ -40,12 +40,12 @@ const SortableDiaryImage = ({ id, src, index, disabled, onRemove }: {
       className={cn(tileClass, isDragging ? 'bg-theme-accent/10' : 'shadow-card')}
     >
       <div className={cn('relative h-full w-full touch-auto', isDragging && 'opacity-0')}>
-        <Image src={src} alt={`첨부 사진 ${index + 1}`} width={192} height={224} sizes="96px" unoptimized={src.startsWith('blob:')} draggable={false} className="h-full w-full object-cover" />
+        <Image src={src} alt={`첨부 이미지 ${index + 1}`} width={192} height={224} sizes="96px" unoptimized={src.startsWith('blob:')} draggable={false} className="h-full w-full object-cover" />
         <span className={cn('absolute bottom-2 left-2 text-xs', imageControlClass)}>{index + 1}</span>
       </div>
       <button
         type="button"
-        aria-label={`사진 ${index + 1} 삭제`}
+        aria-label={`이미지 ${index + 1} 삭제`}
         disabled={disabled}
         onClick={onRemove}
         className={cn('absolute right-2 top-2', imageControlClass, isDragging && 'invisible')}
@@ -57,7 +57,7 @@ const SortableDiaryImage = ({ id, src, index, disabled, onRemove }: {
         type="button"
         {...attributes}
         {...listeners}
-        aria-label={`사진 ${index + 1} 순서 변경`}
+        aria-label={`이미지 ${index + 1} 순서 변경`}
         disabled={disabled}
         onContextMenu={(event) => event.preventDefault()}
         className={cn('absolute bottom-2 right-2 cursor-grab touch-none active:cursor-grabbing disabled:cursor-default', imageControlClass, isDragging && 'invisible')}
@@ -100,9 +100,9 @@ const DiaryFormImages = ({ diaryImages, handleImageChange, getImageUrl, handleRe
       sensors={sensors}
       collisionDetection={closestCenter}
       accessibility={{
-        screenReaderInstructions: { draggable: '스페이스 키로 사진을 선택하고 좌우 방향키로 이동한 뒤 스페이스 키로 놓으세요. Escape 키로 취소합니다.' },
+        screenReaderInstructions: { draggable: '스페이스 키로 이미지을 선택하고 좌우 방향키로 이동한 뒤 스페이스 키로 놓으세요. Escape 키로 취소합니다.' },
         announcements: {
-          onDragStart: ({ active }) => `사진 ${items.findIndex((item) => item.id === active.id) + 1}을 선택했습니다.`,
+          onDragStart: ({ active }) => `이미지 ${items.findIndex((item) => item.id === active.id) + 1}을 선택했습니다.`,
           onDragOver: ({ over }) => over ? `${items.findIndex((item) => item.id === over.id) + 1}번째 위치로 이동합니다.` : undefined,
           onDragEnd: ({ over }) => over ? `${items.findIndex((item) => item.id === over.id) + 1}번째 위치에 놓았습니다.` : '순서 변경을 취소했습니다.',
           onDragCancel: () => '순서 변경을 취소했습니다.',
@@ -132,7 +132,7 @@ const DiaryFormImages = ({ diaryImages, handleImageChange, getImageUrl, handleRe
             className={cn(tileClass, 'flex flex-col items-center justify-center gap-2 border border-dashed border-theme-accent bg-theme-surface/40 text-theme-text-secondary disabled:opacity-40')}
           >
             <AddIcon aria-hidden="true" className="h-7 w-7 text-theme-accent" />
-            <span className="text-xs">사진 추가</span>
+            <span className="text-xs">이미지 추가</span>
           </button>
         )}
       </div>
@@ -142,7 +142,7 @@ const DiaryFormImages = ({ diaryImages, handleImageChange, getImageUrl, handleRe
         <DragOverlay dropAnimation={null} style={{ pointerEvents: 'none' }}>
           {activeItem && (
             <div className={cn(tileClass, 'ring-2 ring-theme-accent shadow-theme-floating')}>
-              <Image src={activeItem.src} alt="이동 중인 사진" width={192} height={224} sizes="96px" unoptimized={activeItem.src.startsWith('blob:')} draggable={false} className="h-full w-full object-cover" />
+              <Image src={activeItem.src} alt="이동 중인 이미지" width={192} height={224} sizes="96px" unoptimized={activeItem.src.startsWith('blob:')} draggable={false} className="h-full w-full object-cover" />
             </div>
           )}
         </DragOverlay>,

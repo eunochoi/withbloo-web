@@ -1,19 +1,21 @@
-'use client';
+"use client";
 
-import type { ReactNode } from 'react';
-import { PANEL_HORIZONTAL_PADDING_CLASS } from './constants';
+import type { ReactNode } from "react";
+import { PANEL_HORIZONTAL_PADDING_CLASS } from "./constants";
 
 interface PanelHeaderProps {
   title?: string;
   onBack?: () => void;
   backLabel?: string;
-  rightAction?: ReactNode;
+  headerLeft?: ReactNode;
+  headerRight?: ReactNode;
   onTitleClick?: () => void;
 }
 
 export const PanelHeader = ({
   title,
-  rightAction,
+  headerLeft,
+  headerRight,
   onTitleClick,
 }: PanelHeaderProps) => (
   <div
@@ -34,9 +36,14 @@ export const PanelHeader = ({
           {title}
         </h2>
       ))}
-    {rightAction && (
+    {headerLeft && (
+      <div className="absolute left-[5%] flex items-center tablet:left-12 desktop:left-[81px]">
+        {headerLeft}
+      </div>
+    )}
+    {headerRight && (
       <div className="absolute right-[5%] flex items-center tablet:right-12 desktop:right-[81px]">
-        {rightAction}
+        {headerRight}
       </div>
     )}
   </div>
