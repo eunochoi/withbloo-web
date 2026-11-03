@@ -3,9 +3,7 @@
 
 import { PickerDialog } from "@/common/components/ui/Dialog/PickerDialog";
 import {
-  PICKER_ACTIONS_CLASS,
   PICKER_BODY_CLASS,
-  PICKER_CONFIRM_BUTTON_CLASS,
   PICKER_CONTENT_CLASS,
   PICKER_TITLE_CLASS
 } from '@/common/components/ui/Dialog/PickerDialog/constants';
@@ -34,8 +32,9 @@ const HomePageYearPicker = ({ onClose, years, isPending, isError, onRetry, selec
   return (
     <PickerDialog labelledBy="home-year-picker-title" describedBy="home-year-picker-description" onClose={onClose}>
       <div className={PICKER_CONTENT_CLASS}>
-        <div className="flex flex-col">
+        <div className="relative flex min-h-11 items-center justify-center px-12">
           <h2 id="home-year-picker-title" className={PICKER_TITLE_CLASS}>어느 해의 기록을 볼까요?</h2>
+          {!isPending && !isError && <button onClick={onSubmit} type="button" className="absolute right-0 min-h-11 px-2 text-xl font-semibold text-theme-accent">적용</button>}
         </div>
         {isError ? (
           <div role="status" className="py-8 text-center text-theme-text-secondary">
@@ -64,9 +63,6 @@ const HomePageYearPicker = ({ onClose, years, isPending, isError, onRetry, selec
                   </button>
                 );
               })}
-            </div>
-            <div className={PICKER_ACTIONS_CLASS}>
-              <button className={PICKER_CONFIRM_BUTTON_CLASS} onClick={onSubmit} type="button">적용하기</button>
             </div>
           </>
         )}

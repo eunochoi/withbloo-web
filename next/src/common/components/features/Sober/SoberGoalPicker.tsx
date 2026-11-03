@@ -136,12 +136,27 @@ export default function SoberGoalPicker({
             onClose={() => setEditor(null)}
           >
             <div className="flex flex-col gap-6 pb-6">
+              <div className="relative flex min-h-11 items-center justify-center px-12">
               <h2
                 id="sober-goal-editor"
                 className="text-center text-lg font-semibold"
               >
                 {editor.kind === 'PERIOD' ? '목표 기간 선택' : '목표 일수 입력'}
               </h2>
+              <button
+                type="button"
+                disabled={!valid}
+                onClick={() => {
+                  if (!valid) return;
+                  setSelection(editor.kind);
+                  setDraft(String(Number(editor.value)));
+                  setEditor(null);
+                }}
+                className="absolute right-0 min-h-11 px-2 text-lg font-semibold text-theme-accent disabled:opacity-40"
+              >
+                완료
+              </button>
+              </div>
               {editor.kind === 'PERIOD' ? (
                 <div className="grid grid-cols-3 gap-1.5">
                   {SOBER_GOALS.map((day) => (
@@ -180,19 +195,7 @@ export default function SoberGoalPicker({
                   )}
                 </div>
               )}
-              <button
-                type="button"
-                disabled={!valid}
-                onClick={() => {
-                  if (!valid) return;
-                  setSelection(editor.kind);
-                  setDraft(String(Number(editor.value)));
-                  setEditor(null);
-                }}
-                className="min-h-12 rounded-full bg-theme-accent text-theme-text-on-accent disabled:opacity-40"
-              >
-                선택 완료
-              </button>
+
             </div>
           </PickerDialog>
         )}

@@ -1,5 +1,4 @@
 import { PickerDialog } from '@/common/components/ui/Dialog/PickerDialog';
-import { PICKER_CONFIRM_BUTTON_CLASS } from '@/common/components/ui/Dialog/PickerDialog/constants';
 import EmotionImage from '@/common/components/ui/EmotionImage';
 import { EMOTIONS } from '@/common/constants/emotions';
 import { useIsPresent } from 'framer-motion';
@@ -71,6 +70,14 @@ const DiaryFormEmotionPicker = ({
           >
             오늘의 감정을 골라주세요
           </h2>
+        <button
+          type="button"
+          disabled={!EMOTIONS.some((item) => item.id === draftEmotion)}
+          onClick={() => onConfirm(draftEmotion)}
+          className="absolute right-0 min-h-11 px-2 text-lg font-semibold text-theme-accent disabled:opacity-40"
+        >
+          완료
+        </button>
         </div>
         <div
           className="flex flex-wrap gap-2"
@@ -142,14 +149,6 @@ const DiaryFormEmotionPicker = ({
             );
           })}
         </div>
-        <button
-          type="button"
-          disabled={!EMOTIONS.some((item) => item.id === draftEmotion)}
-          onClick={() => onConfirm(draftEmotion)}
-          className={PICKER_CONFIRM_BUTTON_CLASS}
-        >
-          선택 완료
-        </button>
       </fieldset>
     </PickerDialog>
   );

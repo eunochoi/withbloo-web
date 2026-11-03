@@ -1,21 +1,23 @@
-'use client';
+"use client";
 
-import { ChevronRightIcon, ResetIcon } from '@/common/constants/appIcons';
+import { PickerHeader } from "@/common/components/ui/Dialog/PickerDialog/PickerHeader";
 
-import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { AnimatePresence } from 'framer-motion';
+import { ChevronRightIcon } from "@/common/constants/appIcons";
 
-import { authAction } from '@/common/auth/authAction';
-import { PickerDialog } from '@/common/components/ui/Dialog/PickerDialog';
-import InfoNotice from '@/common/components/ui/InfoNotice';
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { AnimatePresence } from "framer-motion";
+
+import { authAction } from "@/common/auth/authAction";
+import { PickerDialog } from "@/common/components/ui/Dialog/PickerDialog";
+import InfoNotice from "@/common/components/ui/InfoNotice";
 import {
   DIARY_EMOTION_GROUPS,
   DIARY_SEASONS,
   type DiaryEmotionGroup,
   type DiarySeason,
-} from '@/common/constants/diaryFilters';
-import { statsQueries } from '@/common/queries/statsQueries';
+} from "@/common/constants/diaryFilters";
+import { statsQueries } from "@/common/queries/statsQueries";
 
 const DiaryFilterPicker = ({
   year,
@@ -45,7 +47,21 @@ const DiaryFilterPicker = ({
   return (
     <PickerDialog labelledBy="diary-filter-title" onClose={onClose}>
       <div className="flex flex-col gap-7 pb-6">
-        <div className="relative flex min-h-10 items-center justify-center">
+        <PickerHeader
+          headerLeft={
+            <button
+              type="button"
+              onClick={() => {
+                setSelectedYear(null);
+                setSelectedSeasons([]);
+                setSelectedGroups([]);
+              }}
+              className="min-h-11 px-2 text-lg font-semibold text-theme-accent"
+            >
+              초기화
+            </button>
+          }
+        >
           <h2
             id="diary-filter-title"
             className="text-center text-lg font-semibold"
@@ -54,17 +70,15 @@ const DiaryFilterPicker = ({
           </h2>
           <button
             type="button"
-            onClick={() => {
-              setSelectedYear(null);
-              setSelectedSeasons([]);
-              setSelectedGroups([]);
-            }}
-            className="absolute right-0 flex min-h-9 items-center gap-1 text-sm text-theme-text-secondary"
+            onClick={() =>
+              onApply(selectedYear, selectedSeasons, selectedGroups)
+            }
+            className="absolute right-0 min-h-11 px-2 text-lg font-semibold text-theme-accent"
           >
-            <ResetIcon className="text-xl text-theme-accent" />
-            초기화
+            적용
           </button>
-        </div>
+        </PickerHeader>
+
         <section className="flex flex-col gap-4">
           <h3 className="font-semibold">연도</h3>
           <button
@@ -72,7 +86,7 @@ const DiaryFilterPicker = ({
             onClick={() => setYearOpen(true)}
             className="flex min-h-12 items-center justify-between rounded-xl border border-theme-border px-4 text-theme-text-secondary"
           >
-            {selectedYear === null ? '전체 연도' : `${selectedYear}년`}
+            {selectedYear === null ? "전체 연도" : `${selectedYear}년`}
             <ChevronRightIcon size={20} />
           </button>
         </section>
@@ -83,8 +97,8 @@ const DiaryFilterPicker = ({
               {selectedSeasons.length
                 ? selectedSeasons
                     .map((season) => DIARY_SEASONS[season].label)
-                    .join(', ')
-                : '전체 계절'}
+                    .join(", ")
+                : "전체 계절"}
             </span>
           </div>
           <div className="grid grid-cols-2 gap-3">
@@ -103,7 +117,7 @@ const DiaryFilterPicker = ({
                         : [...previous, season],
                     )
                   }
-                  className={`min-h-12 rounded-xl border px-2 ${selected ? 'border-theme-accent bg-theme-accent/10 text-theme-accent-deep' : 'border-theme-border'}`}
+                  className={`min-h-12 rounded-xl border px-2 ${selected ? "border-theme-accent bg-theme-accent/10 text-theme-accent-deep" : "border-theme-border"}`}
                 >
                   {DIARY_SEASONS[season].label}
                 </button>
@@ -123,8 +137,8 @@ const DiaryFilterPicker = ({
               {selectedGroups.length
                 ? selectedGroups
                     .map((group) => DIARY_EMOTION_GROUPS[group].label)
-                    .join(', ')
-                : '전체 감정'}
+                    .join(", ")
+                : "전체 감정"}
             </span>
           </div>
           <div className="grid grid-cols-3 gap-3">
@@ -145,7 +159,7 @@ const DiaryFilterPicker = ({
                           : [...previous, group],
                       )
                     }
-                    className={`flex min-h-20 min-w-0 flex-col items-center justify-center gap-1 rounded-xl border px-1 py-2 ${selected ? 'border-theme-accent bg-theme-accent/10 text-theme-accent-deep' : 'border-theme-border'}`}
+                    className={`flex min-h-20 min-w-0 flex-col items-center justify-center gap-1 rounded-xl border px-1 py-2 ${selected ? "border-theme-accent bg-theme-accent/10 text-theme-accent-deep" : "border-theme-border"}`}
                   >
                     <span>{item.label}</span>
                     <span className="whitespace-pre-line text-center text-xs leading-4 text-theme-text-secondary">
@@ -158,13 +172,6 @@ const DiaryFilterPicker = ({
           </div>
         </section>
         <InfoNotice>여러 개 선택할 수 있어요. 다시 누르면 해제돼요.</InfoNotice>
-        <button
-          type="button"
-          onClick={() => onApply(selectedYear, selectedSeasons, selectedGroups)}
-          className="min-h-12 rounded-full bg-theme-accent text-theme-text-on-accent"
-        >
-          적용하기
-        </button>
       </div>
       <AnimatePresence>
         {yearOpen && (
@@ -181,15 +188,15 @@ const DiaryFilterPicker = ({
               </h2>
               {[null, ...(yearsQuery.data ?? [])].map((value) => (
                 <button
-                  key={value ?? 'all'}
+                  key={value ?? "all"}
                   type="button"
                   onClick={() => {
                     setSelectedYear(value);
                     setYearOpen(false);
                   }}
-                  className={`min-h-12 rounded-xl border ${selectedYear === value ? 'border-theme-accent bg-theme-accent/10 text-theme-accent-deep' : 'border-theme-border'}`}
+                  className={`min-h-12 rounded-xl border ${selectedYear === value ? "border-theme-accent bg-theme-accent/10 text-theme-accent-deep" : "border-theme-border"}`}
                 >
-                  {value === null ? '전체 연도' : `${value}년`}
+                  {value === null ? "전체 연도" : `${value}년`}
                 </button>
               ))}
               {yearsQuery.isPending && (

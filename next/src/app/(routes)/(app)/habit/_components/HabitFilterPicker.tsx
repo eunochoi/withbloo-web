@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { ResetIcon } from '@/common/constants/appIcons';
+import { PickerHeader } from "@/common/components/ui/Dialog/PickerDialog/PickerHeader";
 
-import { PickerDialog } from '@/common/components/ui/Dialog/PickerDialog';
-import { HabitPriority } from '@/common/components/ui/Habit/HabitPriority';
-import InfoNotice from '@/common/components/ui/InfoNotice';
-import { useState } from 'react';
+import { PickerDialog } from "@/common/components/ui/Dialog/PickerDialog";
+import { HabitPriority } from "@/common/components/ui/Habit/HabitPriority";
+import InfoNotice from "@/common/components/ui/InfoNotice";
+import { useState } from "react";
 
 const HabitFilterPicker = ({
   completedOnly,
@@ -23,7 +23,20 @@ const HabitFilterPicker = ({
   return (
     <PickerDialog labelledBy="habit-filter-title" onClose={onClose}>
       <div className="flex flex-col gap-7 pb-6">
-        <div className="relative flex min-h-10 items-center justify-center">
+        <PickerHeader
+          headerLeft={
+            <button
+              type="button"
+              onClick={() => {
+                setCompleted(false);
+                setSelected([]);
+              }}
+              className="min-h-11 px-2 text-lg font-semibold text-theme-accent"
+            >
+              초기화
+            </button>
+          }
+        >
           <h2
             id="habit-filter-title"
             className="text-center text-lg font-semibold"
@@ -32,16 +45,13 @@ const HabitFilterPicker = ({
           </h2>
           <button
             type="button"
-            onClick={() => {
-              setCompleted(false);
-              setSelected([]);
-            }}
-            className="absolute right-0 flex min-h-9 items-center gap-1 text-sm text-theme-text-secondary"
+            onClick={() => onApply(completed, selected)}
+            className="absolute right-0 min-h-11 px-2 text-lg font-semibold text-theme-accent"
           >
-            <ResetIcon className="text-xl text-theme-accent" />
-            초기화
+            적용
           </button>
-        </div>
+        </PickerHeader>
+
         <label className="flex items-center justify-between gap-3 font-semibold">
           완료한 항목만 보기
           <input
@@ -65,10 +75,10 @@ const HabitFilterPicker = ({
                     .slice()
                     .sort()
                     .map((priority) =>
-                      priority === 0 ? '자유 기록' : '★'.repeat(priority),
+                      priority === 0 ? "자유 기록" : "★".repeat(priority),
                     )
-                    .join(', ')
-                : '전체'}
+                    .join(", ")
+                : "전체"}
             </span>
           </div>
           <div className="grid grid-cols-2 gap-3">
@@ -85,27 +95,20 @@ const HabitFilterPicker = ({
                       : [...previous, priority],
                   )
                 }
-                className={`flex min-h-12 flex-col items-center justify-center gap-2 rounded-xl border px-1 py-3 ${selected.includes(priority) ? 'border-theme-accent bg-theme-accent/10 text-theme-accent' : 'border-theme-border text-theme-text-secondary'}`}
+                className={`flex min-h-12 flex-col items-center justify-center gap-2 rounded-xl border px-1 py-3 ${selected.includes(priority) ? "border-theme-accent bg-theme-accent/10 text-theme-accent" : "border-theme-border text-theme-text-secondary"}`}
               >
                 <HabitPriority
                   priority={priority}
                   className="gap-0 text-base"
                 />
                 <span className="text-sm">
-                  {['자유 기록', '낮음', '보통', '높음'][priority]}
+                  {["자유 기록", "낮음", "보통", "높음"][priority]}
                 </span>
               </button>
             ))}
           </div>
         </section>
         <InfoNotice>중요도는 여러 개 선택할 수 있어요.</InfoNotice>
-        <button
-          type="button"
-          onClick={() => onApply(completed, selected)}
-          className="min-h-12 rounded-full bg-theme-accent text-theme-text-on-accent"
-        >
-          적용하기
-        </button>
       </div>
     </PickerDialog>
   );
