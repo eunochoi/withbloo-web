@@ -35,7 +35,7 @@ const IntroActionButtons = ({ className }: IntroActionButtonsProps) => {
         <button
           type="button"
           onClick={() => setIsOpen(true)}
-          className={twMerge(actionClass, 'border-theme-accent/50 bg-theme-accent/20 text-theme-text-primary hover:opacity-80')}
+          className={twMerge(actionClass, 'border-theme-border bg-theme-surface text-theme-text-primary hover:bg-theme-accent/20')}
         >
           <MdLanguage className={introIconClass} aria-hidden="true" />
           <span className="flex min-w-0 flex-col gap-1">
@@ -50,7 +50,7 @@ const IntroActionButtons = ({ className }: IntroActionButtonsProps) => {
             <span className="text-xs leading-4 opacity-80">로그인 없이 기록을 기기에 저장해요.</span>
           </span>
         </a>
-      </div>
+      </div >
       <AnimatePresence>
         {isOpen && (
           <PickerDialog labelledBy={titleId} onClose={() => setIsOpen(false)}>
