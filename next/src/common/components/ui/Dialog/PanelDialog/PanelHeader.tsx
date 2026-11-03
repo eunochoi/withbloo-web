@@ -19,20 +19,20 @@ export const PanelHeader = ({
   onTitleClick,
 }: PanelHeaderProps) => (
   <div
-    className={`relative flex min-h-12 w-full shrink-0 items-center justify-center ${PANEL_HORIZONTAL_PADDING_CLASS}`}
+    className={`relative mb-4 flex min-h-12 w-full shrink-0 items-center justify-center ${PANEL_HORIZONTAL_PADDING_CLASS}`}
   >
     {title &&
       (onTitleClick ? (
         <button
           type="button"
           onClick={onTitleClick}
-          className="min-h-11 px-10 text-center text-lg font-semibold tracking-tight"
+          className="min-h-11 px-10 text-center text-xl font-semibold tracking-tight"
           aria-label={`${title}, 날짜 선택`}
         >
           {title}
         </button>
       ) : (
-        <h2 className="px-10 text-center text-lg font-semibold tracking-tight">
+        <h2 className="px-10 text-center text-xl font-semibold tracking-tight">
           {title}
         </h2>
       ))}

@@ -64,7 +64,7 @@ const DiaryFilterPicker = ({
         >
           <h2
             id="diary-filter-title"
-            className="text-center text-lg font-semibold"
+            className="text-center text-xl font-semibold"
           >
             일기 필터
           </h2>
@@ -80,7 +80,7 @@ const DiaryFilterPicker = ({
         </PickerHeader>
 
         <section className="flex flex-col gap-4">
-          <h3 className="font-semibold">연도</h3>
+          <h3 className="text-lg font-semibold">연도</h3>
           <button
             type="button"
             onClick={() => setYearOpen(true)}
@@ -92,7 +92,7 @@ const DiaryFilterPicker = ({
         </section>
         <section className="flex flex-col gap-4">
           <div className="flex justify-between gap-3">
-            <h3 className="font-semibold">계절</h3>
+            <h3 className="text-lg font-semibold">계절</h3>
             <span className="text-sm text-theme-text-secondary">
               {selectedSeasons.length
                 ? selectedSeasons
@@ -132,7 +132,7 @@ const DiaryFilterPicker = ({
         </InfoNotice>
         <section className="flex flex-col gap-4">
           <div className="flex justify-between gap-3">
-            <h3 className="font-semibold">감정</h3>
+            <h3 className="text-lg font-semibold">감정</h3>
             <span className="text-sm text-theme-text-secondary">
               {selectedGroups.length
                 ? selectedGroups
@@ -182,7 +182,7 @@ const DiaryFilterPicker = ({
             <div className="flex flex-col gap-3 pb-6">
               <h2
                 id="diary-year-title"
-                className="pb-3 text-center text-lg font-semibold"
+                className="pb-3 text-center text-xl font-semibold"
               >
                 연도 선택
               </h2>

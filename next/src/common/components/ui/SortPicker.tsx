@@ -55,7 +55,7 @@ const SortPicker = <T extends string>({
         >
           <h2
             id="sort-picker-title"
-            className="text-center text-lg font-semibold"
+            className="text-center text-xl font-semibold"
           >
             {title}
           </h2>
@@ -75,7 +75,7 @@ const SortPicker = <T extends string>({
         </PickerHeader>
 
         {priorityFirst !== undefined && (
-          <label className="flex items-center justify-between gap-3 font-semibold">
+          <label className="flex items-center justify-between gap-3 text-lg font-semibold">
             중요한 항목 먼저
             <input
               type="checkbox"
@@ -96,7 +96,7 @@ const SortPicker = <T extends string>({
         )}
         {recordSort && (
           <section className="flex flex-col gap-3">
-            <h3 className="font-semibold">기록</h3>
+            <h3 className="text-lg font-semibold">기록</h3>
             <div className="flex gap-3">
               {(["DESC", "ASC"] as const).map((value) => (
                 <button
@@ -113,7 +113,7 @@ const SortPicker = <T extends string>({
           </section>
         )}
         <section className="flex flex-col gap-3">
-          <h3 className="font-semibold">
+          <h3 className="text-lg font-semibold">
             {sortLabel ?? (title === "일기 정렬" ? "날짜 정렬" : "생성일 정렬")}
           </h3>
           <div className="flex gap-3">

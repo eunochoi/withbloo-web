@@ -39,7 +39,7 @@ const HabitFilterPicker = ({
         >
           <h2
             id="habit-filter-title"
-            className="text-center text-lg font-semibold"
+            className="text-center text-xl font-semibold"
           >
             습관 필터
           </h2>
@@ -52,7 +52,7 @@ const HabitFilterPicker = ({
           </button>
         </PickerHeader>
 
-        <label className="flex items-center justify-between gap-3 font-semibold">
+        <label className="flex items-center justify-between gap-3 text-lg font-semibold">
           완료한 항목만 보기
           <input
             type="checkbox"
@@ -68,7 +68,7 @@ const HabitFilterPicker = ({
         </label>
         <section className="flex flex-col gap-4">
           <div className="flex justify-between gap-3">
-            <h3 className="font-semibold">중요도</h3>
+            <h3 className="text-lg font-semibold">중요도</h3>
             <span className="text-sm text-theme-text-secondary">
               {selected.length
                 ? selected
