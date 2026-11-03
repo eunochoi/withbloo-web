@@ -96,7 +96,7 @@ const DiaryFormEmotionPicker = ({
             </button>
           ))}
         </div>
-        <div className="flex items-center gap-3 rounded-2xl border border-theme-accent/20 bg-theme-accent-light/60 p-4">
+        <div className="flex items-center gap-3 rounded-2xl border border-theme-accent/20 bg-theme-accent/10 p-4">
           <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-theme-surface">
             <EmotionImage
               emotion={EMOTIONS[category.emotions[0]]}
@@ -106,7 +106,7 @@ const DiaryFormEmotionPicker = ({
             />
           </span>
           <span className="flex min-w-0 flex-col gap-1.5">
-            <strong className="text-base text-theme-accent-deep">
+            <strong className="font-semibold text-theme-accent">
               {category.label}
             </strong>
             <span className="text-sm leading-5 text-theme-text-secondary">
