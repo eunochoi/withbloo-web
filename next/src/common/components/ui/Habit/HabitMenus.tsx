@@ -23,7 +23,6 @@ const HabitMenus = ({ habitId, habitName, isMenuOpen, setMenuOpen, onDeleted, sh
   const onDelete = async () => {
     try {
       await authAction(() => deleteHabit({ habitId }));
-      onDeleted?.();
       queryClient.invalidateQueries({ queryKey: ['habits'] });
       queryClient.invalidateQueries({ queryKey: ['habit'] });
       queryClient.invalidateQueries({ queryKey: ['diary'] });
@@ -32,7 +31,7 @@ const HabitMenus = ({ habitId, habitName, isMenuOpen, setMenuOpen, onDeleted, sh
       queryClient.invalidateQueries({ queryKey: ['stats', 'years'] });
       showNotice('습관 항목 삭제 완료');
     } catch (error) {
-      showNotice(error instanceof Error ? error.message : '습관 항목 삭제 실패');
+      throw error;
     }
   };
 
@@ -45,6 +44,7 @@ const HabitMenus = ({ habitId, habitName, isMenuOpen, setMenuOpen, onDeleted, sh
       onDetail={showDetail ? () => router.push(`/habit/${habitId}`, { scroll: false }) : undefined}
       onEdit={() => router.push(`/habit/${habitId}/edit`, { scroll: false })}
       onDelete={onDelete}
+      onDeleted={onDeleted}
     />
   );
 };

@@ -27,9 +27,8 @@ const DiaryMenus = ({ isMenuOpen, setMenuOpen, diaryData, onDeleted, showDetail 
       queryClient.invalidateQueries({ queryKey: ['diary-habit', 'month'] });
       queryClient.invalidateQueries({ queryKey: ['stats'] });
       showNotice('일기 삭제 완료');
-      onDeleted?.();
     } catch (error) {
-      showNotice(error instanceof Error ? error.message : '일기 삭제 실패');
+      throw error;
     }
   };
   const dateLabel = format(parseLocalDate(diaryData.date), 'yyyy년 M월 d일');
@@ -43,6 +42,7 @@ const DiaryMenus = ({ isMenuOpen, setMenuOpen, diaryData, onDeleted, showDetail 
       onDetail={showDetail ? () => router.push(`/diary/${diaryData.id}`, { scroll: false }) : undefined}
       onEdit={() => router.push(`/diary/${diaryData.id}/edit`, { scroll: false })}
       onDelete={onDelete}
+      onDeleted={onDeleted}
     />
   );
 };

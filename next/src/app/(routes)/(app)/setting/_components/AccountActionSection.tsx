@@ -45,10 +45,7 @@ export const AccountActionSection = ({ onDeleteAccount }: Props) => {
         confirmLabel="로그아웃"
         confirmDescription="현재 계정에서 로그아웃해요."
         onClose={() => setIsLogoutConfirmOpen(false)}
-        onConfirm={() => {
-          setIsLogoutConfirmOpen(false);
-          logout();
-        }}
+        onConfirm={logout}
       />
     </>
   );

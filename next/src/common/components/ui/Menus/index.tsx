@@ -17,7 +17,8 @@ interface Props {
   kind: 'diary' | 'habit' | 'sober';
   onDetail?: () => void;
   onEdit: () => void;
-  onDelete: () => void;
+  onDelete: () => Promise<unknown> | void;
+  onDeleted?: () => void;
 }
 
 const Menus = ({
@@ -28,6 +29,7 @@ const Menus = ({
   onDetail,
   onEdit,
   onDelete,
+  onDeleted,
 }: Props) => {
   const id = useId();
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
@@ -146,6 +148,7 @@ const Menus = ({
         danger
         onClose={() => setIsConfirmingDelete(false)}
         onConfirm={onDelete}
+        onConfirmed={onDeleted}
       />
     </>
   );
