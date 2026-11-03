@@ -1,19 +1,4 @@
 @font-face {
-  font-family: 'Fredoka';
-  src: url('/fonts/Fredoka[wdth,wght].ttf') format('truetype');
-  font-style: normal;
-  font-weight: 300 700;
-  font-stretch: 75% 125%;
-  font-display: swap;
-}
-
-.font-wordmark {
-  font-family: 'Fredoka', sans-serif;
-  font-weight: 550;
-  font-stretch: 95%;
-}
-
-@font-face {
   font-family: 'TmoneyRoundWind';
   src: url('/fonts/TmoneyRoundWindRegular.otf') format('opentype');
   font-style: normal;

@@ -76,7 +76,6 @@ export default function RootLayout({
     <html lang="ko" suppressHydrationWarning>
       <head>
         <meta id="theme-color" name="theme-color" content="#F0F7FF" />
-        <link rel="preload" href="/fonts/Fredoka[wdth,wght].ttf" as="font" type="font/ttf" crossOrigin="anonymous" />
         <script dangerouslySetInnerHTML={{ __html: localThemeInitScript }} />
         <meta name="google-site-verification" content="MSSWdnca2PMfsNV3MPmssa5cjQqycFJmdrj04DFx5fU" />
 

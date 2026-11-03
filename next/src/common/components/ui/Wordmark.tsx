@@ -9,14 +9,27 @@ const Wordmark = ({ className, accentColor ='rgb(var(--theme-accent))' }: Props)
   <span
     role="img"
     aria-label="withBloo"
-    className={twMerge('inline-block h-[1.35em] w-[4.2em] max-w-full shrink-0 align-middle text-[36px]', className)}
-    style={{
-      // 원본의 두 색 영역을 유지하면서 글자색만 현재 테마에 맞춘다.
-      background: `linear-gradient(to right, rgb(var(--theme-text-primary)) 47.06%, ${accentColor} 47.06%)`,
-      mask:'url("/img/withbloo/wordmark.svg") center / contain no-repeat',
-      WebkitMask:'url("/img/withbloo/wordmark.svg") center / contain no-repeat',
-    }}
-  />
+    className={twMerge('relative inline-block h-[1.35em] w-[3.4525em] max-w-full shrink-0 align-middle text-[36px]', className)}
+  >
+    <span
+      aria-hidden="true"
+      className="absolute inset-0"
+      style={{
+        backgroundColor: 'rgb(var(--theme-text-primary))',
+        mask: 'url("/img/brand/withbloo-text-mask.png") center / contain no-repeat',
+        WebkitMask: 'url("/img/brand/withbloo-text-mask.png") center / contain no-repeat',
+      }}
+    />
+    <span
+      aria-hidden="true"
+      className="absolute inset-0"
+      style={{
+        backgroundColor: accentColor,
+        mask: 'url("/img/brand/withbloo-accent-mask.png") center / contain no-repeat',
+        WebkitMask: 'url("/img/brand/withbloo-accent-mask.png") center / contain no-repeat',
+      }}
+    />
+  </span>
 );
 
 export default Wordmark;

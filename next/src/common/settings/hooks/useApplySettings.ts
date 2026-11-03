@@ -27,7 +27,6 @@ export const useApplySettings = ({ accent, mode, fontSize, fontType }: useApplyS
     const changed = previousTheme.current.accent !== accent || previousTheme.current.mode !== mode;
     previousTheme.current = { accent, mode };
     if (changed) {
-      root.style.setProperty('--previous-wordmark-image', window.getComputedStyle(root).getPropertyValue('--wordmark-image'));
       root.classList.add('theme-transitioning');
     }
     root.dataset.themeAccent = accent;
@@ -39,13 +38,11 @@ export const useApplySettings = ({ accent, mode, fontSize, fontType }: useApplyS
     if (mode === '자동') media.addEventListener('change', applyMode);
     const timeout = changed ? window.setTimeout(() => {
       root.classList.remove('theme-transitioning');
-      root.style.removeProperty('--previous-wordmark-image');
     }, 450) : undefined;
     return () => {
       if (mode === '자동') media.removeEventListener('change', applyMode);
       if (timeout !== undefined) window.clearTimeout(timeout);
       root.classList.remove('theme-transitioning');
-      root.style.removeProperty('--previous-wordmark-image');
     };
   }, [accent, mode]);
 };
