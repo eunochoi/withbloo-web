@@ -50,7 +50,7 @@ const HomePage = ({
     <main className="h-dvh w-full overflow-hidden bg-theme-accent-light">
       <div className="flex h-full min-h-0 w-full flex-col justify-between gap-2 overflow-y-auto px-[5dvw] pt-8 pb-[calc(var(--mobileNav)+env(safe-area-inset-bottom)+1rem)] tablet:mx-auto tablet:max-w-[600px] tablet:px-9 tablet:pb-8 desktop:max-w-[900px] desktop:justify-center desktop:gap-16 desktop:px-14 desktop:py-8">
         <div className="shrink-0 tablet:hidden">
-          <Wordmark className="text-[40px]" />
+          <Wordmark className="text-[36px]" />
         </div>
         <div className="desktop:flex desktop:items-center desktop:justify-between desktop:gap-8">
           <HomeGreeting />
