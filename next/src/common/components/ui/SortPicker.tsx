@@ -47,7 +47,7 @@ const SortPicker = <T extends string>({
                 setPriority(false);
                 setRecords(recordSort ? "DESC" : undefined);
               }}
-              className="min-h-11 px-2 text-lg font-semibold text-theme-accent"
+              className="min-h-11 px-2 text-lg font-normal text-theme-text-secondary/70"
             >
               초기화
             </button>
@@ -68,7 +68,7 @@ const SortPicker = <T extends string>({
                 records,
               )
             }
-            className="absolute right-0 min-h-11 px-2 text-lg font-semibold text-theme-accent"
+            className="absolute right-0 min-h-11 px-2 text-lg font-normal text-theme-accent"
           >
             적용
           </button>

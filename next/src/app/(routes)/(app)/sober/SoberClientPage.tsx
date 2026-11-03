@@ -288,7 +288,7 @@ function SoberFilterPicker({
                   setImportant(false);
                   setDays(0);
                 }}
-                className="min-h-11 px-2 text-lg font-semibold text-theme-accent"
+                className="min-h-11 px-2 text-lg font-normal text-theme-text-secondary/70"
               >
                 초기화
               </button>
@@ -300,7 +300,7 @@ function SoberFilterPicker({
             <button
               type="button"
               onClick={() => onApply(important, days)}
-              className="absolute right-0 min-h-11 px-2 text-lg font-semibold text-theme-accent"
+              className="absolute right-0 min-h-11 px-2 text-lg font-normal text-theme-accent"
             >
               적용
             </button>

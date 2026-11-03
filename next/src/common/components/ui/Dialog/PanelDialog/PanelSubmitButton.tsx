@@ -7,7 +7,7 @@ type PanelSubmitButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'cla
 export const PanelSubmitButton = ({ children, ...props }: PanelSubmitButtonProps) => {
   return (
     <button
-      className="flex min-h-11 items-center justify-center gap-1 px-2 text-lg font-semibold text-theme-accent transition-opacity disabled:cursor-not-allowed disabled:opacity-40"
+      className="flex min-h-11 items-center justify-center gap-1 px-2 text-lg font-normal text-theme-accent transition-opacity disabled:cursor-not-allowed disabled:opacity-40"
       type="button"
       {...props}
     >

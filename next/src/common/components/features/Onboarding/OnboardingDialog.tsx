@@ -65,7 +65,7 @@ export function OnboardingDialog({
       dismissible={!firstRun}
       onClose={onClose}
     >
-      <PanelHeader headerRight={<button type="button" className="min-h-11 px-1 text-lg font-semibold text-theme-accent" onClick={() => (isLast ? finish() : changePage(page + 1))}>{isLast ? (firstRun ? '시작' : '닫기') : '다음'}</button>} />
+      <PanelHeader headerRight={<button type="button" className="min-h-11 px-1 text-lg font-normal text-theme-accent" onClick={() => (isLast ? finish() : changePage(page + 1))}>{isLast ? (firstRun ? '시작' : '닫기') : '다음'}</button>} />
       <ScrollContainer
         ref={scrollRef}
         className="min-h-0 flex-1"

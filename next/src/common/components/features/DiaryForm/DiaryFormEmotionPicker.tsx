@@ -74,7 +74,7 @@ const DiaryFormEmotionPicker = ({
           type="button"
           disabled={!EMOTIONS.some((item) => item.id === draftEmotion)}
           onClick={() => onConfirm(draftEmotion)}
-          className="absolute right-0 min-h-11 px-2 text-lg font-semibold text-theme-accent disabled:opacity-40"
+          className="absolute right-0 min-h-11 px-2 text-lg font-normal text-theme-accent disabled:opacity-40"
         >
           완료
         </button>

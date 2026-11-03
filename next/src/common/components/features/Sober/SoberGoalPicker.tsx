@@ -152,7 +152,7 @@ export default function SoberGoalPicker({
                   setDraft(String(Number(editor.value)));
                   setEditor(null);
                 }}
-                className="absolute right-0 min-h-11 px-2 text-lg font-semibold text-theme-accent disabled:opacity-40"
+                className="absolute right-0 min-h-11 px-2 text-lg font-normal text-theme-accent disabled:opacity-40"
               >
                 완료
               </button>
