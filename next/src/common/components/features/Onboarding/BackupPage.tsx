@@ -1,15 +1,15 @@
 'use client';
 
-import { twMerge } from 'tailwind-merge';
-import Wordmark from '../../ui/Wordmark';
+import { twMerge } from'tailwind-merge';
+import Wordmark from'../../ui/Wordmark';
 import {
   sectionClassName,
   sectionContentClassName,
   exampleClassName,
   sectionTextClassName,
   sectionTitleClassName,
-} from './styles';
-import { OnboardingFrame } from './OnboardingFrame';
+} from'./styles';
+import { OnboardingFrame } from'./OnboardingFrame';
 
 export function BackupPage() {
   return (
@@ -24,11 +24,10 @@ export function BackupPage() {
           <div
             className={twMerge(
               exampleClassName,
-              'justify-center items-center gap-4',
+             'justify-center items-center gap-4',
             )}
           >
             <Wordmark
-              accentColor="var(--loading-indicator)"
               className="text-[36px]"
             />
             <span className="font-semibold text-[20px] text-theme-text-primary">
@@ -54,11 +53,10 @@ export function BackupPage() {
           <div
             className={twMerge(
               exampleClassName,
-              'justify-center items-center gap-4',
+             'justify-center items-center gap-4',
             )}
           >
             <Wordmark
-              accentColor="var(--loading-indicator)"
               className="text-[36px]"
             />
             <span className="font-semibold text-[20px] text-theme-text-primary">

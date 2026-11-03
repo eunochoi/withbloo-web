@@ -79,18 +79,6 @@ const config: Config = {
         "theme-floating": "0 2px 12px rgb(var(--theme-shadow-color) / 0.08)",
       },
       keyframes: {
-        rotateCustom: {
-          '0%': { transform: 'rotate(5deg)' },
-          '10%': { transform: 'rotate(15deg)' },
-          '20%': { transform: 'rotate(-3deg)' },
-          '32%': { transform: 'rotate(13deg)' },
-          '42%': { transform: 'rotate(-1deg)' },
-          '52%': { transform: 'rotate(10deg)' },
-          '64%': { transform: 'rotate(2deg)' },
-          '78%': { transform: 'rotate(7deg)' },
-          '94%': { transform: 'rotate(5deg)' },
-          '100%': { transform: 'rotate(5deg)' },
-        },
         calendarSelectedBounce: {
           '0%, 100%': { transform: 'translateY(0)' },
           '20%': { transform: 'translateY(-3px)' },
@@ -107,7 +95,6 @@ const config: Config = {
         },
       },
       animation: {
-        'rotate-slow': 'rotateCustom 2000ms ease-in-out',
         'calendar-selected-bounce': 'calendarSelectedBounce 1200ms ease-in-out infinite',
         'calendar-selected-badge-bounce': 'calendarSelectedBadgeBounce 1200ms ease-in-out infinite',
       }

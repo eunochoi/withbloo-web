@@ -1,20 +1,20 @@
 'use client';
 
-import { authAction } from '@/common/auth/authAction';
-import Wordmark from '@/common/components/ui/Wordmark';
-import { DIARY_EMOTION_GROUPS } from '@/common/constants/diaryFilters';
-import { getTodayString } from '@/common/functions/getTodayString';
-import { diaryQueries } from '@/common/queries/diaryQueries';
-import { useQuery } from '@tanstack/react-query';
-import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { authAction } from'@/common/auth/authAction';
+import Wordmark from'@/common/components/ui/Wordmark';
+import { DIARY_EMOTION_GROUPS } from'@/common/constants/diaryFilters';
+import { getTodayString } from'@/common/functions/getTodayString';
+import { diaryQueries } from'@/common/queries/diaryQueries';
+import { useQuery } from'@tanstack/react-query';
+import Image from'next/image';
+import { useEffect, useState } from'react';
 
-import HomeAnalysisCard from './HomeAnalysisCard';
-import HomeGreeting from './HomeGreeting';
-import TodayRecordSection from './TodayRecordSection';
-import negativeCat from '/public/img/bloolog/cats/cat-blue-n.png';
-import positiveCat from '/public/img/bloolog/cats/cat-blue-p.png';
-import neutralCat from '/public/img/bloolog/cats/cat-blue.png';
+import HomeAnalysisCard from'./HomeAnalysisCard';
+import HomeGreeting from'./HomeGreeting';
+import TodayRecordSection from'./TodayRecordSection';
+import negativeCat from'/public/img/bloolog/cats/cat-blue-n.png';
+import positiveCat from'/public/img/bloolog/cats/cat-blue-p.png';
+import neutralCat from'/public/img/bloolog/cats/cat-blue.png';
 
 const HomePage = ({
   initialDate,
@@ -65,10 +65,19 @@ const HomePage = ({
         <div className="flex min-w-0 flex-col gap-3">
           {loading ? (
             <div
-              className="h-40 animate-pulse rounded-2xl bg-theme-skeleton motion-reduce:animate-none"
+              className="grid grid-cols-3 rounded-2xl border border-theme-accent/20 bg-theme-surface py-4 animate-pulse motion-reduce:animate-none desktop:grid-cols-4 desktop:py-6"
               role="status"
               aria-label="오늘의 기록 불러오는 중"
-            />
+              aria-busy="true"
+            >
+              {[0, 1, 2, 3].map((index) => (
+                <div key={index} className={`${index === 0 ?'hidden desktop:flex' :'flex'} min-w-0 flex-col items-center gap-2 px-2`} aria-hidden="true">
+                  <div className="h-5 w-16 max-w-full rounded bg-theme-skeleton" />
+                  <div className="h-14 w-14 rounded-full bg-theme-skeleton" />
+                  <div className="h-4 w-20 max-w-full rounded bg-theme-skeleton" />
+                </div>
+              ))}
+            </div>
           ) : (
             <TodayRecordSection initialDate={today} />
           )}

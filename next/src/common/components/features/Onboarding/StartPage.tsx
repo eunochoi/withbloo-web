@@ -1,13 +1,13 @@
 'use client';
 
-import { ArrowRightIcon } from '@/common/constants/appIcons';
-import Image from 'next/image';
-import Wordmark from '../../ui/Wordmark';
-import standingCat from '/public/img/bloolog/cats/cat-blue-standing.png';
+import { ArrowRightIcon } from'@/common/constants/appIcons';
+import Image from'next/image';
+import Wordmark from'../../ui/Wordmark';
+import standingCat from'/public/img/bloolog/cats/cat-blue-standing.png';
 
 export function StartPage() {
   return (
-    <div style={{ lineHeight: 'normal' }} className="w-full flex-1 px-6 py-6 flex flex-col justify-evenly items-center gap-4">
+    <div style={{ lineHeight:'normal' }} className="w-full flex-1 px-6 py-6 flex flex-col justify-evenly items-center gap-4">
       <span className="text-[24px] font-semibold">이제, 시작해볼까요?</span>
       <div className="w-full h-auto flex flex-col justify-center items-center gap-2">
         <span className="text-[15px] text-theme-text-secondary">
@@ -26,13 +26,12 @@ export function StartPage() {
           sizes="300px"
         />
         <Wordmark
-          accentColor="var(--loading-indicator)"
           className="text-[36px]"
         />
       </div>
       <div className="w-full h-auto flex flex-col justify-center items-center gap-2">
         <span className="text-[15px] text-theme-text-secondary">
-          {"오늘부터 '블루'가 함께할게요."}
+          {"오늘부터'블루'가 함께할게요."}
         </span>
         <span className="mt-2 text-[13px] whitespace-pre-line text-theme-accent-deep">
           {'withBloo - Bloom with Bloo & Blue.'}
