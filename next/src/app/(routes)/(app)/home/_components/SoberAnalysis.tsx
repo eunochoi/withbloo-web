@@ -14,10 +14,10 @@ import {
   getSoberDurationDistribution,
 } from '@/common/functions/sober';
 import { SoberIcon } from '@/common/components/features/Sober/SoberIcon';
-import AppUnderlineTabs, {
-  titleMarkerClass,
-  underlineTitleClass,
-} from '@/common/components/ui/AppUnderlineTabs';
+import AppDotTabs, {
+  dotTabMarkerClass,
+  dotTabTitleClass,
+} from '@/common/components/ui/AppDotTabs';
 import InfoNotice from '@/common/components/ui/InfoNotice';
 
 export default function SoberAnalysis() {
@@ -68,9 +68,9 @@ export default function SoberAnalysis() {
         {!isPending && !isError && (
           <div className="flex min-w-0 flex-col gap-4">
             <h3
-              className={`${underlineTitleClass} mx-1 flex items-center gap-2`}
+              className={`${dotTabTitleClass} mx-1 flex items-center gap-2`}
             >
-              <span aria-hidden="true" className={titleMarkerClass} />
+              <span aria-hidden="true" className={dotTabMarkerClass} />
               유지 기간 분포
             </h3>
             <div className="mx-1 flex flex-col gap-6 rounded-theme border border-theme-accent/20 bg-theme-accent-light/50 px-4 py-6">
@@ -99,7 +99,7 @@ export default function SoberAnalysis() {
         )}
         <div className="flex min-w-0 flex-col gap-4">
           <div>
-            <AppUnderlineTabs
+            <AppDotTabs
               value={shortest ? 'short' : 'long'}
               onChange={(value) => setShortest(value === 'short')}
               options={[

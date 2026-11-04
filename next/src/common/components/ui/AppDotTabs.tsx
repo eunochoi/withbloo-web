@@ -3,30 +3,30 @@
 import { useEffect, useRef } from 'react';
 import { cn } from "@/common/utils/cn";
 
-export const underlineTitleClass = "pb-2 pt-2 text-base font-normal text-theme-text-primary";
+export const dotTabTitleClass = "pb-2 pt-2 text-base font-normal text-theme-text-primary";
 
-export const titleMarkerClass = "h-2 w-2 shrink-0 rounded-full bg-theme-accent";
+export const dotTabMarkerClass = "h-2 w-2 shrink-0 rounded-full bg-theme-accent";
 
-interface AppUnderlineTabsOption<T extends string | number> {
+interface AppDotTabsOption<T extends string | number> {
   label: string;
   value: T;
 }
 
-interface AppUnderlineTabsProps<T extends string | number> {
-  options: AppUnderlineTabsOption<T>[];
+interface AppDotTabsProps<T extends string | number> {
+  options: AppDotTabsOption<T>[];
   value: T;
   onChange: (value: T) => void;
   scrollToSelected?: boolean;
   accessibilityLabel?: string;
 }
 
-const AppUnderlineTabs = <T extends string | number>({
+const AppDotTabs = <T extends string | number>({
   options,
   value,
   onChange,
   scrollToSelected = false,
   accessibilityLabel,
-}: AppUnderlineTabsProps<T>) => {
+}: AppDotTabsProps<T>) => {
   const container = useRef<HTMLDivElement>(null);
   const selected = useRef<HTMLButtonElement>(null);
   useEffect(() => {
@@ -37,7 +37,7 @@ const AppUnderlineTabs = <T extends string | number>({
     parent.scrollTo({ left, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
   }, [value, scrollToSelected]);
   return (
-    <div ref={container} role="tablist" aria-label={accessibilityLabel} className={cn("mx-1 flex items-center gap-3", scrollToSelected && "overflow-x-auto overscroll-x-contain")}>
+    <div ref={container} role="tablist" aria-label={accessibilityLabel} className={cn("flex items-center gap-3", scrollToSelected && "overflow-x-auto overscroll-x-contain")}>
       {options.map((option) => (
         <button
           key={option.value}
@@ -45,7 +45,7 @@ const AppUnderlineTabs = <T extends string | number>({
           role="tab"
           aria-selected={value === option.value}
           className={cn(
-            underlineTitleClass,
+            dotTabTitleClass,
             "flex shrink-0 items-center gap-2 pr-2",
             value === option.value
               ? "text-theme-text-primary"
@@ -54,7 +54,7 @@ const AppUnderlineTabs = <T extends string | number>({
           onClick={() => onChange(option.value)}
           type="button"
         >
-          <span aria-hidden="true" className={cn(titleMarkerClass, value !== option.value && "bg-theme-text-tertiary/70")} />
+          <span aria-hidden="true" className={cn(dotTabMarkerClass, value !== option.value && "bg-theme-text-tertiary/70")} />
           {option.label}
         </button>
       ))}
@@ -62,4 +62,4 @@ const AppUnderlineTabs = <T extends string | number>({
   );
 };
 
-export default AppUnderlineTabs;
+export default AppDotTabs;

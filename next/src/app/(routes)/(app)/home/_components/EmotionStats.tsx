@@ -1,7 +1,7 @@
 'use client';
 
 import { AppSection, AppSectionHeader, AppSectionMeta, AppSectionTitle } from '@/common/components/ui/AppSection';
-import AppUnderlineTabs from '@/common/components/ui/AppUnderlineTabs';
+import AppDotTabs from '@/common/components/ui/AppDotTabs';
 import EmotionImage from '@/common/components/ui/EmotionImage';
 import InfoNotice from '@/common/components/ui/InfoNotice';
 import { DIARY_EMOTION_GROUPS } from '@/common/constants/diaryFilters';
@@ -35,7 +35,7 @@ const EmotionStats = ({ year, emotionCounts, halfYearEmotionCounts }: Props) => 
         <AppSectionTitle>감정 기록</AppSectionTitle>
         <AppSectionMeta className="min-w-0 shrink text-right !text-theme-text-secondary">{year}년 {total}개</AppSectionMeta>
       </AppSectionHeader>
-      <AppUnderlineTabs options={HALF_YEAR_OPTIONS.map((label, value) => ({ label, value }))} value={selectedHalfYear} onChange={setSelectedHalfYear} />
+      <AppDotTabs options={HALF_YEAR_OPTIONS.map((label, value) => ({ label, value }))} value={selectedHalfYear} onChange={setSelectedHalfYear} />
       <div className="mx-1 flex flex-col gap-6 rounded-theme border border-theme-accent/20 bg-theme-accent-light/50 px-4 py-6">
         <div className={`flex h-4 gap-0.5 overflow-hidden rounded-full ${total ? '' : 'bg-theme-accent/30'}`} role="img" aria-label={`감정 비율: ${groups.map((group) => `${group.label} ${group.count}회 ${total ? Math.round(group.count / total * 100) : 0}%`).join(', ')}`}>
           {groups.filter((group) => group.count > 0).map((group) => <span key={group.label} style={{ flex: group.count, backgroundColor: group.color }} />)}

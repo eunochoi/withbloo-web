@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import HabitIcon from '@/common/components/ui/HabitIcon';
-import AppUnderlineTabs from '@/common/components/ui/AppUnderlineTabs';
+import AppDotTabs from '@/common/components/ui/AppDotTabs';
 import PickerInfoCard from '@/common/components/ui/PickerInfoCard';
 import PickerGridItem from '@/common/components/ui/PickerGridItem';
 import { HABIT_ICON_CATEGORIES } from '@/common/constants/habitIconCategories';
@@ -44,7 +44,7 @@ const HabitFormIconPicker = ({
       onApply={() => onApply(draft)}
       fixedContent={
         <div className="shrink-0 space-y-4 pb-4">
-          <AppUnderlineTabs
+          <AppDotTabs
             options={HABIT_ICON_CATEGORIES.map((item) => ({ value: item.id, label: item.label }))}
             value={categoryId}
             scrollToSelected

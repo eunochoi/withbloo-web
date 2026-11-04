@@ -5,7 +5,7 @@ import { CalendarIcon, DescriptionIcon, TrophyIcon } from '@/common/constants/ap
 import { DiaryStats } from "@/common/actions/stats";
 
 import { AppSection, AppSectionHeader, AppSectionMeta, AppSectionTitle } from "@/common/components/ui/AppSection";
-import { titleMarkerClass, underlineTitleClass } from '@/common/components/ui/AppUnderlineTabs';
+import { dotTabMarkerClass, dotTabTitleClass } from '@/common/components/ui/AppDotTabs';
 import InfoNotice from '@/common/components/ui/InfoNotice';
 import { cn } from "@/common/utils/cn";
 
@@ -39,7 +39,7 @@ const DiaryAnalysis = ({ stats, year }: Props) => {
 
       <div className="flex min-w-0 flex-col gap-4">
         <div className="flex min-w-0 flex-col gap-4">
-          <h3 className={`${underlineTitleClass} mx-1 flex items-center gap-2`}><span aria-hidden="true" className={titleMarkerClass} />기록 요약</h3>
+          <h3 className={`${dotTabTitleClass} mx-1 flex items-center gap-2`}><span aria-hidden="true" className={dotTabMarkerClass} />기록 요약</h3>
           <div className="mx-1 grid grid-cols-3 divide-x divide-theme-border/50 rounded-theme border border-theme-accent/20 bg-theme-accent-light/50 py-2">
             <div className={statBoxClass}>
               <CalendarIcon className={statIconClass} aria-hidden="true" />
@@ -69,7 +69,7 @@ const DiaryAnalysis = ({ stats, year }: Props) => {
           </div>
         </div>
         <div className="flex min-w-0 flex-col gap-4">
-          <h3 className={`${underlineTitleClass} mx-1 flex items-center gap-2`}><span aria-hidden="true" className={titleMarkerClass} />월별 기록</h3>
+          <h3 className={`${dotTabTitleClass} mx-1 flex items-center gap-2`}><span aria-hidden="true" className={dotTabMarkerClass} />월별 기록</h3>
           <div className="mx-1 flex flex-col gap-3 rounded-theme border border-theme-text-secondary/10 bg-theme-surface-muted/60 px-4 py-4">
             <div className="flex flex-row">
               {(stats?.monthlyCount ?? Array(12).fill(0)).map((count, index) => {

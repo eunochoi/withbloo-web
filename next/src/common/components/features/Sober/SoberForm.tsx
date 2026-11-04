@@ -13,7 +13,7 @@ import { PanelBody } from '@/common/components/ui/Dialog/PanelDialog/PanelBody';
 import { PanelHeader } from '@/common/components/ui/Dialog/PanelDialog/PanelHeader';
 import { PanelSubmitButton } from '@/common/components/ui/Dialog/PanelDialog/PanelSubmitButton';
 import InfoNotice from '@/common/components/ui/InfoNotice';
-import AppUnderlineTabs from '@/common/components/ui/AppUnderlineTabs';
+import AppDotTabs from '@/common/components/ui/AppDotTabs';
 import PickerInfoCard from '@/common/components/ui/PickerInfoCard';
 import PickerGridItem from '@/common/components/ui/PickerGridItem';
 import { showNotice } from '@/common/components/ui/Notice/notice';
@@ -276,7 +276,7 @@ export const SoberForm = ({
             }}
             fixedContent={
               <div className="shrink-0 space-y-4 pb-4">
-                <AppUnderlineTabs
+                <AppDotTabs
                   options={SOBER_ICON_CATEGORIES.map((entry) => ({ value: entry.id, label: entry.label }))}
                   value={category}
                   onChange={setCategory}

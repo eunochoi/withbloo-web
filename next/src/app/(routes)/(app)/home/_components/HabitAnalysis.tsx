@@ -4,7 +4,7 @@ import ScrollableName from '@/common/components/ui/ScrollableName';
 
 import { HabitStats } from "@/common/actions/stats";
 import { AppSection, AppSectionHeader, AppSectionMeta, AppSectionTitle } from "@/common/components/ui/AppSection";
-import AppUnderlineTabs, { titleMarkerClass, underlineTitleClass } from "@/common/components/ui/AppUnderlineTabs";
+import AppDotTabs, { dotTabMarkerClass, dotTabTitleClass } from "@/common/components/ui/AppDotTabs";
 import { HabitPriority } from '@/common/components/ui/Habit/HabitPriority';
 import HabitIcon from "@/common/components/ui/HabitIcon";
 import InfoNotice from '@/common/components/ui/InfoNotice';
@@ -45,14 +45,14 @@ const HabitAnalysis = ({ stats, year, today }: Props) => {
       <div className="flex min-w-0 flex-col gap-4">
         <div className="flex min-w-0 flex-col gap-4">
           <div className="flex items-baseline justify-between gap-3">
-            <h3 className={`${underlineTitleClass} mx-1 flex items-center gap-2`}><span aria-hidden="true" className={titleMarkerClass} />최근 7일 흐름</h3>
+            <h3 className={`${dotTabTitleClass} mx-1 flex items-center gap-2`}><span aria-hidden="true" className={dotTabMarkerClass} />최근 7일 흐름</h3>
           </div>
           <HabitFlow today={today} compact />
         </div>
 
         <div className="flex min-w-0 flex-col gap-4">
 
-          <AppUnderlineTabs
+          <AppDotTabs
             options={HABIT_TAB_OPTIONS}
             value={habitTab}
             onChange={setHabitTab}

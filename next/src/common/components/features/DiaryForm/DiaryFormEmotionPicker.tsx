@@ -1,6 +1,6 @@
 import { PickerDialog } from '@/common/components/ui/Dialog/PickerDialog';
 import EmotionImage from '@/common/components/ui/EmotionImage';
-import AppUnderlineTabs from '@/common/components/ui/AppUnderlineTabs';
+import AppDotTabs from '@/common/components/ui/AppDotTabs';
 import PickerInfoCard from '@/common/components/ui/PickerInfoCard';
 import { EMOTIONS } from '@/common/constants/emotions';
 import { useIsPresent } from 'framer-motion';
@@ -84,7 +84,7 @@ const DiaryFormEmotionPicker = ({
         className="m-0 flex w-full min-w-0 flex-col gap-4 border-0 pb-[max(24px,env(safe-area-inset-bottom))]"
       >
 
-        <AppUnderlineTabs
+        <AppDotTabs
           options={categories.map((item, value) => ({ label: item.label, value }))}
           value={categoryIndex}
           onChange={setCategoryIndex}
