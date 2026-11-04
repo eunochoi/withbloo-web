@@ -12,6 +12,7 @@ interface PanelDialogProps {
   children: ReactNode;
   onClose: () => void;
   dismissible?: boolean;
+  preserveHandle?: boolean;
   handleColor?: string;
   height?: 'full' | 'auto';
 }
@@ -22,6 +23,7 @@ export const PanelDialog = ({
   children,
   onClose,
   dismissible = true,
+  preserveHandle = false,
   handleColor,
   height = 'full',
 }: PanelDialogProps) => {
@@ -73,7 +75,7 @@ export const PanelDialog = ({
         exit={{ opacity: 0, y: y.get() > 0 && !reduceMotion ? '100%' : offset }}
         transition={transition}
       >
-        {dismissible && <SheetHandle onClose={onClose} color={handleColor} />}
+        {(dismissible || preserveHandle) && <SheetHandle onClose={onClose} color={handleColor} disabled={!dismissible} />}
         {children}
       </motion.div>
     </dialog>

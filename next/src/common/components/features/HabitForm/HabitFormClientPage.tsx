@@ -122,6 +122,7 @@ const HabitFormClientPage = ({ isEdit, habitId }: HabitFormClientPageProps) => {
         <PanelDialog
           ariaLabel={`습관 항목 ${confirmText}`}
           dismissible={!isSubmitting}
+          preserveHandle
           onClose={handleBack}
         >
           <PanelHeader

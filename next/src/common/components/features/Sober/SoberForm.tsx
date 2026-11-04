@@ -112,6 +112,7 @@ export const SoberForm = ({
         ariaLabel={item ? '거리두기 수정' : '거리두기 추가'}
         onClose={onClose}
         dismissible={!saving}
+        preserveHandle
       >
         <PanelHeader title={item ? '거리두기 수정' : '거리두기 추가'} headerRight={<PanelSubmitButton
             type="button"

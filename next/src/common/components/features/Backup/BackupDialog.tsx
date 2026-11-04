@@ -181,6 +181,7 @@ export function BackupDialog({
         ariaLabel={title}
         onClose={finish}
         dismissible={!busy}
+        preserveHandle
         height="auto"
       >
         <h2

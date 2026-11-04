@@ -130,6 +130,7 @@ const DiaryFormClientPage = ({ isEdit, diaryId }: DiaryFormClientPageProps) => {
         <PanelDialog
           ariaLabel={headerTitle}
           dismissible={!isSubmitting}
+          preserveHandle
           onClose={handleBack}
         >
           <PanelHeader

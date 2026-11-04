@@ -71,7 +71,7 @@ export default function SoberRestartForm({
   };
   const title = editing ? '다시 시작 기록 수정' : '다시 시작 기록 추가';
   return (
-    <PanelDialog ariaLabel={title} dismissible={!saving} onClose={onClose}>
+    <PanelDialog ariaLabel={title} dismissible={!saving} preserveHandle onClose={onClose}>
       <PanelHeader title={title} headerRight={<PanelSubmitButton
           type="button"
           disabled={saving}
