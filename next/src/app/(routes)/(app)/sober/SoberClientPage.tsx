@@ -3,7 +3,7 @@
 import { PickerHeader } from "@/common/components/ui/Dialog/PickerDialog/PickerHeader";
 
 import { authAction } from "@/common/auth/authAction";
-import HabitFormPickerRow from "@/common/components/features/HabitForm/HabitFormPickerRow";
+import { FilterPickerRow } from "@/common/components/ui/FilterPickerRow";
 import SoberCard from "@/common/components/features/Sober/SoberCard";
 import AppPageLayout from "@/common/components/layout/AppPageLayout";
 import AppPageTitle from "@/common/components/layout/AppPageTitle";
@@ -289,7 +289,7 @@ function SoberFilterPicker({
                   setImportant(false);
                   setDays(0);
                 }}
-                className="min-h-11 px-2 text-lg font-normal text-theme-text-secondary/70"
+                className="min-h-11 text-lg font-normal text-theme-text-secondary/70"
               >
                 초기화
               </button>
@@ -301,15 +301,15 @@ function SoberFilterPicker({
             <button
               type="button"
               onClick={() => onApply(important, days)}
-              className="absolute right-0 min-h-11 px-2 text-lg font-normal text-theme-accent"
+              className="absolute right-0 min-h-11 text-lg font-normal text-theme-accent"
             >
               적용
             </button>
           </PickerHeader>}>
-        <div className="flex flex-col gap-7 pb-6">
+        <div className="flex flex-col gap-5 px-2 pb-6 pt-2">
 
 
-          <label className="flex min-h-12 items-center justify-between gap-3 font-semibold">
+          <label className="flex items-center justify-between gap-3 text-base font-semibold">
             중요한 항목만 보기
             <input
               type="checkbox"
@@ -323,9 +323,9 @@ function SoberFilterPicker({
               className="relative h-7 w-12 shrink-0 rounded-full bg-theme-border after:absolute after:left-1 after:top-1 after:h-5 after:w-5 after:rounded-full after:bg-theme-surface after:transition-transform peer-checked:bg-theme-accent peer-checked:after:translate-x-5"
             />
           </label>
-          <section className="space-y-4">
-            <h3 className="font-semibold">최소 유지 기간</h3>
-            <HabitFormPickerRow
+          <section className="space-y-3">
+            <h3 className="text-base font-semibold">최소 유지 기간</h3>
+            <FilterPickerRow
               label={
                 periods.find((entry) => entry.days === days)?.label ?? "전체"
               }
@@ -360,7 +360,7 @@ function SoberFilterPicker({
                     setDays(entry.days);
                     setPeriodOpen(false);
                   }}
-                  className={`min-h-12 rounded-xl border ${entry.days === days ? "border-theme-accent bg-theme-accent/10 text-theme-accent-deep" : "border-theme-border"}`}
+                  className={`min-h-12 rounded-xl border ${entry.days === days ? "border-theme-accent bg-theme-accent/10 text-theme-accent-deep" : "border-theme-border/70"}`}
                 >
                   {entry.label}
                 </button>

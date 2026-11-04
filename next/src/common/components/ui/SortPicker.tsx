@@ -14,6 +14,7 @@ interface Props<T extends string> {
   priorityFirst?: boolean;
   recordSort?: "ASC" | "DESC";
   sortLabel?: string;
+  showCriteriaSort?: boolean;
   onClose: () => void;
   onApply: (
     value: T,
@@ -29,6 +30,7 @@ const SortPicker = <T extends string>({
   priorityFirst,
   recordSort,
   sortLabel,
+  showCriteriaSort = false,
   onClose,
   onApply,
 }: Props<T>) => {
@@ -45,7 +47,7 @@ const SortPicker = <T extends string>({
                 setPriority(false);
                 setRecords(recordSort ? "DESC" : undefined);
               }}
-              className="min-h-11 px-2 text-lg font-normal text-theme-text-secondary/70"
+              className="min-h-11 text-lg font-normal text-theme-text-secondary/70"
             >
               초기화
             </button>
@@ -66,13 +68,12 @@ const SortPicker = <T extends string>({
                 records,
               )
             }
-            className="absolute right-0 min-h-11 px-2 text-lg font-normal text-theme-accent"
+            className="absolute right-0 min-h-11 text-lg font-normal text-theme-accent"
           >
             적용
           </button>
         </PickerHeader>}>
-      <div className="flex flex-col gap-7 pb-6">
-
+      <div className={`flex flex-col pb-6 ${showCriteriaSort ? 'gap-5' : 'gap-7'}`}>
 
         {priorityFirst !== undefined && (
           <label className="flex items-center justify-between gap-3 text-lg font-semibold">
@@ -104,7 +105,7 @@ const SortPicker = <T extends string>({
                   type="button"
                   aria-pressed={records === value}
                   onClick={() => setRecords(value)}
-                  className={`min-h-12 flex-1 rounded-xl border px-1 py-3 ${records === value ? "border-theme-accent bg-theme-accent/10 text-theme-accent-deep" : "border-theme-border"}`}
+                  className={`min-h-12 flex-1 rounded-xl border px-1 py-3 ${records === value ? "border-theme-accent bg-theme-accent/10 text-theme-accent-deep" : "border-theme-border/70"}`}
                 >
                   {value === "DESC" ? "긴 기록순" : "짧은 기록순"}
                 </button>
@@ -112,9 +113,9 @@ const SortPicker = <T extends string>({
             </div>
           </section>
         )}
-        <section className="flex flex-col gap-3">
-          <h3 className="text-lg font-semibold">
-            {sortLabel ?? (title === "일기 정렬" ? "날짜 정렬" : "생성일 정렬")}
+        <section className={`flex flex-col gap-3 ${showCriteriaSort ? 'px-2' : ''}`}>
+          <h3 className={showCriteriaSort ? 'text-base font-semibold' : 'text-lg font-semibold'}>
+            {sortLabel ?? (title === "일기 정렬" ? "날짜순 정렬" : "생성일 정렬")}
           </h3>
           <div className="flex gap-3">
             {options.map((option) => (
@@ -127,14 +128,14 @@ const SortPicker = <T extends string>({
                   if (option.value === "CUSTOM") setPriority(false);
                   setRecords(recordSort ? "DESC" : undefined);
                 }}
-                className={`min-h-12 min-w-0 flex-1 rounded-xl border px-1 py-3 ${selected === option.value ? "border-theme-accent bg-theme-accent/10 text-theme-accent-deep" : "border-theme-border"}`}
+                className={`min-h-12 min-w-0 flex-1 rounded-xl border px-1 py-3 ${selected === option.value ? "border-theme-accent bg-theme-accent/10 text-theme-accent-deep" : "border-theme-border/70"}`}
               >
                 {option.label}
               </button>
             ))}
           </div>
         </section>
-        <div className="flex flex-col gap-1">
+        <div className={`flex flex-col gap-1 ${showCriteriaSort ? 'px-2' : ''}`}>
           <InfoNotice>
             {selected === "CUSTOM"
               ? "직접 정한 순서로 보여드려요."

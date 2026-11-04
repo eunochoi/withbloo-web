@@ -235,6 +235,7 @@ const DiaryClientPage = () => {
         {isSortOpen && (
           <SortPicker
             title="일기 정렬"
+            showCriteriaSort
             value={sortValue}
             options={[
               { value: 'DESC', label: '최신순' },

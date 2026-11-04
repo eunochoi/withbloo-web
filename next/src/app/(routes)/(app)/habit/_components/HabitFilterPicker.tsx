@@ -29,7 +29,7 @@ const HabitFilterPicker = ({
                 setCompleted(false);
                 setSelected([]);
               }}
-              className="min-h-11 px-2 text-lg font-normal text-theme-text-secondary/70"
+              className="min-h-11 text-lg font-normal text-theme-text-secondary/70"
             >
               초기화
             </button>
@@ -44,15 +44,15 @@ const HabitFilterPicker = ({
           <button
             type="button"
             onClick={() => onApply(completed, selected)}
-            className="absolute right-0 min-h-11 px-2 text-lg font-normal text-theme-accent"
+            className="absolute right-0 min-h-11 text-lg font-normal text-theme-accent"
           >
             적용
           </button>
         </PickerHeader>}>
-      <div className="flex flex-col gap-7 pb-6">
+      <div className="flex flex-col gap-5 px-2 pb-6 pt-2">
 
 
-        <label className="flex items-center justify-between gap-3 text-lg font-semibold">
+        <label className="flex items-center justify-between gap-3 text-base font-semibold">
           완료한 항목만 보기
           <input
             type="checkbox"
@@ -66,9 +66,9 @@ const HabitFilterPicker = ({
             className="relative h-7 w-12 shrink-0 rounded-full bg-theme-border transition-colors after:absolute after:left-1 after:top-1 after:h-5 after:w-5 after:rounded-full after:bg-theme-surface after:transition-transform peer-checked:bg-theme-accent peer-checked:after:translate-x-5"
           />
         </label>
-        <section className="flex flex-col gap-4">
+        <section className="flex flex-col gap-3">
           <div className="flex justify-between gap-3">
-            <h3 className="text-lg font-semibold">중요도</h3>
+            <h3 className="text-base font-semibold">중요도</h3>
             <span className="text-sm text-theme-text-secondary">
               {selected.length
                 ? selected
@@ -95,7 +95,7 @@ const HabitFilterPicker = ({
                       : [...previous, priority],
                   )
                 }
-                className={`flex min-h-12 flex-col items-center justify-center gap-2 rounded-xl border px-1 py-3 ${selected.includes(priority) ? "border-theme-accent bg-theme-accent/10 text-theme-accent" : "border-theme-border text-theme-text-secondary"}`}
+                className={`flex min-h-12 flex-col items-center justify-center gap-2 rounded-xl border px-1 py-3 ${selected.includes(priority) ? "border-theme-accent bg-theme-accent/10 text-theme-accent" : "border-theme-border/70 text-theme-text-secondary"}`}
               >
                 <HabitPriority
                   priority={priority}

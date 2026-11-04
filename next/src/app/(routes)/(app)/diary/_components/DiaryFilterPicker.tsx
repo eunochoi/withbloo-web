@@ -2,7 +2,7 @@
 
 import { PickerHeader } from "@/common/components/ui/Dialog/PickerDialog/PickerHeader";
 
-import { ChevronRightIcon } from "@/common/constants/appIcons";
+import { FilterPickerRow } from "@/common/components/ui/FilterPickerRow";
 
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -54,7 +54,7 @@ const DiaryFilterPicker = ({
                 setSelectedSeasons([]);
                 setSelectedGroups([]);
               }}
-              className="min-h-11 px-2 text-lg font-normal text-theme-text-secondary/70"
+              className="min-h-11 text-lg font-normal text-theme-text-secondary/70"
             >
               초기화
             </button>
@@ -71,28 +71,25 @@ const DiaryFilterPicker = ({
             onClick={() =>
               onApply(selectedYear, selectedSeasons, selectedGroups)
             }
-            className="absolute right-0 min-h-11 px-2 text-lg font-normal text-theme-accent"
+            className="absolute right-0 min-h-11 text-lg font-normal text-theme-accent"
           >
             적용
           </button>
         </PickerHeader>}>
-      <div className="flex flex-col gap-7 pb-6">
+      <div className="flex flex-col gap-5 px-2 pb-6 pt-2">
 
 
-        <section className="flex flex-col gap-4">
-          <h3 className="text-lg font-semibold">연도</h3>
-          <button
-            type="button"
+        <section className="flex flex-col gap-3">
+          <h3 className="text-base font-semibold">연도</h3>
+          <FilterPickerRow
+            label={selectedYear === null ? "전체 연도" : `${selectedYear}년`}
+            accessibilityLabel="연도 선택"
             onClick={() => setYearOpen(true)}
-            className="flex min-h-12 items-center justify-between rounded-xl border border-theme-border px-4 text-theme-text-secondary"
-          >
-            {selectedYear === null ? "전체 연도" : `${selectedYear}년`}
-            <ChevronRightIcon size={20} />
-          </button>
+          />
         </section>
-        <section className="flex flex-col gap-4">
+        <section className="flex flex-col gap-3">
           <div className="flex justify-between gap-3">
-            <h3 className="text-lg font-semibold">계절</h3>
+            <h3 className="text-base font-semibold">계절</h3>
             <span className="text-sm text-theme-text-secondary">
               {selectedSeasons.length
                 ? selectedSeasons
@@ -117,7 +114,7 @@ const DiaryFilterPicker = ({
                         : [...previous, season],
                     )
                   }
-                  className={`min-h-12 rounded-xl border px-2 ${selected ? "border-theme-accent bg-theme-accent/10 text-theme-accent-deep" : "border-theme-border"}`}
+                  className={`min-h-12 rounded-xl border px-2 ${selected ? "border-theme-accent bg-theme-accent/10 text-theme-accent-deep" : "border-theme-border/70"}`}
                 >
                   {DIARY_SEASONS[season].label}
                 </button>
@@ -130,9 +127,9 @@ const DiaryFilterPicker = ({
           <br />
           가을 9~11월, 겨울 12~다음 2월
         </InfoNotice>
-        <section className="flex flex-col gap-4">
+        <section className="flex flex-col gap-3">
           <div className="flex justify-between gap-3">
-            <h3 className="text-lg font-semibold">감정</h3>
+            <h3 className="text-base font-semibold">감정</h3>
             <span className="text-sm text-theme-text-secondary">
               {selectedGroups.length
                 ? selectedGroups
@@ -159,7 +156,7 @@ const DiaryFilterPicker = ({
                           : [...previous, group],
                       )
                     }
-                    className={`flex min-h-20 min-w-0 flex-col items-center justify-center gap-1 rounded-xl border px-1 py-2 ${selected ? "border-theme-accent bg-theme-accent/10 text-theme-accent-deep" : "border-theme-border"}`}
+                    className={`flex min-h-20 min-w-0 flex-col items-center justify-center gap-1 rounded-xl border px-1 py-2 ${selected ? "border-theme-accent bg-theme-accent/10 text-theme-accent-deep" : "border-theme-border/70"}`}
                   >
                     <span>{item.label}</span>
                     <span className="whitespace-pre-line text-center text-xs leading-4 text-theme-text-secondary">
@@ -194,7 +191,7 @@ const DiaryFilterPicker = ({
                     setSelectedYear(value);
                     setYearOpen(false);
                   }}
-                  className={`min-h-12 rounded-xl border ${selectedYear === value ? "border-theme-accent bg-theme-accent/10 text-theme-accent-deep" : "border-theme-border"}`}
+                  className={`min-h-12 rounded-xl border ${selectedYear === value ? "border-theme-accent bg-theme-accent/10 text-theme-accent-deep" : "border-theme-border/70"}`}
                 >
                   {value === null ? "전체 연도" : `${value}년`}
                 </button>
