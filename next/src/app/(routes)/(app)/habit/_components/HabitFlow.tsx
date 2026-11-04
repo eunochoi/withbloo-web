@@ -57,7 +57,7 @@ const HabitFlow = ({
   if (compact)
     return (
       <>
-        <div className="mx-1 flex min-w-0 flex-col gap-4 rounded-theme border border-theme-text-secondary/10 bg-theme-surface-muted/60 p-4">
+        <div className="mx-1 flex min-w-0 flex-col gap-4 rounded-theme border border-theme-accent/20 bg-theme-accent-light/50 p-4">
           <div className="flex items-center justify-between gap-3">
             <div>
               <p className="text-sm text-theme-text-secondary">최근 7일 평균</p>

@@ -73,55 +73,27 @@ export default function SoberAnalysis() {
               <span aria-hidden="true" className={titleMarkerClass} />
               유지 기간 분포
             </h3>
-            <div className="mx-1 flex flex-col gap-4 rounded-theme border border-theme-accent/20 bg-theme-accent-light/50 px-4 py-6">
-              <div className="flex flex-wrap justify-center gap-y-4">
-                {distribution.map(
-                  (count, index) =>
-                    count > 0 && (
-                      <div
-                        key={labels[index]}
-                        className="flex w-1/3 min-w-0 flex-col items-center gap-2 px-1"
-                      >
-                        <span className="flex items-center justify-center gap-2 text-sm text-theme-text-secondary">
-                          <span
-                            className="h-3 w-3 shrink-0 rounded-full bg-theme-accent"
-                            style={{ opacity: 0.25 + index * 0.15 }}
-                          />
-                          <span className="text-center">{labels[index]}</span>
-                        </span>
-                        <span className="text-2xl font-semibold">
-                          {count}
-                          <span className="ml-1 text-base font-normal text-theme-text-secondary">
-                            개
-                          </span>
-                        </span>
-                      </div>
-                    ),
-                )}
-              </div>
-              {!data?.length && (
-                <p className="text-center text-sm text-theme-text-secondary">
-                  아직 거리두기 항목이 없어요.
-                </p>
-              )}
+            <div className="mx-1 flex flex-col gap-6 rounded-theme border border-theme-accent/20 bg-theme-accent-light/50 px-4 py-6">
               <div
-                className="flex h-4 overflow-hidden rounded-full bg-theme-accent/30"
+                className={`flex h-4 gap-0.5 overflow-hidden rounded-full ${data?.length ? '' : 'bg-theme-accent/30'}`}
                 role="img"
-                aria-label={labels
-                  .map((label, index) => `${label} ${distribution[index]}개`)
-                  .join(', ')}
+                aria-label={labels.map((label, index) => `${label} ${distribution[index]}개`).join(', ')}
               >
-                {distribution.map(
-                  (count, index) =>
-                    count > 0 && (
-                      <span
-                        key={labels[index]}
-                        className="bg-theme-accent"
-                        style={{ flex: count, opacity: 0.25 + index * 0.15 }}
-                      />
-                    ),
-                )}
+                {distribution.map((count, index) => count > 0 && (
+                  <span key={labels[index]} className="bg-theme-accent" style={{ flex: count, opacity: 0.25 + index * 0.15 }} />
+                ))}
               </div>
+              {data?.length ? (
+                <div className="flex flex-col gap-4">
+                  {distribution.map((count, index) => count > 0 && (
+                    <div key={labels[index]} className="flex items-center gap-3">
+                      <span className="h-4 w-4 shrink-0 rounded-full bg-theme-accent" style={{ opacity: 0.25 + index * 0.15 }} />
+                      <span className="min-w-0 flex-1 text-sm">{labels[index]}</span>
+                      <span className="text-sm text-theme-text-secondary">{count}개</span>
+                    </div>
+                  ))}
+                </div>
+              ) : <p className="text-center text-sm text-theme-text-secondary">아직 거리두기 항목이 없어요.</p>}
             </div>
           </div>
         )}
