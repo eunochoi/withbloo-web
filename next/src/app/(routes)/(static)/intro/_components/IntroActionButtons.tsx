@@ -6,7 +6,7 @@ import { cn } from '@/common/utils/cn';
 import { AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { useId, useState } from 'react';
-import { FaGooglePlay } from 'react-icons/fa';
+import { FaApple, FaGooglePlay } from 'react-icons/fa';
 import { MdInstallMobile, MdLanguage, MdOutlineAndroid } from 'react-icons/md';
 import { twMerge } from 'tailwind-merge';
 
@@ -27,6 +27,8 @@ interface IntroActionButtonsProps {
 const IntroActionButtons = ({ className }: IntroActionButtonsProps) => {
   const { installPwa } = usePwaInstall();
   const [isOpen, setIsOpen] = useState(false);
+  const [isAppOpen, setIsAppOpen] = useState(false);
+  const appTitleId = useId();
   const titleId = useId();
 
   return (
@@ -39,17 +41,17 @@ const IntroActionButtons = ({ className }: IntroActionButtonsProps) => {
         >
           <MdLanguage className={introIconClass} aria-hidden="true" />
           <span className="flex min-w-0 flex-col gap-1">
-            <span className='font-semibold'>WEB 서비스 시작</span>
+            <span className='font-semibold'>웹 서비스 시작</span>
             <span className="text-xs leading-4 opacity-80">로그인 후 기록을 서버에 저장해요.</span>
           </span>
         </button>
-        <a href={PLAY_STORE_URL} className={twMerge(actionClass, 'border-theme-border bg-theme-surface text-theme-text-primary hover:bg-theme-accent/20')}>
+        <button type="button" onClick={() => setIsAppOpen(true)} className={twMerge(actionClass, 'border-theme-border bg-theme-surface text-theme-text-primary hover:bg-theme-accent/20')}>
           <FaGooglePlay className={introIconClass} aria-hidden="true" />
           <span className="flex min-w-0 flex-col gap-1">
-            <span className='font-semibold'>APP 서비스 시작</span>
+            <span className='font-semibold'>앱 서비스 시작</span>
             <span className="text-xs leading-4 opacity-80">로그인 없이 기록을 기기에 저장해요.</span>
           </span>
-        </a>
+        </button>
       </div >
       <AnimatePresence>
         {isOpen && (
@@ -83,6 +85,27 @@ const IntroActionButtons = ({ className }: IntroActionButtonsProps) => {
                   <ChevronRightIcon className="shrink-0 text-xl text-theme-text-tertiary" aria-hidden="true" />
                 </button>
               </div>
+            </div>
+          </PickerDialog>
+        )}
+        {isAppOpen && (
+          <PickerDialog labelledBy={appTitleId} onClose={() => setIsAppOpen(false)} header={<h2 id={appTitleId} className="text-center text-lg font-semibold tracking-tight text-theme-text-primary">앱 서비스 이용하기</h2>}>
+            <div className="flex w-full flex-col gap-3 pb-[max(1rem,env(safe-area-inset-bottom))]">
+              <a href={PLAY_STORE_URL} className={optionClass}>
+                <MdOutlineAndroid className="shrink-0 text-2xl text-theme-accent" aria-hidden="true" />
+                <span className="flex min-w-0 flex-1 flex-col gap-1">
+                  <span className="text-base font-semibold text-theme-text-primary">안드로이드 앱</span>
+                  <span className="text-sm leading-5 tracking-tight text-theme-text-secondary">Google Play에서 설치해 이용해요.</span>
+                </span>
+                <ChevronRightIcon className="shrink-0 text-xl text-theme-text-tertiary" aria-hidden="true" />
+              </a>
+              <button type="button" disabled className={cn(optionClass, 'cursor-not-allowed opacity-60')}>
+                <FaApple className="shrink-0 text-2xl text-theme-accent" aria-hidden="true" />
+                <span className="flex min-w-0 flex-1 flex-col gap-1">
+                  <span className="text-base font-semibold text-theme-text-primary">iOS 앱</span>
+                  <span className="text-sm leading-5 tracking-tight text-theme-text-secondary">iOS 앱을 준비하고 있어요.</span>
+                </span>
+              </button>
             </div>
           </PickerDialog>
         )}
