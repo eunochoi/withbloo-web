@@ -15,6 +15,7 @@ interface PanelDialogProps {
   preserveHandle?: boolean;
   handleColor?: string;
   height?: 'full' | 'auto';
+  animateHeight?: boolean;
 }
 
 // 라우트 기반 화면을 패널로 표시한다. 닫힌 뒤의 라우트 이동은 상위 컴포넌트가 처리한다.
@@ -26,6 +27,7 @@ export const PanelDialog = ({
   preserveHandle = false,
   handleColor,
   height = 'full',
+  animateHeight = false,
 }: PanelDialogProps) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -68,10 +70,11 @@ export const PanelDialog = ({
       />
       <motion.div
         ref={contentRef}
+        layout={!animateHeight && height === 'auto' && !reduceMotion}
         style={{ y }}
         className={`absolute inset-x-0 bottom-0 mx-auto flex ${height === 'auto' ? 'h-auto' : 'h-[95dvh]'} max-h-[95dvh] w-full max-w-[550px] desktop:max-w-[650px] flex-col overflow-hidden rounded-t-[2rem] border border-theme-border bg-theme-surface pt-2 shadow-theme-modal`}
         initial={{ opacity: 0, y: offset }}
-        animate={{ opacity: 1, y: 0 }}
+        animate={{ opacity: 1, y: 0, ...(animateHeight ? { height: height === 'auto' ? 'auto' : '95dvh' } : {}) }}
         exit={{ opacity: 0, y: y.get() > 0 && !reduceMotion ? '100%' : offset }}
         transition={transition}
       >
