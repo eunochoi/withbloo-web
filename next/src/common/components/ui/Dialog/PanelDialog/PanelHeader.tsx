@@ -37,12 +37,12 @@ export const PanelHeader = ({
         </h2>
       ))}
     {headerLeft && (
-      <div className="absolute left-[5%] flex items-center tablet:left-12 desktop:left-[81px]">
+      <div className="absolute left-5 flex items-center tablet:left-12 desktop:left-[81px]">
         {headerLeft}
       </div>
     )}
     {headerRight && (
-      <div className="absolute right-[5%] flex items-center tablet:right-12 desktop:right-[81px]">
+      <div className="absolute right-5 flex items-center tablet:right-12 desktop:right-[81px]">
         {headerRight}
       </div>
     )}
