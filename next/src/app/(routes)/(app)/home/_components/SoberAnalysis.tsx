@@ -98,7 +98,7 @@ export default function SoberAnalysis() {
           </div>
         )}
         <div className="flex min-w-0 flex-col gap-4">
-          <div>
+          <div className="mx-1">
             <AppDotTabs
               value={shortest ? 'short' : 'long'}
               onChange={(value) => setShortest(value === 'short')}

@@ -52,11 +52,13 @@ const HabitAnalysis = ({ stats, year, today }: Props) => {
 
         <div className="flex min-w-0 flex-col gap-4">
 
-          <AppDotTabs
-            options={HABIT_TAB_OPTIONS}
-            value={habitTab}
-            onChange={setHabitTab}
-          />
+          <div className="mx-1">
+            <AppDotTabs
+              options={HABIT_TAB_OPTIONS}
+              value={habitTab}
+              onChange={setHabitTab}
+            />
+          </div>
 
           {habits && habits.length > 0 ?
             <ol className="mx-1 m-0 list-none rounded-theme border border-theme-text-secondary/10 bg-theme-surface-muted/60 p-6">

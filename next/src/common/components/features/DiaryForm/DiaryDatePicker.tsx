@@ -65,7 +65,7 @@ const DiaryDatePicker = ({
                 setDraft(today);
                 calendar.showDate(today);
               }}
-              className="min-h-11 px-2 text-lg font-normal text-theme-text-secondary/70"
+              className="min-h-11 text-lg font-normal text-theme-text-secondary/70"
             >
               오늘
             </button>
@@ -81,7 +81,7 @@ const DiaryDatePicker = ({
             type="button"
             disabled={disabled}
             onClick={() => onApply(draft)}
-            className="absolute right-0 min-h-11 px-2 text-lg font-normal text-theme-accent disabled:opacity-40"
+            className="absolute right-0 min-h-11 text-lg font-normal text-theme-accent disabled:opacity-40"
           >
             완료
           </button>

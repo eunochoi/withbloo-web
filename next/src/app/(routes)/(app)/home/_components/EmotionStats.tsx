@@ -35,7 +35,9 @@ const EmotionStats = ({ year, emotionCounts, halfYearEmotionCounts }: Props) => 
         <AppSectionTitle>감정 기록</AppSectionTitle>
         <AppSectionMeta className="min-w-0 shrink text-right !text-theme-text-secondary">{year}년 {total}개</AppSectionMeta>
       </AppSectionHeader>
-      <AppDotTabs options={HALF_YEAR_OPTIONS.map((label, value) => ({ label, value }))} value={selectedHalfYear} onChange={setSelectedHalfYear} />
+      <div className="mx-1">
+        <AppDotTabs options={HALF_YEAR_OPTIONS.map((label, value) => ({ label, value }))} value={selectedHalfYear} onChange={setSelectedHalfYear} />
+      </div>
       <div className="mx-1 flex flex-col gap-6 rounded-theme border border-theme-accent/20 bg-theme-accent-light/50 px-4 py-6">
         <div className={`flex h-4 gap-0.5 overflow-hidden rounded-full ${total ? '' : 'bg-theme-accent/30'}`} role="img" aria-label={`감정 비율: ${groups.map((group) => `${group.label} ${group.count}회 ${total ? Math.round(group.count / total * 100) : 0}%`).join(', ')}`}>
           {groups.filter((group) => group.count > 0).map((group) => <span key={group.label} style={{ flex: group.count, backgroundColor: group.color }} />)}
@@ -49,7 +51,7 @@ const EmotionStats = ({ year, emotionCounts, halfYearEmotionCounts }: Props) => 
           ))}
         </div>
       </div>
-      <div className="-mx-5 w-auto flex gap-3 overflow-x-auto overscroll-x-contain px-6 pb-2 tablet:-mx-12 tablet:px-[calc(3rem+0.25rem)] desktop:-mx-[81px] desktop:px-[calc(81px+0.25rem)]">
+      <div className="-mx-6 w-auto flex gap-3 overflow-x-auto overscroll-x-contain px-7 pb-2 tablet:-mx-12 tablet:px-[calc(3rem+0.25rem)] desktop:-mx-[81px] desktop:px-[calc(81px+0.25rem)]">
         {sortedEmotions.map((emotion) => (
           <div key={emotion.id} className="flex w-[40%] shrink-0 flex-col items-center gap-1 rounded-theme border p-3" style={{ backgroundColor: `${emotion.color}26`, borderColor: `${emotion.color}40` }}>
             <EmotionImage emotion={emotion} alt="" width={64} height={64} className="h-16 w-16" />
