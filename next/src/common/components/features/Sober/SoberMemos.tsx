@@ -36,7 +36,7 @@ export default function SoberMemos({
   return (
     <>
       <PanelDialog ariaLabel={`${name} 기록`} onClose={onClose}>
-        <PanelHeader title={`${name} 기록`} />
+        <PanelHeader title={`${name} 기록`} scrollableTitle />
         <PanelBody showScrollFade>
           <div className="flex flex-col gap-3 pb-7">
             <button

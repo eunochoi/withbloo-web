@@ -9,6 +9,7 @@ import { useId, useRef, useState } from 'react';
 
 import { ConfirmDialog } from '../Dialog/ConfirmDialog';
 import { PickerDialog } from '../Dialog/PickerDialog';
+import ScrollableName from '../ScrollableName';
 
 interface Props {
   isOpen: boolean;
@@ -91,9 +92,9 @@ const Menus = ({
           <PickerDialog labelledBy={`${id}-title`} onClose={onClose} header={<div className="flex flex-col items-center gap-2">
                 <h2
                   id={`${id}-title`}
-                  className="text-center text-lg font-semibold tracking-tight text-theme-text-primary"
+                  className="w-full min-w-0 text-center text-lg font-semibold tracking-tight text-theme-text-primary"
                 >
-                  {title}
+                  {kind === 'diary' ? title : <ScrollableName name={title} />}
                 </h2>
               </div>}>
             <div className="flex w-full flex-col gap-6 pb-[max(1rem,env(safe-area-inset-bottom))]">

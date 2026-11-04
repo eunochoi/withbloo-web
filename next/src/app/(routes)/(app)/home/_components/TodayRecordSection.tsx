@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 
 import { authAction } from '@/common/auth/authAction';
 import EmotionImage from '@/common/components/ui/EmotionImage';
+import ScrollableName from '@/common/components/ui/ScrollableName';
 import { EMOTIONS } from '@/common/constants/emotions';
 import { resolveHabitIconColor } from '@/common/constants/habitIconColors';
 import { getTodayString } from '@/common/functions/getTodayString';
@@ -216,13 +217,13 @@ const TodayRecordSection = ({ initialDate }: { initialDate: string }) => {
             />
           )}
         </span>
-        <span aria-live="polite">
+        <span aria-live="polite" className="w-full min-w-0">
           {soberQuery.isPending
             ? '확인 중'
             : soberQuery.isError
               ? '불러오기 실패'
               : sober
-                ? sober.name
+                ? <ScrollableName name={sober.name} />
                 : '기록 없음'}
         </span>
       </button>
