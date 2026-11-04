@@ -1,17 +1,18 @@
 'use client';
 
-import { restrictToParentElement, restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import { closestCenter, DndContext, DragEndEvent, KeyboardSensor, MouseSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { restrictToParentElement, restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from "@dnd-kit/sortable";
-import { Habit } from "./_types";
-import { HabitItem } from "./HabitItem";
+import { HabitSortEntry } from "./_types";
+import { HabitManualSortItem } from "./HabitManualSortItem";
 
-interface HabitListProps {
-  tempHabits: Habit[];
-  onOrderChange: (habits: Habit[]) => void;
+interface HabitManualSortListProps {
+  tempHabits: HabitSortEntry[];
+  onOrderChange: (habits: HabitSortEntry[]) => void;
+  disabled?: boolean;
 }
 
-export const HabitList = ({ tempHabits, onOrderChange }: HabitListProps) => {
+export const HabitManualSortList = ({ tempHabits, onOrderChange, disabled = false }: HabitManualSortListProps) => {
   const sensors = useSensors(
     useSensor(MouseSensor, { activationConstraint: { distance: 6 } }),
     useSensor(TouchSensor, { activationConstraint: { delay: 180, tolerance: 6 } }),
@@ -29,21 +30,20 @@ export const HabitList = ({ tempHabits, onOrderChange }: HabitListProps) => {
     onOrderChange(arrayMove(tempHabits, oldIndex, newIndex));
   };
 
-  return (<div className='w-full'>
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCenter}
-      onDragEnd={handleDragEnd}
-      modifiers={[restrictToVerticalAxis, restrictToParentElement]}
-    >
-      <div className="w-full">
+  return (
+    <div className="w-full min-w-0 bg-theme-bg rounded-xl" inert={disabled}>
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+        modifiers={[restrictToParentElement, restrictToVerticalAxis]}
+      >
         <SortableContext items={tempHabits.map((habit) => habit.id)} strategy={verticalListSortingStrategy}>
           {tempHabits.map((tempHabit) => (
-            <HabitItem key={tempHabit.id} habit={tempHabit} />
+            <HabitManualSortItem key={tempHabit.id} habit={tempHabit} />
           ))}
         </SortableContext>
-      </div>
-
-    </DndContext>
-  </div>);
+      </DndContext>
+    </div>
+  );
 };

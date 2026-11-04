@@ -28,7 +28,7 @@ const HabitPageToolbar = ({ onToggle, onOpenFilter, completedOnly, priorities, o
     ...(priorities.length > 0 && priorities.length < 4 ? priorities.map((priority) => priority === 0 ? '자유' : <span key={priority} className="text-theme-accent">{'★'.repeat(priority)}</span>) : []),
   ];
   const showPriority = sortValue !== 'CUSTOM' && priorityFirst;
-  const sortDescription = sortValue === 'CUSTOM' ? '커스텀' : `${showPriority ? '중요한 항목 먼저 · ' : ''}생성일 ${sortValue === 'DESC' ? '최신순' : '과거순'}`;
+  const sortDescription = sortValue === 'CUSTOM' ? '자유' : `${showPriority ? '중요한 항목 먼저 · ' : ''}생성일 ${sortValue === 'DESC' ? '최신순' : '과거순'}`;
   const filterDescription = `${completedOnly ? '오늘 완료' : '완료 상태 전체'}, 중요도 ${getSelectionSummary(priorities.map((priority) => priority === 0 ? '자유 기록' : '★'.repeat(priority)), 4)}`;
   return (
     <Toolbar>

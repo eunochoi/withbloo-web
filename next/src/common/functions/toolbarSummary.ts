@@ -1,7 +1,7 @@
 import type { HabitSort } from '../types/sort';
 
 export const getToolbarSortParts = (sort: HabitSort, priorityFirst = false): string[] => {
-  if (sort === 'CUSTOM') return ['커스텀'];
+  if (sort === 'CUSTOM') return ['자유'];
   const parts = [priorityFirst ? '중요' : '', sort === 'ASC' ? '과거' : ''].filter(Boolean);
   return parts.length ? parts : ['정렬'];
 };

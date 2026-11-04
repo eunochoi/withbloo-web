@@ -1,8 +1,9 @@
 'use client';
 
+import { HabitSortModal } from '@/common/components/features/HabitSort/HabitSortModal';
+
 import { sortHabits } from '@/common/functions/sortHabits';
 
-import SortPicker from '@/common/components/ui/SortPicker';
 import { AnimatePresence } from 'framer-motion';
 import HabitFilterPicker from './_components/HabitFilterPicker';
 import HabitPageContent from './_components/HabitPageContent';
@@ -35,6 +36,7 @@ const HabitClientPage = ({ todayString }: { todayString: string }) => {
     sortValue,
     priorityFirst,
     customHabitOrder,
+    setCustomHabitOrder,
     isStorageReady,
     setSort,
   } = useHabitSortPreferences();
@@ -132,21 +134,7 @@ const HabitClientPage = ({ todayString }: { todayString: string }) => {
       </AppPageLayout>
       <AnimatePresence>
         {isSortOpen && (
-          <SortPicker
-            title="습관 정렬"
-            value={sortValue}
-            priorityFirst={priorityFirst}
-            options={[
-              { value: 'DESC', label: '최신순' },
-              { value: 'ASC', label: '과거순' },
-              { value: 'CUSTOM', label: '커스텀' },
-            ]}
-            onClose={() => setSortOpen(false)}
-            onApply={(value, priority) => {
-              setSort(value, priority);
-              setSortOpen(false);
-            }}
-          />
+          <HabitSortModal initialHabits={habits} onClose={() => setSortOpen(false)} sortValue={sortValue} priorityFirst={priorityFirst} customHabitOrder={customHabitOrder} setCustomHabitOrder={setCustomHabitOrder} setSort={setSort} isStorageReady={isStorageReady} />
         )}
         {isFilterOpen && (
           <HabitFilterPicker
