@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import { PANEL_HORIZONTAL_PADDING_CLASS } from "./constants";
+import ScrollableName from '../../ScrollableName';
 
 interface PanelHeaderProps {
   title?: string;
@@ -10,6 +11,7 @@ interface PanelHeaderProps {
   headerLeft?: ReactNode;
   headerRight?: ReactNode;
   onTitleClick?: () => void;
+  scrollableTitle?: boolean;
 }
 
 export const PanelHeader = ({
@@ -17,6 +19,7 @@ export const PanelHeader = ({
   headerLeft,
   headerRight,
   onTitleClick,
+  scrollableTitle = false,
 }: PanelHeaderProps) => title || headerLeft || headerRight ? (
   <div
     className={`relative flex min-h-12 w-full shrink-0 items-center justify-center ${PANEL_HORIZONTAL_PADDING_CLASS}`}
@@ -32,8 +35,8 @@ export const PanelHeader = ({
           {title}
         </button>
       ) : (
-        <h2 className="px-10 text-center text-xl font-semibold tracking-tight">
-          {title}
+        <h2 className={`${scrollableTitle ? 'w-full min-w-0 ' : ''}px-10 text-center text-xl font-semibold tracking-tight`}>
+          {scrollableTitle ? <ScrollableName name={title} /> : title}
         </h2>
       ))}
     {headerLeft && (
