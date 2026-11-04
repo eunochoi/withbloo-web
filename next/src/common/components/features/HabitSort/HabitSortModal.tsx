@@ -1,7 +1,6 @@
 'use client';
 
 import { sortHabits } from '@/common/functions/sortHabits';
-import { useSortSectionScroll } from '@/common/hooks/useSortSectionScroll';
 
 import { authAction } from '@/common/auth/authAction';
 import { habitQueries } from '@/common/queries/habitQueries';
@@ -50,8 +49,6 @@ export const HabitSortModal = ({ onClose, sortValue, priorityFirst, customHabitO
   const [draftSort, setDraftSort] = useState(sortValue);
   const [priority, setPriority] = useState(priorityFirst);
   const [standardSort, setStandardSort] = useState<'ASC' | 'DESC'>(sortValue === 'CUSTOM' ? 'DESC' : sortValue);
-  const [, setUserSortSelected] = useState(false);
-  const sections = useSortSectionScroll(sortValue === 'CUSTOM', isStorageReady && (tempHabits !== null || isError));
 
   useEffect(() => setDraftSort(sortValue), [sortValue]);
 
@@ -115,11 +112,11 @@ export const HabitSortModal = ({ onClose, sortValue, priorityFirst, customHabitO
               </PanelSubmitButton>
             }
           />
-          <PanelBody ref={sections.scrollRef} showScrollFade>
+          <PanelBody showScrollFade>
             <div className="flex min-w-0 w-full flex-col pb-6">
-              <section ref={sections.standardRef} className="flex min-w-0 flex-col gap-5 pb-8">
+              <section className="flex min-w-0 flex-col gap-5 pb-8">
                 <label className="flex cursor-pointer items-center gap-2 text-lg font-semibold">
-                  <input type="radio" name="habit-sort-mode" value="standard" checked={draftSort !== 'CUSTOM'} onChange={() => { setDraftSort(standardSort); setUserSortSelected(false); sections.cancelInitialScroll(); }} onClick={sections.cancelInitialScroll} className="h-5 w-5 shrink-0 appearance-none rounded-full border border-theme-accent bg-theme-surface checked:bg-theme-accent checked:shadow-[inset_0_0_0_3px_rgb(var(--theme-surface))] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-theme-accent" />
+                  <input type="radio" name="habit-sort-mode" value="standard" checked={draftSort !== 'CUSTOM'} onChange={() => setDraftSort(standardSort)} className="h-5 w-5 shrink-0 appearance-none rounded-full border border-theme-accent bg-theme-surface checked:bg-theme-accent checked:shadow-[inset_0_0_0_3px_rgb(var(--theme-surface))] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-theme-accent" />
                   기준별 정렬
                 </label>
                 <fieldset disabled={draftSort === 'CUSTOM'} className={`p-2 flex min-w-0 flex-col gap-5 transition-opacity ${draftSort === 'CUSTOM' ? 'opacity-40' : ''}`}>
@@ -141,9 +138,9 @@ export const HabitSortModal = ({ onClose, sortValue, priorityFirst, customHabitO
                   <InfoNotice>{priority ? '중요한 항목부터, ' : ''}생성일 순으로 정렬해요.</InfoNotice>
                 </fieldset>
               </section>
-              <section ref={sections.customRef} className="flex min-w-0 flex-col gap-5 border-t border-theme-border/30 pt-8">
+              <section className="flex min-w-0 flex-col gap-5 border-t border-theme-border/30 pt-8">
                 <label className="flex cursor-pointer items-center gap-2 text-lg font-semibold">
-                  <input type="radio" name="habit-sort-mode" value="user" checked={draftSort === 'CUSTOM'} onChange={() => { setDraftSort('CUSTOM'); setUserSortSelected(true); sections.cancelInitialScroll(); }} onClick={() => { setUserSortSelected(true); sections.cancelInitialScroll(); }} className="h-5 w-5 shrink-0 appearance-none rounded-full border border-theme-accent bg-theme-surface checked:bg-theme-accent checked:shadow-[inset_0_0_0_3px_rgb(var(--theme-surface))] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-theme-accent" />
+                  <input type="radio" name="habit-sort-mode" value="user" checked={draftSort === 'CUSTOM'} onChange={() => setDraftSort('CUSTOM')} className="h-5 w-5 shrink-0 appearance-none rounded-full border border-theme-accent bg-theme-surface checked:bg-theme-accent checked:shadow-[inset_0_0_0_3px_rgb(var(--theme-surface))] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-theme-accent" />
                   자유 정렬
                 </label>
                 <fieldset disabled={draftSort !== 'CUSTOM'} className={`p-2 flex min-w-0 flex-col gap-5 transition-opacity ${draftSort !== 'CUSTOM' ? 'opacity-40' : ''}`}>

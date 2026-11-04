@@ -14,7 +14,6 @@ import InfoNotice from '@/common/components/ui/InfoNotice';
 import ScrollableName from '@/common/components/ui/ScrollableName';
 import { DragIcon, StarIcon } from '@/common/constants/appIcons';
 import { sortSobers } from '@/common/functions/sober';
-import { useSortSectionScroll } from '@/common/hooks/useSortSectionScroll';
 import { SoberIcon } from './SoberIcon';
 import type { SoberWithRestarts } from './types';
 
@@ -42,10 +41,8 @@ export function SoberSortModal({ items, isError, onRetry, sort, recordSort, prio
   const [standardSort, setStandardSort] = useState<'ASC' | 'DESC'>(sort === 'CUSTOM' ? 'DESC' : sort);
   const [records, setRecords] = useState(recordSort);
   const [priority, setPriority] = useState(priorityFirst);
-  const [, setSelected] = useState(false);
   const [order, setOrder] = useState<SoberWithRestarts[] | null>(() => items ? sortSobers(items, { sort: 'CUSTOM', customOrder }, now) : null);
   const [, setReset] = useState(false);
-  const sections = useSortSectionScroll(sort === 'CUSTOM', order !== null || isError);
   useEffect(() => { if (items) setOrder((current) => current ?? sortSobers(items, { sort: 'CUSTOM', customOrder }, now)); }, [items, customOrder, now]);
   const sensors = useSensors(useSensor(MouseSensor, { activationConstraint: { distance: 6 } }), useSensor(TouchSensor, { activationConstraint: { delay: 180, tolerance: 6 } }), useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }));
   const defaults = [...(items ?? [])].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime() || a.id - b.id);
@@ -62,9 +59,9 @@ export function SoberSortModal({ items, isError, onRetry, sort, recordSort, prio
   );
   return <AnimatePresence onExitComplete={onClose}>{mounted && <PanelDialog ariaLabel="거리두기 정렬 설정" onClose={() => setMounted(false)}>
     <PanelHeader title="거리두기 정렬" onBack={() => setMounted(false)} headerLeft={<button type="button" aria-label="선택 초기화" disabled={draftSort === 'CUSTOM' && !items} onClick={() => { if (draftSort === 'CUSTOM') { setOrder(defaults); setReset(true); } else { setSort('DESC'); setStandardSort('DESC'); setRecords('DESC'); setPriority(false); } }} className="min-h-11 text-lg font-normal text-theme-text-secondary/70 disabled:opacity-40">초기화</button>} headerRight={<PanelSubmitButton type="button" disabled={draftSort === 'CUSTOM' && !order} onClick={() => { onApply(draftSort, draftSort === 'CUSTOM' ? false : priority, records, draftSort === 'CUSTOM' ? (isDefault ? [] : ids) : customOrder); setMounted(false); }}>적용</PanelSubmitButton>} />
-    <PanelBody ref={sections.scrollRef} showScrollFade><div className="flex min-w-0 w-full flex-col pb-6">
-      <section ref={sections.standardRef} className="flex min-w-0 flex-col gap-5 pb-8">
-        <label className="flex cursor-pointer items-center gap-2 text-lg font-semibold"><input type="radio" name="sober-sort-mode" checked={draftSort !== 'CUSTOM'} onChange={() => { setSort(standardSort); setSelected(false); sections.cancelInitialScroll(); }} onClick={sections.cancelInitialScroll} className={radioClass} />기준별 정렬</label>
+    <PanelBody showScrollFade><div className="flex min-w-0 w-full flex-col pb-6">
+      <section className="flex min-w-0 flex-col gap-5 pb-8">
+        <label className="flex cursor-pointer items-center gap-2 text-lg font-semibold"><input type="radio" name="sober-sort-mode" checked={draftSort !== 'CUSTOM'} onChange={() => setSort(standardSort)} className={radioClass} />기준별 정렬</label>
         <fieldset disabled={draftSort === 'CUSTOM'} className={`flex min-w-0 flex-col gap-5 p-2 ${draftSort === 'CUSTOM' ? 'opacity-40' : ''}`}>
           <label className="flex items-center justify-between gap-3 text-base font-semibold">중요한 항목 먼저<input type="checkbox" role="switch" checked={priority} onChange={(event) => setPriority(event.target.checked)} className="peer sr-only" /><span aria-hidden="true" className="relative h-7 w-12 shrink-0 rounded-full bg-theme-border transition-colors after:absolute after:left-1 after:top-1 after:h-5 after:w-5 after:rounded-full after:bg-theme-surface after:transition-transform peer-checked:bg-theme-accent peer-checked:after:translate-x-5" /></label>
           <section className="flex flex-col gap-3"><h3 className="text-base font-semibold">기록 정렬</h3>{options(records, setRecords, ['긴 기록순', '짧은 기록순'])}</section>
@@ -72,8 +69,8 @@ export function SoberSortModal({ items, isError, onRetry, sort, recordSort, prio
           <InfoNotice>{priority ? '중요도, ' : ''}현재 기록, 생성일 순으로 정렬해요.</InfoNotice>
         </fieldset>
       </section>
-      <section ref={sections.customRef} className="flex min-w-0 flex-col gap-5 border-t border-theme-border/30 pt-8">
-        <label className="flex cursor-pointer items-center gap-2 text-lg font-semibold"><input type="radio" name="sober-sort-mode" checked={draftSort === 'CUSTOM'} onChange={() => { setSort('CUSTOM'); setSelected(true); sections.cancelInitialScroll(); }} onClick={() => { setSelected(true); sections.cancelInitialScroll(); }} className={radioClass} />자유 정렬</label>
+      <section className="flex min-w-0 flex-col gap-5 border-t border-theme-border/30 pt-8">
+        <label className="flex cursor-pointer items-center gap-2 text-lg font-semibold"><input type="radio" name="sober-sort-mode" checked={draftSort === 'CUSTOM'} onChange={() => setSort('CUSTOM')} className={radioClass} />자유 정렬</label>
         <fieldset disabled={draftSort !== 'CUSTOM'} className={`flex min-w-0 flex-col gap-5 p-2 ${draftSort !== 'CUSTOM' ? 'opacity-40' : ''}`}>
           {draftSort === 'CUSTOM' && !items && (isError ? <div className="py-4 text-center text-sm text-theme-text-secondary">거리두기를 불러오지 못했어요. <button type="button" onClick={onRetry} className="text-theme-accent">다시 시도</button></div> : <p role="status" className="py-4 text-center text-sm text-theme-text-secondary">거리두기를 불러오는 중이에요.</p>)}
           {order && <div className="w-full min-w-0 rounded-xl bg-theme-bg" inert={draftSort !== 'CUSTOM'}><DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd} modifiers={[restrictToParentElement, restrictToVerticalAxis]}><SortableContext items={ids} strategy={verticalListSortingStrategy}>{order.map((item) => <SoberSortItem key={item.id} item={item} />)}</SortableContext></DndContext></div>}
