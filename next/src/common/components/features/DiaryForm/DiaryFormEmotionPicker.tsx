@@ -1,5 +1,7 @@
 import { PickerDialog } from '@/common/components/ui/Dialog/PickerDialog';
 import EmotionImage from '@/common/components/ui/EmotionImage';
+import AppUnderlineTabs from '@/common/components/ui/AppUnderlineTabs';
+import PickerInfoCard from '@/common/components/ui/PickerInfoCard';
 import { EMOTIONS } from '@/common/constants/emotions';
 import { useIsPresent } from 'framer-motion';
 import { useState } from 'react';
@@ -8,32 +10,35 @@ const categories = [
   {
     label: '긍정',
     summary: '마음이 밝거나 편안했던 순간',
+    representativeEmotion: 0,
     emotions: [0, 1, 2, 3],
   },
   {
     label: '중립',
     summary: '담담함부터 피로, 미묘하게 섞인 마음까지',
+    representativeEmotion: 11,
     emotions: [4, 9, 10, 11],
   },
   {
     label: '부정',
     summary: '마음이 무겁거나 복잡했던 순간',
+    representativeEmotion: 6,
     emotions: [5, 6, 7, 8],
   },
 ];
 const descriptions = [
-  '마음이 포근하고 만족스러워요',
-  '즐겁고 신나는 마음이 들어요',
-  '누군가나 무언가가 소중하게 느껴져요',
-  '마음이 차분하고 편안해요',
-  '예상하지 못한 일에 놀랐어요',
-  '걱정이 들고 마음이 조마조마해요',
-  '마음이 가라앉고 울적해요',
-  '짜증이 나거나 화가 올라와요',
-  '마음이 복잡하고 정리가 어려워요',
-  '특별한 감정 없이 담담한 상태',
-  '몸과 마음이 느긋하고 기운이 조금 가라앉아 있어요',
-  '좋고 나쁜 감정이 뒤섞여 미묘한 상태',
+  '마음이 포근하고\n만족스러워요',
+  '즐겁고 신나는\n마음이 들어요',
+  '누군가나 무언가가\n소중하게 느껴져요',
+  '마음이 차분하고\n편안해요',
+  '예상하지 못한 일에\n놀랐어요',
+  '걱정이 들고 마음이\n조마조마해요',
+  '마음이 가라앉고\n울적해요',
+  '짜증이 나거나\n화가 올라와요',
+  '마음이 복잡하고\n정리가 어려워요',
+  '특별한 감정 없이\n담담한 상태',
+  '몸과 마음이 느긋하고\n기운이 살짝 가라앉아요',
+  '좋고 나쁜 감정이 뒤섞여\n미묘한 상태',
 ];
 
 interface DiaryFormEmotionPickerProps {
@@ -79,27 +84,17 @@ const DiaryFormEmotionPicker = ({
         className="m-0 flex w-full min-w-0 flex-col gap-4 border-0 pb-[max(24px,env(safe-area-inset-bottom))]"
       >
 
-        <div
-          className="flex flex-wrap gap-2"
-          role="group"
-          aria-label="감정 분류"
-        >
-          {categories.map((item, index) => (
-            <button
-              key={item.label}
-              type="button"
-              aria-pressed={categoryIndex === index}
-              onClick={() => setCategoryIndex(index)}
-              className={`min-h-12 rounded-full border px-4 py-2 text-sm ${categoryIndex === index ? 'border-theme-accent bg-theme-accent/10 font-semibold text-theme-accent' : 'border-theme-border text-theme-text-secondary'}`}
-            >
-              {item.label}
-            </button>
-          ))}
-        </div>
-        <div className="flex items-center gap-3 rounded-2xl border border-theme-accent/20 bg-theme-accent/10 p-4">
-          <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-theme-surface">
+        <AppUnderlineTabs
+          options={categories.map((item, value) => ({ label: item.label, value }))}
+          value={categoryIndex}
+          onChange={setCategoryIndex}
+          scrollToSelected
+          accessibilityLabel="감정 분류"
+        />
+        <PickerInfoCard>
+          <span className="flex h-12 w-12 shrink-0 items-center justify-center">
             <EmotionImage
-              emotion={EMOTIONS[category.emotions[0]]}
+              emotion={EMOTIONS[category.representativeEmotion]}
               alt=""
               width={44}
               height={44}
@@ -109,13 +104,13 @@ const DiaryFormEmotionPicker = ({
             <strong className="font-semibold text-theme-accent">
               {category.label}
             </strong>
-            <span className="text-sm leading-5 text-theme-text-secondary">
+            <span className="min-h-10 text-sm leading-5 text-theme-text-secondary">
               {category.summary}
             </span>
           </span>
-        </div>
+        </PickerInfoCard>
         <div
-          className="grid auto-rows-fr grid-cols-2 gap-3"
+          className="grid auto-rows-fr grid-cols-[repeat(auto-fit,minmax(min(100%,12rem),1fr))] gap-3"
           role="group"
           aria-label="감정 선택"
         >
@@ -127,6 +122,7 @@ const DiaryFormEmotionPicker = ({
                 key={id}
                 type="button"
                 aria-pressed={selected}
+                aria-label={`${item.nameKr}, ${descriptions[id].replace(/\n/g, ' ')}`}
                 onClick={() => setDraftEmotion(id)}
                 className={`flex min-w-0 flex-col items-center gap-2 rounded-2xl border px-4 py-6 ${selected ? 'border-theme-accent bg-theme-accent/10' : 'border-transparent'}`}
               >
@@ -142,7 +138,7 @@ const DiaryFormEmotionPicker = ({
                 >
                   {item.nameKr}
                 </strong>
-                <span className="text-center text-sm leading-5 text-theme-text-secondary">
+                <span className="whitespace-pre-line text-center text-sm leading-5 text-theme-text-secondary">
                   {descriptions[id]}
                 </span>
               </button>

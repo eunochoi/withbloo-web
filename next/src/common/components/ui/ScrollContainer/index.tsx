@@ -14,6 +14,7 @@ interface ScrollContainerProps extends Omit<HTMLAttributes<HTMLDivElement>, 'chi
   scrollFadeClassName?: string;
   showScrollFade?: boolean;
   showTopFade?: boolean;
+  fadeOutset?: boolean;
 }
 
 export const ScrollContainer = forwardRef<HTMLDivElement, ScrollContainerProps>(
@@ -25,6 +26,7 @@ export const ScrollContainer = forwardRef<HTMLDivElement, ScrollContainerProps>(
     scrollFadeClassName,
     showScrollFade = false,
     showTopFade = true,
+    fadeOutset = false,
     ...props
   }, ref) => {
     const [scrollArea, setScrollArea] = useState<HTMLDivElement | null>(null);
@@ -44,7 +46,7 @@ export const ScrollContainer = forwardRef<HTMLDivElement, ScrollContainerProps>(
     useImperativeHandle(ref, () => scrollArea!, [scrollArea]);
 
     return (
-      <div className={cn("relative min-h-0 w-full overflow-hidden", className)}>
+      <div className={cn("relative min-h-0 w-full", fadeOutset ? "overflow-visible" : "overflow-hidden", className)}>
         <div
           ref={setScrollArea}
           className={cn("h-full w-full overflow-y-auto", scrollAreaClassName)}
@@ -61,12 +63,12 @@ export const ScrollContainer = forwardRef<HTMLDivElement, ScrollContainerProps>(
             <ScrollEdgeFade
               edge="top"
               visible={showTopFade && isVisibleTopFade}
-              className={cn("absolute inset-x-0 top-0 z-[90] h-16", scrollFadeClassName)}
+              className={cn("absolute inset-x-0 z-[90] h-16", fadeOutset ? "-top-1" : "top-0", scrollFadeClassName)}
             />
             <ScrollEdgeFade
               edge="bottom"
               visible={isVisibleBottomFade}
-              className={cn("absolute inset-x-0 bottom-0 z-[90] h-16", scrollFadeClassName)}
+              className={cn("absolute inset-x-0 z-[90] h-16", fadeOutset ? "-bottom-1" : "bottom-0", scrollFadeClassName)}
             />
           </>
         )}

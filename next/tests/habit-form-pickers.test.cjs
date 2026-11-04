@@ -5,7 +5,7 @@ const sourceLoader = require('./load-source.cjs');
 function pickerHarness(name, props) {
   const state = [];
   let cursor = 0;
-  const load = sourceLoader({ react: {
+  const load = sourceLoader({ '@/common/components/ui/ScrollContainer': { ScrollContainer: 'div' }, '@/common/components/ui/PickerGridItem': { __esModule: true, default: 'button' }, '@/common/components/ui/PickerInfoCard': { __esModule: true, default: 'div' }, react: {
     useState: (initial) => {
       const index = cursor++;
       if (!(index in state)) state[index] = typeof initial === 'function' ? initial() : initial;
@@ -35,7 +35,7 @@ for (const [name, value, selection] of [
     const applied = [];
     let closed = false;
     const render = pickerHarness(name, { value, iconColor: 'mint', onApply: (item) => applied.push(item), onClose: () => { closed = true; } });
-    const getLabel = (node) => node.props?.['aria-label'] ?? find(node.props?.children, (child) => child.type === 'span' && child.props.children === selection)?.props.children;
+    const getLabel = (node) => node.props?.['aria-label'] ?? node.props?.label ?? find(node.props?.children, (child) => child.type === 'span' && child.props.children === selection)?.props.children;
     find(render(), (node) => node.type === 'button' && (getLabel(node) === selection || find(node.props?.children, (child) => child.type === 'span' && child.props.children === selection))).props.onClick();
     assert.deepEqual(applied, []);
     render().props.onClose();
@@ -60,4 +60,18 @@ test('native icon categories cover every selectable icon once, with readable lab
   assert.equal(new Set(keys).size, keys.length);
   assert.deepEqual([...keys].sort(), [...HABIT_ICON_KEYS].sort());
   assert.ok(keys.every((key) => HABIT_ICON_LABELS[key]));
+});
+
+test('color picker previews three icons for each record type using the draft color', () => {
+  for (const [kind, names] of [['habit', ['water', 'walking', 'reading']], ['sober', ['phone', 'coffee', 'shopping']]]) {
+    const render = pickerHarness('HabitFormColorPicker', { value: 'theme', kind, onApply() {}, onClose() {} });
+    const select = find(render(), (node) => node.type === 'button' && node.props?.label === '라벤더');
+    select.props.onClick();
+    const card = render().props.fixedContent;
+    for (const name of names) {
+      const icon = find(card, (node) => node.props?.iconKey === name || node.props?.name === name);
+      assert.ok(icon, `${kind}: ${name}`);
+      assert.equal(icon.props.iconColor ?? icon.props.color, 'lavender');
+    }
+  }
 });

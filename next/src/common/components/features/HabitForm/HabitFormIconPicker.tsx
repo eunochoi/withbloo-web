@@ -1,5 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import HabitIcon from '@/common/components/ui/HabitIcon';
+import AppUnderlineTabs from '@/common/components/ui/AppUnderlineTabs';
+import PickerInfoCard from '@/common/components/ui/PickerInfoCard';
+import PickerGridItem from '@/common/components/ui/PickerGridItem';
 import { HABIT_ICON_CATEGORIES } from '@/common/constants/habitIconCategories';
 import { HABIT_ICON_LABELS } from '@/common/constants/habitIconLabels';
 import type { HabitIconKey } from '@/common/constants/habitIcons';
@@ -26,60 +29,32 @@ const HabitFormIconPicker = ({
   const category =
     HABIT_ICON_CATEGORIES.find((item) => item.id === categoryId) ??
     HABIT_ICON_CATEGORIES[0];
-  const selectedChip = useRef<HTMLButtonElement>(null);
   const initialSelection = useRef<HTMLButtonElement>(null);
   const grid = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    selectedChip.current?.scrollIntoView({
-      block: 'nearest',
-      inline: 'center',
-      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
-        ? 'auto'
-        : 'smooth',
-    });
-  }, [categoryId]);
   useEffect(() => {
     initialSelection.current?.scrollIntoView({ block: 'nearest' });
   }, []);
   return (
     <HabitFormPicker
       fixedHeight
+      scrollFade
       id="habit-icon-picker-title"
       title="습관 아이콘"
       onClose={onClose}
       onApply={() => onApply(draft)}
       fixedContent={
-        <div className="shrink-0 space-y-4 pb-2">
-          <div
-            className="flex gap-2 overflow-x-auto overscroll-x-contain pb-1"
-            role="tablist"
-            aria-label="아이콘 분류"
-          >
-            {HABIT_ICON_CATEGORIES.map((item) => (
-              <button
-                key={item.id}
-                ref={categoryId === item.id ? selectedChip : undefined}
-                type="button"
-                role="tab"
-                aria-selected={categoryId === item.id}
-                onClick={() => {
-                  setCategoryId(item.id);
-                  grid.current?.scrollIntoView({
-                    block: 'nearest',
-                    behavior: window.matchMedia(
-                      '(prefers-reduced-motion: reduce)',
-                    ).matches
-                      ? 'auto'
-                      : 'smooth',
-                  });
-                }}
-                className={`min-h-12 shrink-0 rounded-full border px-4 py-2 text-sm ${categoryId === item.id ? 'border-theme-accent bg-theme-accent/10 font-semibold text-theme-accent' : 'border-transparent text-theme-text-secondary'}`}
-              >
-                {item.label}
-              </button>
-            ))}
-          </div>
-          <div className="flex items-center gap-3 rounded-2xl border border-theme-accent/20 bg-theme-accent/10 p-4">
+        <div className="shrink-0 space-y-4 pb-4">
+          <AppUnderlineTabs
+            options={HABIT_ICON_CATEGORIES.map((item) => ({ value: item.id, label: item.label }))}
+            value={categoryId}
+            scrollToSelected
+            accessibilityLabel="아이콘 분류"
+            onChange={(id) => {
+              setCategoryId(id);
+              grid.current?.scrollIntoView({ block: 'nearest', behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+            }}
+          />
+          <PickerInfoCard>
             <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-theme-surface">
               <HabitIcon
                 iconKey={category.keys[0]}
@@ -91,11 +66,11 @@ const HabitFormIconPicker = ({
               <h3 className="font-semibold text-theme-accent">
                 {category.label}
               </h3>
-              <p className="whitespace-pre-line text-sm leading-5 tracking-tight text-theme-text-secondary">
+              <p className="text-sm leading-5 tracking-tight text-theme-text-secondary">
                 {category.description}
               </p>
             </div>
-          </div>
+          </PickerInfoCard>
         </div>
       }
     >
@@ -106,26 +81,15 @@ const HabitFormIconPicker = ({
         aria-label={category.label}
       >
         {category.keys.map((key) => (
-          <button
+          <PickerGridItem
             key={key}
             ref={key === value ? initialSelection : undefined}
-            type="button"
-            aria-label={HABIT_ICON_LABELS[key]}
-            aria-pressed={draft === key}
+            label={HABIT_ICON_LABELS[key]}
+            selected={draft === key}
             onClick={() => setDraft(key)}
-            className={`flex aspect-square min-w-0 flex-col items-center justify-center gap-2 rounded-2xl border p-2 ${draft === key ? 'border-theme-accent bg-theme-accent/10 text-theme-accent' : 'border-transparent text-theme-text-primary'}`}
           >
-            <span className="flex h-10 items-center justify-center">
-              <HabitIcon
-                iconKey={key}
-                iconColor={iconColor}
-                className="text-3xl"
-              />
-            </span>
-            <span className="flex min-h-10 items-center justify-center text-center text-sm font-semibold leading-5 tracking-tight">
-              {HABIT_ICON_LABELS[key]}
-            </span>
-          </button>
+            <HabitIcon iconKey={key} iconColor={iconColor} className="text-3xl" />
+          </PickerGridItem>
         ))}
       </div>
     </HabitFormPicker>

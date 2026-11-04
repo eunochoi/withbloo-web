@@ -13,6 +13,9 @@ import { PanelBody } from '@/common/components/ui/Dialog/PanelDialog/PanelBody';
 import { PanelHeader } from '@/common/components/ui/Dialog/PanelDialog/PanelHeader';
 import { PanelSubmitButton } from '@/common/components/ui/Dialog/PanelDialog/PanelSubmitButton';
 import InfoNotice from '@/common/components/ui/InfoNotice';
+import AppUnderlineTabs from '@/common/components/ui/AppUnderlineTabs';
+import PickerInfoCard from '@/common/components/ui/PickerInfoCard';
+import PickerGridItem from '@/common/components/ui/PickerGridItem';
 import { showNotice } from '@/common/components/ui/Notice/notice';
 import {
   HABIT_ICON_COLORS,
@@ -56,12 +59,12 @@ export const SoberForm = ({
   const [priority, setPriority] = useState(item?.isPriority ?? false);
   const [draftIcon, setDraftIcon] = useState(iconKey);
   const [category, setCategory] = useState<string>('basic');
+  const selectedIconCategory = SOBER_ICON_CATEGORIES.find((entry) => entry.id === category) ?? SOBER_ICON_CATEGORIES[0];
   const [picker, setPicker] = useState<
     'icon' | 'color' | 'goal' | 'date' | null
   >(null);
   const [saving, setSaving] = useState(false);
   const savingRef = useRef(false);
-  const selectedCategory = useRef<HTMLButtonElement>(null);
   const iconGrid = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -70,12 +73,7 @@ export const SoberForm = ({
       .matches
       ? 'auto'
       : 'smooth';
-    selectedCategory.current?.scrollIntoView({
-      block: 'nearest',
-      inline: 'center',
-      behavior,
-    });
-    iconGrid.current?.parentElement?.scrollTo({ top: 0, behavior });
+    iconGrid.current?.closest<HTMLElement>('[data-picker-scroll]')?.scrollTo({ top: 0, behavior });
   }, [category, picker]);
 
   const save = async () => {
@@ -243,6 +241,7 @@ export const SoberForm = ({
         )}
         {picker === 'color' && (
           <HabitFormColorPicker
+            kind="sober"
             value={color}
             onClose={() => setPicker(null)}
             onApply={(value) => {
@@ -266,6 +265,7 @@ export const SoberForm = ({
         {picker === 'icon' && (
           <HabitFormPicker
             fixedHeight
+            scrollFade
             id="sober-icon-title"
             title="거리두기 아이콘"
             onClose={() => setPicker(null)}
@@ -274,51 +274,33 @@ export const SoberForm = ({
               setPicker(null);
             }}
             fixedContent={
-              <div className="shrink-0 space-y-3">
-                <div
-                  className="flex gap-2 overflow-x-auto overscroll-x-contain pb-1"
-                  role="tablist"
-                  aria-label="아이콘 분류"
-                >
-                  {SOBER_ICON_CATEGORIES.map((entry) => (
-                    <button
-                      key={entry.id}
-                      ref={category === entry.id ? selectedCategory : undefined}
-                      type="button"
-                      role="tab"
-                      aria-selected={category === entry.id}
-                      onClick={() => setCategory(entry.id)}
-                      className={`shrink-0 rounded-full border px-4 py-2 text-sm ${category === entry.id ? 'border-theme-accent bg-theme-accent/10 text-theme-accent-deep' : 'border-transparent text-theme-text-secondary'}`}
-                    >
-                      {entry.label}
-                    </button>
-                  ))}
-                </div>
-                <p className="whitespace-pre-line text-center text-xs leading-4 text-theme-text-secondary">
-                  {
-                    SOBER_ICON_CATEGORIES.find((entry) => entry.id === category)
-                      ?.description
-                  }
-                </p>
+              <div className="shrink-0 space-y-4 pb-4">
+                <AppUnderlineTabs
+                  options={SOBER_ICON_CATEGORIES.map((entry) => ({ value: entry.id, label: entry.label }))}
+                  value={category}
+                  onChange={setCategory}
+                  scrollToSelected
+                  accessibilityLabel="아이콘 분류"
+                />
+                <PickerInfoCard>
+                  <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-theme-surface">
+                    <SoberIcon name={selectedIconCategory.keys[0]} color={color} className="h-8 w-8" />
+                  </span>
+                  <div className="min-w-0 space-y-1.5">
+                    <h3 className="font-semibold text-theme-accent">{selectedIconCategory.label}</h3>
+                    <p className="text-sm leading-5 tracking-tight text-theme-text-secondary">
+                      {selectedIconCategory.description}
+                    </p>
+                  </div>
+                </PickerInfoCard>
               </div>
             }
           >
             <div ref={iconGrid} className="grid grid-cols-3 gap-3">
-              {SOBER_ICON_CATEGORIES.find(
-                (entry) => entry.id === category,
-              )?.keys.map((key) => (
-                <button
-                  key={key}
-                  type="button"
-                  aria-pressed={draftIcon === key}
-                  onClick={() => setDraftIcon(key)}
-                  className={`flex min-h-24 flex-col items-center justify-center gap-2 rounded-xl border p-2 ${draftIcon === key ? 'border-theme-accent bg-theme-accent-light/50' : 'border-transparent'}`}
-                >
-                  <SoberIcon name={key} color={color} />
-                  <span className="text-center text-sm">
-                    {SOBER_ICONS[key]}
-                  </span>
-                </button>
+              {selectedIconCategory.keys.map((key) => (
+                <PickerGridItem key={key} label={SOBER_ICONS[key]} selected={draftIcon === key} onClick={() => setDraftIcon(key)}>
+                  <SoberIcon name={key} color={color} className="h-8 w-8" />
+                </PickerGridItem>
               ))}
             </div>
           </HabitFormPicker>
