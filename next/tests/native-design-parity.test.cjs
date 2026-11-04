@@ -35,6 +35,8 @@ test('list and home use priority, current duration and creation order without mu
   assert.deepEqual(sortSobers(items, { priorityFirst: true }, now).map((item) => item.id), [2, 3, 1]);
   assert.deepEqual(sortSobers(items, { recordSort: 'ASC', sort: 'ASC' }, now).map((item) => item.id), [2, 1, 3]);
   assert.deepEqual(sortSobers(items, { sort: 'SHORT' }, now).map((item) => item.id), [2, 3, 1]);
+  assert.deepEqual(sortSobers(items, { sort: 'CUSTOM', customOrder: [2, 1], priorityFirst: true }, now).map((item) => item.id), [2, 1, 3]);
+  assert.deepEqual(sortSobers(items, { sort: 'CUSTOM', customOrder: [] }, now).map((item) => item.id), [3, 1, 2]);
   assert.deepEqual(items.map((item) => item.id), [1, 2, 3]);
   assert.equal(formatSoberGoal(14), '2주');
   assert.equal(formatSoberGoal(30), '1개월');

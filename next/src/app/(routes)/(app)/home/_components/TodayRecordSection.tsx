@@ -31,6 +31,7 @@ const TodayRecordSection = ({ initialDate }: { initialDate: string }) => {
   const [soberSort, setSoberSort] = useState<{
     sort?: string;
     priorityFirst?: boolean;
+    customOrder?: number[];
     recordSort?: string;
   }>({});
   const router = useRouter();

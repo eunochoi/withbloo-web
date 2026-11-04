@@ -86,9 +86,16 @@ export function sortSobers<
   },
 >(
   items: T[],
-  preferences: { sort?: string; priorityFirst?: boolean; recordSort?: string },
+  preferences: { sort?: string; priorityFirst?: boolean; recordSort?: string; customOrder?: number[] },
   now: number,
 ): T[] {
+  if (preferences.sort === 'CUSTOM') {
+    const order = new Map((preferences.customOrder ?? []).map((id, index) => [id, index]));
+    return items.slice().sort((a, b) =>
+      (order.get(a.id) ?? Number.MAX_SAFE_INTEGER) - (order.get(b.id) ?? Number.MAX_SAFE_INTEGER) ||
+      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime() || a.id - b.id,
+    );
+  }
   return items.slice().sort((a, b) => {
     if (preferences.priorityFirst && a.isPriority !== b.isPriority)
       return Number(b.isPriority) - Number(a.isPriority);
