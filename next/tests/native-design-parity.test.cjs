@@ -46,7 +46,7 @@ test('list and home use priority, current duration and creation order without mu
 function find(node, predicate) {
   if (!node || typeof node !== 'object') return undefined;
   if (Array.isArray(node)) return node.map((child) => find(child, predicate)).find(Boolean);
-  return predicate(node) ? node : find(node.props?.children, predicate);
+  return predicate(node) ? node : find(node.props?.children, predicate) ?? find(node.props?.header, predicate);
 }
 
 test('custom goal validates before confirming and does not apply drafts until the final action', () => {
@@ -61,9 +61,9 @@ test('custom goal validates before confirming and does not apply drafts until th
   const render = () => { cursor = 0; return Component({ mode: 'AUTO', days: 7, onClose: () => {}, onApply: (...args) => applied.push(args) }); };
   find(render(), (node) => node.type === 'button' && find(node.props.children, (child) => child.type === 'span' && child.props.children === '직접 입력')).props.onClick();
   find(render(), (node) => node.type === 'input').props.onChange({ target: { value: '0' } });
-  assert.equal(find(render(), (node) => node.type === 'button' && node.props.children === '선택 완료').props.disabled, true);
+  assert.equal(find(render(), (node) => node.type === 'button' && node.props.children === '완료').props.disabled, true);
   find(render(), (node) => node.type === 'input').props.onChange({ target: { value: '14' } });
-  find(render(), (node) => node.type === 'button' && node.props.children === '선택 완료').props.onClick();
+  find(render(), (node) => node.type === 'button' && node.props.children === '완료').props.onClick();
   assert.deepEqual(applied, []);
   find(render(), (node) => node.type === 'button' && node.props.children === '이 목표로 설정하기').props.onClick();
   assert.deepEqual(applied, [['MANUAL', 14]]);
