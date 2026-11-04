@@ -3,7 +3,6 @@
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-import { ScrollContainer } from "@/common/components/ui/ScrollContainer";
 import LoginBottomSection from './_components/LoginBottomSection';
 import LoginTopSection from './_components/LoginTopSection';
 
@@ -20,13 +19,7 @@ const LoginClientPage = () => {
   }, [router]);
 
   return (
-    <ScrollContainer
-      className="static-theme-blue bg-theme-accent-light h-[100dvh] w-[100dvw]  text-theme-text-primary"
-      showScrollFade
-      scrollFadeClassName='tablet:hidden'
-      scrollAreaClassName='tablet:overflow-hidden'
-      contentClassName='tablet:h-full'
-    >
+    <div className="static-theme-blue h-[100dvh] w-[100dvw] overflow-y-auto bg-theme-accent-light text-theme-text-primary tablet:overflow-hidden">
       <div className="grid min-h-[100dvh] tablet:h-full tablet:min-h-0 tablet:grid-cols-2 desktop:grid-cols-[4fr_3fr]">
         <div className="min-w-0 tablet:min-h-0 tablet:overflow-y-auto">
           <LoginTopSection />
@@ -35,7 +28,7 @@ const LoginClientPage = () => {
           <LoginBottomSection />
         </div>
       </div>
-    </ScrollContainer>
+    </div>
   );
 };
 

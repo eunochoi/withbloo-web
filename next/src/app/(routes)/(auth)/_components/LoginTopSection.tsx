@@ -14,7 +14,7 @@ const LoginTopSection = () => (
 
       <div className="flex flex-col gap-6">
         <span className="-mb-3 text-base font-semibold text-theme-accent-deep desktop:text-lg">#하루 #감정 #색상</span>
-        <h1 id="login-intro-title" className="flex flex-col gap-3 desktop:gap-6 text-3xl desktop:text-5xl font-bold tracking-tight">
+        <h1 id="login-intro-title" className="flex flex-col gap-3 desktop:gap-6 text-4xl desktop:text-5xl font-bold tracking-tight">
           <span>오늘도,</span>
           <span>나다운 색으로</span>
         </h1>
