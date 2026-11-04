@@ -11,7 +11,7 @@ import { PickerDialog } from "@/common/components/ui/Dialog/PickerDialog";
 import EmptyStateCard from "@/common/components/ui/EmptyStateCard";
 import InfoNotice from "@/common/components/ui/InfoNotice";
 import { showNotice } from "@/common/components/ui/Notice/notice";
-import SortPicker from "@/common/components/ui/SortPicker";
+import { SoberSortModal } from "@/common/components/features/Sober/SoberSortModal";
 import Toolbar from "@/common/components/ui/Toolbar";
 import ToolbarButton from "@/common/components/ui/ToolbarButton";
 import { AddIcon, FilterIcon, SortIcon } from "@/common/constants/appIcons";
@@ -38,8 +38,9 @@ export default function SoberClientPage() {
   const router = useRouter();
 
   const [picker, setPicker] = useState<"sort" | "filter" | null>(null);
-  const [sort, setSort] = useState<"DESC" | "ASC">("DESC");
+  const [sort, setSort] = useState<"DESC" | "ASC" | "CUSTOM">("DESC");
   const [recordSort, setRecordSort] = useState<"DESC" | "ASC">("DESC");
+  const [customOrder, setCustomOrder] = useState<number[]>([]);
   const [priority, setPriority] = useState(false);
   const [priorityFirst, setPriorityFirst] = useState(false);
   const [preferencesReady, setPreferencesReady] = useState(false);
@@ -48,7 +49,8 @@ export default function SoberClientPage() {
   useEffect(() => {
     try {
       const saved = JSON.parse(localStorage.getItem("took:sober-sort") ?? "{}");
-      if (["DESC", "ASC"].includes(saved.sort)) setSort(saved.sort);
+      if (["DESC", "ASC", "CUSTOM"].includes(saved.sort)) setSort(saved.sort);
+      if (Array.isArray(saved.customOrder)) setCustomOrder(saved.customOrder.filter((id: unknown) => Number.isSafeInteger(id) && (id as number) > 0));
       if (["DESC", "ASC"].includes(saved.recordSort)) {
         setRecordSort(saved.recordSort);
       } else if (saved.sort === "SHORT") {
@@ -64,10 +66,10 @@ export default function SoberClientPage() {
     if (preferencesReady) {
       localStorage.setItem(
         "took:sober-sort",
-        JSON.stringify({ sort, priorityFirst, recordSort }),
+        JSON.stringify({ sort, priorityFirst, recordSort, customOrder }),
       );
     }
-  }, [sort, priorityFirst, recordSort, preferencesReady]);
+  }, [sort, priorityFirst, recordSort, customOrder, preferencesReady]);
 
   useEffect(() => {
     const timer = window.setInterval(() => setNow(Date.now()), 60000);
@@ -76,7 +78,7 @@ export default function SoberClientPage() {
 
   const ordered = sortSobers(
     items ?? [],
-    { sort, priorityFirst, recordSort },
+    { sort, priorityFirst, recordSort, customOrder },
     now,
   );
   const filtered = ordered.filter(
@@ -85,7 +87,7 @@ export default function SoberClientPage() {
       getSoberSummary(entry, entry.restarts, now).current.duration >=
         minDays * SOBER_DAY_MS,
   );
-  const sortLabel =
+  const sortLabel = sort === "CUSTOM" ? "자유" :
     [
       priorityFirst ? "중요" : "",
       recordSort === "ASC" ? "짧은 기록" : "",
@@ -211,20 +213,21 @@ export default function SoberClientPage() {
 
       <AnimatePresence>
         {picker === "sort" && (
-          <SortPicker
-            title="거리두기 정렬"
-            value={sort}
-            priorityFirst={priorityFirst}
+          <SoberSortModal
+            items={items}
+            isError={isError}
+            onRetry={() => void refetch()}
+            sort={sort}
             recordSort={recordSort}
-            options={[
-              { value: "DESC", label: "최신순" },
-              { value: "ASC", label: "과거순" },
-            ]}
+            priorityFirst={priorityFirst}
+            customOrder={customOrder}
+            now={now}
             onClose={() => setPicker(null)}
-            onApply={(value, important, records) => {
-              setRecordSort(records ?? "DESC");
+            onApply={(value, important, records, order) => {
+              setRecordSort(records);
               setSort(value);
               setPriorityFirst(important);
+              setCustomOrder(order);
               setPicker(null);
             }}
           />
