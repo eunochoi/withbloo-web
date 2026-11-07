@@ -57,6 +57,7 @@ export const uploadImages = async (formData: FormData): Promise<ActionResult<Upl
           fit: 'inside',
           withoutEnlargement: true,
         })
+        .flatten({ background: '#ffffff' })
         .jpeg({
           quality: 85,
           progressive: false,
