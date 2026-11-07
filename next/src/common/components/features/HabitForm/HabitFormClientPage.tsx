@@ -10,13 +10,10 @@ import HabitFormRecordOptions from './HabitFormRecordOptions';
 import { authAction } from '@/common/auth/authAction';
 import { habitQueries } from '@/common/queries/habitQueries';
 import { showNotice } from '@/common/components/ui/Notice/notice';
-import {
-  HABIT_NAME_MAX_LENGTH
-} from '@/common/constants/habit';
 import { useQuery } from '@tanstack/react-query';
 import { AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { PanelDialog } from '../../ui/Dialog/PanelDialog';
 import { PanelBody } from '../../ui/Dialog/PanelDialog/PanelBody';
 import { PanelHeader } from '../../ui/Dialog/PanelDialog/PanelHeader';
@@ -38,6 +35,7 @@ interface HabitFormClientPageProps {
 
 const HabitFormClientPage = ({ isEdit, habitId }: HabitFormClientPageProps) => {
   const router = useRouter();
+  const formRef = useRef<HTMLFieldSetElement>(null);
   const [picker, setPicker] = useState<'priority' | 'icon' | 'color' | 'date' | null>(null);
   const [isDialogMounted, setIsDialogMounted] = useState(true);
   const {
@@ -96,6 +94,7 @@ const HabitFormClientPage = ({ isEdit, habitId }: HabitFormClientPageProps) => {
     successMessage: isEdit ? '습관을 수정했어요' : '습관을 추가했어요',
     failureMessage: isEdit ? '저장하지 못했어요' : '저장하지 못했어요',
     onSuccess: () => setIsDialogMounted(false),
+    onInvalidName: () => formRef.current?.querySelector<HTMLInputElement>('input[name="habit-form-name"]')?.focus(),
   });
 
   const handleBack = () => {
@@ -131,14 +130,14 @@ const HabitFormClientPage = ({ isEdit, habitId }: HabitFormClientPageProps) => {
           headerRight={<PanelSubmitButton
               type="button"
               onClick={handleSubmit}
-              disabled={isSubmitting || !name.trim() || name.length > HABIT_NAME_MAX_LENGTH}
+              disabled={isSubmitting}
               aria-busy={isSubmitting}
             >
               {isSubmitting ? '저장 중' : '저장'}
             </PanelSubmitButton>}
           />
           <PanelBody showScrollFade>
-            <fieldset disabled={isSubmitting} className="m-0 flex min-w-0 w-full flex-col gap-7 border-0 pb-6">
+            <fieldset ref={formRef} disabled={isSubmitting} className="m-0 flex min-w-0 w-full flex-col gap-7 border-0 pb-6">
               <div className="flex w-full flex-col gap-7">
                 <HabitFormNameSection name={name} setName={setName} />
                 <HabitFormPrioritySection priority={priority} onOpen={() => setPicker('priority')} />

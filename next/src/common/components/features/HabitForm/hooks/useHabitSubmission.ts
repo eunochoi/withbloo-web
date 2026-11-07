@@ -16,6 +16,7 @@ type UseHabitSubmissionParams = {
   successMessage: string;
   failureMessage: string;
   onSuccess: () => void;
+  onInvalidName: () => void;
 };
 
 export const useHabitSubmission = ({
@@ -25,6 +26,7 @@ export const useHabitSubmission = ({
   successMessage,
   failureMessage,
   onSuccess,
+  onInvalidName,
 }: UseHabitSubmissionParams) => {
   const queryClient = useQueryClient();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -33,6 +35,11 @@ export const useHabitSubmission = ({
     if (isSubmitting) return;
 
     const trimmedName = name.trim();
+    if (!trimmedName) {
+      showNotice('습관 이름을 입력해주세요');
+      onInvalidName();
+      return;
+    }
     if (
       trimmedName.length < HABIT_NAME_MIN_LENGTH
       || trimmedName.length > HABIT_NAME_MAX_LENGTH
@@ -40,6 +47,7 @@ export const useHabitSubmission = ({
       showNotice(
         `습관 이름은 ${HABIT_NAME_MIN_LENGTH}~${HABIT_NAME_MAX_LENGTH}자로 입력해주세요.`,
       );
+      onInvalidName();
       return;
     }
     if (

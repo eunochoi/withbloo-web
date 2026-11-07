@@ -8,6 +8,7 @@ import { uploadDiaryImagesAndCollectIds } from '../functions/uploadDiaryImagesAn
 import type { DiaryImageDraft } from '../types';
 
 type UseDiarySubmissionParams = {
+  date: string | null;
   text: string;
   emotion: number;
   diaryImages: DiaryImageDraft[];
@@ -15,9 +16,11 @@ type UseDiarySubmissionParams = {
   successMessage: string;
   failureMessage: string;
   onSuccess: () => void;
+  onInvalidText: () => void;
 };
 
 export const useDiarySubmission = ({
+  date,
   text,
   emotion,
   diaryImages,
@@ -25,6 +28,7 @@ export const useDiarySubmission = ({
   successMessage,
   failureMessage,
   onSuccess,
+  onInvalidText,
 }: UseDiarySubmissionParams) => {
   const queryClient = useQueryClient();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -32,16 +36,22 @@ export const useDiarySubmission = ({
   const handleSubmit = async () => {
     if (isSubmitting) return;
 
+    if (!date) {
+      showNotice('날짜를 선택해주세요');
+      return;
+    }
     if (!Number.isInteger(emotion) || emotion < 0 || emotion >= EMOTIONS.length) {
       showNotice('감정을 선택해주세요');
       return;
     }
     if (text.trim().length === 0) {
-      showNotice('내용을 입력해주세요');
+      showNotice('이야기를 입력해주세요');
+      onInvalidText();
       return;
     }
     if (text.length > DIARY_TEXT_MAX_LENGTH) {
       showNotice(`일기 내용은 ${DIARY_TEXT_MAX_LENGTH.toLocaleString()}자까지 입력할 수 있습니다.`);
+      onInvalidText();
       return;
     }
 

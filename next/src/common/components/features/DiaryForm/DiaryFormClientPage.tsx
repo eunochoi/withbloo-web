@@ -3,7 +3,6 @@
 import { authAction } from '@/common/auth/authAction';
 import { diaryQueries } from '@/common/queries/diaryQueries';
 import { showNotice } from '@/common/components/ui/Notice/notice';
-import { DIARY_TEXT_MAX_LENGTH } from '@/common/constants/diary';
 import { isValidLocalDateString } from '@/common/utils/date/isValidLocalDateString';
 import { parseLocalDate } from '@/common/utils/date/parseLocalDate';
 import { arrayMove } from '@dnd-kit/sortable';
@@ -12,7 +11,7 @@ import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { AnimatePresence } from 'framer-motion';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { PanelDialog } from '../../ui/Dialog/PanelDialog';
 import { PanelBody } from '../../ui/Dialog/PanelDialog/PanelBody';
 import { PanelHeader } from '../../ui/Dialog/PanelDialog/PanelHeader';
@@ -36,6 +35,7 @@ interface DiaryFormClientPageProps {
 
 const DiaryFormClientPage = ({ isEdit, diaryId }: DiaryFormClientPageProps) => {
   const router = useRouter();
+  const formRef = useRef<HTMLFieldSetElement>(null);
   const [isDialogMounted, setIsDialogMounted] = useState(true);
   const searchParams = useSearchParams();
   const {
@@ -98,6 +98,7 @@ const DiaryFormClientPage = ({ isEdit, diaryId }: DiaryFormClientPageProps) => {
         imageContentIds,
       });
   const { isSubmitting, handleSubmit } = useDiarySubmission({
+    date: effectiveDate,
     text,
     emotion,
     diaryImages,
@@ -105,6 +106,7 @@ const DiaryFormClientPage = ({ isEdit, diaryId }: DiaryFormClientPageProps) => {
     successMessage: isEdit ? '일기를 수정했어요' : '일기를 저장했어요',
     failureMessage: isEdit ? '저장하지 못했어요' : '저장하지 못했어요',
     onSuccess: () => setIsDialogMounted(false),
+    onInvalidText: () => formRef.current?.querySelector<HTMLTextAreaElement>('textarea[name="diary-form-text"]')?.focus(),
   });
 
   const handleBack = () => {
@@ -140,14 +142,14 @@ const DiaryFormClientPage = ({ isEdit, diaryId }: DiaryFormClientPageProps) => {
           headerRight={<PanelSubmitButton
                 type="button"
                 onClick={handleSubmit}
-                disabled={isSubmitting || !effectiveDate || text.length > DIARY_TEXT_MAX_LENGTH}
+                disabled={isSubmitting}
                 aria-busy={isSubmitting}
               >
                 {isSubmitting ? '저장 중' : '저장'}
               </PanelSubmitButton>}
           />
           <PanelBody showScrollFade>
-            <fieldset disabled={isSubmitting} className="m-0 flex w-full flex-col gap-6 border-0 pb-[max(1rem,env(safe-area-inset-bottom))]">
+            <fieldset ref={formRef} disabled={isSubmitting} className="m-0 flex w-full flex-col gap-6 border-0 pb-[max(1rem,env(safe-area-inset-bottom))]">
               <DiaryFormEmotionSection
                 emotion={emotion}
                 setEmotion={setEmotion}

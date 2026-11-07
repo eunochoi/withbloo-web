@@ -66,6 +66,7 @@ export const SoberForm = ({
   const [saving, setSaving] = useState(false);
   const savingRef = useRef(false);
   const iconGrid = useRef<HTMLDivElement>(null);
+  const nameInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (picker !== 'icon') return;
@@ -77,7 +78,23 @@ export const SoberForm = ({
   }, [category, picker]);
 
   const save = async () => {
-    if (savingRef.current || !name.trim()) return;
+    if (savingRef.current) return;
+    if (!name.trim()) {
+      showNotice('거리를 두고 싶은 것을 입력해주세요');
+      nameInput.current?.focus();
+      return;
+    }
+    if (name.trim().length > SOBER_NAME_MAX_LENGTH) {
+      showNotice(`이름은 ${SOBER_NAME_MAX_LENGTH}자까지 입력할 수 있어요.`);
+      nameInput.current?.focus();
+      return;
+    }
+    const start = new Date(item ? item.initialStartedAt : startedAt);
+    if (!Number.isFinite(start.getTime()) || start.getUTCFullYear() < 1900 || start.getTime() > Date.now()
+      || (!item && format(start, "yyyy-MM-dd'T'HH:mm") !== startedAt)) {
+      showNotice('시작 일시는 1900년 이후의 현재 또는 과거 시각으로 선택해주세요.');
+      return;
+    }
     savingRef.current = true;
     setSaving(true);
     try {
@@ -117,7 +134,7 @@ export const SoberForm = ({
         <PanelHeader title={item ? '거리두기 수정' : '거리두기 추가'} headerRight={<PanelSubmitButton
             type="button"
             onClick={save}
-            disabled={saving || !name.trim()}
+            disabled={saving}
             aria-busy={saving}
           >
             {saving ? '저장 중' : '저장'}
@@ -146,6 +163,7 @@ export const SoberForm = ({
               <h3 className="text-lg font-semibold">거리를 두고 싶은 것</h3>
               <div className="space-y-3 px-1">
                 <input
+                  ref={nameInput}
                   aria-label="거리두기 항목 이름"
                   value={name}
                   maxLength={SOBER_NAME_MAX_LENGTH}
