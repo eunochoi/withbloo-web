@@ -4,11 +4,15 @@ import { CALENDAR_BADGE_SCALE } from "./src/common/constants/calendar";
 
 const scrollFadeStops = [
   "rgb(0 0 0 / 1) 0%",
-  "rgb(0 0 0 / 0.97) 10%",
-  "rgb(0 0 0 / 0.84) 25%",
-  "rgb(0 0 0 / 0.5) 50%",
-  "rgb(0 0 0 / 0.16) 75%",
-  "rgb(0 0 0 / 0.03) 90%",
+  "rgb(0 0 0 / 0.973) 10%",
+  "rgb(0 0 0 / 0.894) 20%",
+  "rgb(0 0 0 / 0.784) 30%",
+  "rgb(0 0 0 / 0.647) 40%",
+  "rgb(0 0 0 / 0.502) 50%",
+  "rgb(0 0 0 / 0.353) 60%",
+  "rgb(0 0 0 / 0.216) 70%",
+  "rgb(0 0 0 / 0.106) 80%",
+  "rgb(0 0 0 / 0.027) 90%",
   "rgb(0 0 0 / 0) 100%",
 ].join(", ");
 
@@ -104,8 +108,8 @@ const config: Config = {
     plugin(({ addVariant, addUtilities }) => {
       addVariant("landscape-short", "@media (orientation: landscape) and (max-height: 650px)");
       addUtilities({
-        ".mask-scroll-fade-top": { maskImage: `linear-gradient(in oklch to bottom, ${scrollFadeStops})` },
-        ".mask-scroll-fade-bottom": { maskImage: `linear-gradient(in oklch to top, ${scrollFadeStops})` },
+        ".mask-scroll-fade-top": { maskImage: `linear-gradient(to bottom, ${scrollFadeStops})` },
+        ".mask-scroll-fade-bottom": { maskImage: `linear-gradient(to top, ${scrollFadeStops})` },
       });
     }),
   ],
