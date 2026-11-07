@@ -14,9 +14,9 @@ import { useEffect, useState } from "react";
 
 
 import InfoNotice from '@/common/components/ui/InfoNotice';
-import { PanelDialog } from "../../ui/Dialog/PanelDialog";
-import { PanelBody } from "../../ui/Dialog/PanelDialog/PanelBody";
-import { PanelHeader } from "../../ui/Dialog/PanelDialog/PanelHeader";
+import { BottomSheet } from "../../ui/BottomSheet/BottomSheet";
+import { BottomSheetBody } from "../../ui/BottomSheet/BottomSheetBody";
+import { BottomSheetTitle } from "../../ui/BottomSheet/BottomSheetTitle";
 import HabitInfoHeader from "./HabitInfoHeader";
 import MonthInfo from "./MonthInfo";
 import YearInfo from "./YearInfo";
@@ -46,12 +46,12 @@ const HabitDetailClientPage = ({ habitId, today }: Props) => {
   return (
     <AnimatePresence onExitComplete={() => router.back()}>
       {isDialogMounted && (
-        <PanelDialog
+        <BottomSheet
           ariaLabel="습관 정보"
           handleColor={accent.color}
           onClose={() => setIsDialogMounted(false)}
         >
-          <PanelHeader
+          <BottomSheetTitle
             title="상세 정보"
             onBack={() => setIsDialogMounted(false)}
             headerRight={habitDataById && (
@@ -76,7 +76,7 @@ const HabitDetailClientPage = ({ habitId, today }: Props) => {
               </>
             )}
           />
-          <PanelBody showScrollFade>
+          <BottomSheetBody showScrollFade>
             <div className="flex w-full flex-col gap-8 pb-6 tablet:pb-7">
               <HabitInfoHeader habitData={habitDataById} />
 
@@ -111,8 +111,8 @@ const HabitDetailClientPage = ({ habitId, today }: Props) => {
                 {habitDataById.priority > 0 && <><InfoNotice accent={accent}>실천 가능일은 선택 기간 내 시작일~오늘이에요.</InfoNotice><InfoNotice accent={accent}>실천율 = 실천 횟수 ÷ 실천 가능일 × 100</InfoNotice></>}
               </div>}
             </div>
-          </PanelBody>
-        </PanelDialog>
+          </BottomSheetBody>
+        </BottomSheet>
       )}
     </AnimatePresence>
   );

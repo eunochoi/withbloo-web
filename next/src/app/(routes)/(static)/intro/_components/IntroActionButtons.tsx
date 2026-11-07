@@ -1,6 +1,6 @@
 'use client';
 
-import { PickerDialog } from '@/common/components/ui/Dialog/PickerDialog';
+import { BottomSheetPicker } from '@/common/components/ui/BottomSheet/BottomSheetPicker';
 import { ChevronRightIcon } from '@/common/constants/appIcons';
 import { cn } from '@/common/utils/cn';
 import { AnimatePresence } from 'framer-motion';
@@ -55,7 +55,7 @@ const IntroActionButtons = ({ className }: IntroActionButtonsProps) => {
       </div >
       <AnimatePresence>
         {isOpen && (
-          <PickerDialog labelledBy={titleId} onClose={() => setIsOpen(false)} header={<h2 id={titleId} className="text-center text-lg font-semibold tracking-tight text-theme-text-primary">
+          <BottomSheetPicker labelledBy={titleId} onClose={() => setIsOpen(false)} header={<h2 id={titleId} className="text-center text-lg font-semibold tracking-tight text-theme-text-primary">
                 웹 서비스 이용하기
               </h2>}>
             <div className="flex w-full flex-col gap-6 pb-[max(1rem,env(safe-area-inset-bottom))]">
@@ -86,10 +86,10 @@ const IntroActionButtons = ({ className }: IntroActionButtonsProps) => {
                 </button>
               </div>
             </div>
-          </PickerDialog>
+          </BottomSheetPicker>
         )}
         {isAppOpen && (
-          <PickerDialog labelledBy={appTitleId} onClose={() => setIsAppOpen(false)} header={<h2 id={appTitleId} className="text-center text-lg font-semibold tracking-tight text-theme-text-primary">앱 서비스 이용하기</h2>}>
+          <BottomSheetPicker labelledBy={appTitleId} onClose={() => setIsAppOpen(false)} header={<h2 id={appTitleId} className="text-center text-lg font-semibold tracking-tight text-theme-text-primary">앱 서비스 이용하기</h2>}>
             <div className="flex w-full flex-col gap-3 pb-[max(1rem,env(safe-area-inset-bottom))]">
               <a href={PLAY_STORE_URL} className={optionClass}>
                 <MdOutlineAndroid className="shrink-0 text-2xl text-theme-accent" aria-hidden="true" />
@@ -107,7 +107,7 @@ const IntroActionButtons = ({ className }: IntroActionButtonsProps) => {
                 </span>
               </button>
             </div>
-          </PickerDialog>
+          </BottomSheetPicker>
         )}
       </AnimatePresence>
     </>

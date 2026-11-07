@@ -1,6 +1,6 @@
 "use client";
 
-import { PickerHeader } from "@/common/components/ui/Dialog/PickerDialog/PickerHeader";
+import { BottomSheetPickerHeader } from "@/common/components/ui/BottomSheet/BottomSheetPickerHeader";
 
 import { FilterPickerRow } from "@/common/components/ui/FilterPickerRow";
 
@@ -9,7 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import { AnimatePresence } from "framer-motion";
 
 import { authAction } from "@/common/auth/authAction";
-import { PickerDialog } from "@/common/components/ui/Dialog/PickerDialog";
+import { BottomSheetPicker } from "@/common/components/ui/BottomSheet/BottomSheetPicker";
 import InfoNotice from "@/common/components/ui/InfoNotice";
 import {
   DIARY_EMOTION_GROUPS,
@@ -45,7 +45,7 @@ const DiaryFilterPicker = ({
     enabled: yearOpen,
   });
   return (
-    <PickerDialog labelledBy="diary-filter-title" onClose={onClose} header={<PickerHeader
+    <BottomSheetPicker labelledBy="diary-filter-title" onClose={onClose} header={<BottomSheetPickerHeader
           headerLeft={
             <button
               type="button"
@@ -75,7 +75,7 @@ const DiaryFilterPicker = ({
           >
             적용
           </button>
-        </PickerHeader>}>
+        </BottomSheetPickerHeader>}>
       <div className="flex flex-col gap-5 px-2 pb-6 pt-2">
 
 
@@ -172,7 +172,7 @@ const DiaryFilterPicker = ({
       </div>
       <AnimatePresence>
         {yearOpen && (
-          <PickerDialog
+          <BottomSheetPicker
             labelledBy="diary-year-title"
             onClose={() => setYearOpen(false)}
            header={<h2
@@ -211,10 +211,10 @@ const DiaryFilterPicker = ({
                 </button>
               )}
             </div>
-          </PickerDialog>
+          </BottomSheetPicker>
         )}
       </AnimatePresence>
-    </PickerDialog>
+    </BottomSheetPicker>
   );
 };
 

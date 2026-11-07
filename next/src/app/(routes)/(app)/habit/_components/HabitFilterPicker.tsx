@@ -1,8 +1,8 @@
 "use client";
 
-import { PickerHeader } from "@/common/components/ui/Dialog/PickerDialog/PickerHeader";
+import { BottomSheetPickerHeader } from "@/common/components/ui/BottomSheet/BottomSheetPickerHeader";
 
-import { PickerDialog } from "@/common/components/ui/Dialog/PickerDialog";
+import { BottomSheetPicker } from "@/common/components/ui/BottomSheet/BottomSheetPicker";
 import { HabitPriority } from "@/common/components/ui/Habit/HabitPriority";
 import InfoNotice from "@/common/components/ui/InfoNotice";
 import { useState } from "react";
@@ -21,7 +21,7 @@ const HabitFilterPicker = ({
   const [completed, setCompleted] = useState(completedOnly);
   const [selected, setSelected] = useState(priorities);
   return (
-    <PickerDialog labelledBy="habit-filter-title" onClose={onClose} header={<PickerHeader
+    <BottomSheetPicker labelledBy="habit-filter-title" onClose={onClose} header={<BottomSheetPickerHeader
           headerLeft={
             <button
               type="button"
@@ -48,7 +48,7 @@ const HabitFilterPicker = ({
           >
             적용
           </button>
-        </PickerHeader>}>
+        </BottomSheetPickerHeader>}>
       <div className="flex flex-col gap-5 px-2 pb-6 pt-2">
 
 
@@ -110,7 +110,7 @@ const HabitFilterPicker = ({
         </section>
         <InfoNotice>중요도는 여러 개 선택할 수 있어요.</InfoNotice>
       </div>
-    </PickerDialog>
+    </BottomSheetPicker>
   );
 };
 

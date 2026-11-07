@@ -3,7 +3,7 @@
 import type { DiaryData } from '@/common/types/diary';
 import DiaryHabitMonthCalendar from './DiaryHabitMonthCalendar';
 import DayInfo from './DayInfo';
-import { PickerDialog } from '@/common/components/ui/Dialog/PickerDialog';
+import { BottomSheetPicker } from '@/common/components/ui/BottomSheet/BottomSheetPicker';
 import { AnimatePresence } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { format } from 'date-fns';
@@ -68,7 +68,7 @@ const CalendarPageContent = ({
       </section>
       <AnimatePresence>
         {isOpen && (
-          <PickerDialog
+          <BottomSheetPicker
             labelledBy="calendar-day-title"
             onClose={() => setIsOpen(false)}
            header={<header className="flex min-h-12 items-center justify-center gap-4">
@@ -84,7 +84,7 @@ const CalendarPageContent = ({
 
               {dayInfo}
             </div>
-          </PickerDialog>
+          </BottomSheetPicker>
         )}
       </AnimatePresence>
     </>

@@ -1,11 +1,11 @@
 "use client";
 
-import { PickerHeader } from "@/common/components/ui/Dialog/PickerDialog/PickerHeader";
+import { BottomSheetPickerHeader } from "@/common/components/ui/BottomSheet/BottomSheetPickerHeader";
 
 import { useState } from "react";
 
 import InfoNotice from "./InfoNotice";
-import { PickerDialog } from "./Dialog/PickerDialog";
+import { BottomSheetPicker } from "./BottomSheet/BottomSheetPicker";
 
 interface Props<T extends string> {
   title: string;
@@ -38,7 +38,7 @@ const SortPicker = <T extends string>({
   const [records, setRecords] = useState(recordSort);
   const [priority, setPriority] = useState(priorityFirst ?? false);
   return (
-    <PickerDialog labelledBy="sort-picker-title" onClose={onClose} header={<PickerHeader
+    <BottomSheetPicker labelledBy="sort-picker-title" onClose={onClose} header={<BottomSheetPickerHeader
           headerLeft={
             <button
               type="button"
@@ -72,7 +72,7 @@ const SortPicker = <T extends string>({
           >
             적용
           </button>
-        </PickerHeader>}>
+        </BottomSheetPickerHeader>}>
       <div className={`flex flex-col pb-6 ${showCriteriaSort ? 'gap-5' : 'gap-7'}`}>
 
         {priorityFirst !== undefined && (
@@ -150,7 +150,7 @@ const SortPicker = <T extends string>({
           )}
         </div>
       </div>
-    </PickerDialog>
+    </BottomSheetPicker>
   );
 };
 

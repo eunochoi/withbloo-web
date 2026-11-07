@@ -19,10 +19,10 @@ test('custom mode applies dragged order without changing it before apply', () =>
     '@dnd-kit/core': { DndContext: 'DndContext', KeyboardSensor: 'KeyboardSensor', MouseSensor: 'MouseSensor', TouchSensor: 'TouchSensor', useSensor: () => ({}), useSensors: () => [] },
     '@dnd-kit/modifiers': { restrictToParentElement: () => {}, restrictToVerticalAxis: () => {} },
     '@dnd-kit/sortable': { SortableContext: 'SortableContext', sortableKeyboardCoordinates: () => {}, verticalListSortingStrategy: () => {}, arrayMove: (items, from, to) => { const result = [...items]; result.splice(to, 0, result.splice(from, 1)[0]); return result; } },
-    '@/common/components/ui/Dialog/PanelDialog': { PanelDialog: 'PanelDialog' },
-    '@/common/components/ui/Dialog/PanelDialog/PanelBody': { PanelBody: 'PanelBody' },
-    '@/common/components/ui/Dialog/PanelDialog/PanelHeader': { PanelHeader: 'PanelHeader' },
-    '@/common/components/ui/Dialog/PanelDialog/PanelSubmitButton': { PanelSubmitButton: 'PanelSubmitButton' },
+    '@/common/components/ui/BottomSheet/BottomSheet': { BottomSheet: 'BottomSheet' },
+    '@/common/components/ui/BottomSheet/BottomSheetBody': { BottomSheetBody: 'BottomSheetBody' },
+    '@/common/components/ui/BottomSheet/BottomSheetTitle': { BottomSheetTitle: 'BottomSheetTitle' },
+    '@/common/components/ui/BottomSheet/BottomSheetSubmitButton': { BottomSheetSubmitButton: 'BottomSheetSubmitButton' },
     '@/common/components/ui/InfoNotice': { __esModule: true, default: 'InfoNotice' },
   });
   const { SoberSortModal } = load('common/components/features/Sober/SoberSortModal.tsx');
@@ -35,7 +35,7 @@ test('custom mode applies dragged order without changing it before apply', () =>
   find(tree, (node) => node.type === 'DndContext').props.onDragEnd({ active: { id: 1 }, over: { id: 3 } });
   assert.equal(applied.length, 0);
   tree = render();
-  const header = find(tree, (node) => node.type === 'PanelHeader');
+  const header = find(tree, (node) => node.type === 'BottomSheetTitle');
   assert.equal(header.props.headerRight.props.disabled, false);
   header.props.headerRight.props.onClick();
   assert.deepEqual(applied, [['CUSTOM', false, 'DESC', [2, 3, 1]]]);

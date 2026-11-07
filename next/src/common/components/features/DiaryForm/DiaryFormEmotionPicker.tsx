@@ -1,4 +1,4 @@
-import { PickerDialog } from '@/common/components/ui/Dialog/PickerDialog';
+import { BottomSheetPicker } from '@/common/components/ui/BottomSheet/BottomSheetPicker';
 import EmotionImage from '@/common/components/ui/EmotionImage';
 import AppDotTabs from '@/common/components/ui/AppDotTabs';
 import PickerInfoCard from '@/common/components/ui/PickerInfoCard';
@@ -63,7 +63,7 @@ const DiaryFormEmotionPicker = ({
   const category = categories[categoryIndex];
 
   return (
-    <PickerDialog labelledBy="diary-emotion-picker-title" onClose={onClose} header={<div className="relative flex min-h-11 items-center justify-center">
+    <BottomSheetPicker labelledBy="diary-emotion-picker-title" onClose={onClose} header={<div className="relative flex min-h-11 items-center justify-center">
           <h2
             id="diary-emotion-picker-title"
             className="text-center text-lg font-semibold text-theme-text-primary"
@@ -146,7 +146,7 @@ const DiaryFormEmotionPicker = ({
           })}
         </div>
       </fieldset>
-    </PickerDialog>
+    </BottomSheetPicker>
   );
 };
 

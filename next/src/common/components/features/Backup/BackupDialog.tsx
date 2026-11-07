@@ -10,7 +10,7 @@ import {
 } from 'react-icons/pi';
 import { authAction } from '@/common/auth/authAction';
 import { AUTH_ERROR_CODE } from '@/common/auth/types';
-import { PanelDialog } from '@/common/components/ui/Dialog/PanelDialog';
+import { BottomSheet } from '@/common/components/ui/BottomSheet/BottomSheet';
 import InfoNotice from '@/common/components/ui/InfoNotice';
 import { showNotice } from '@/common/components/ui/Notice/notice';
 
@@ -190,7 +190,7 @@ export function BackupDialog({
     });
   return (
     <AnimatePresence mode="wait" propagate>
-      <PanelDialog
+      <BottomSheet
         key={step}
         ariaLabel={title}
         onClose={finish}
@@ -322,7 +322,7 @@ export function BackupDialog({
             </form>
           )}
         </div>
-      </PanelDialog>
+      </BottomSheet>
     </AnimatePresence>
   );
 }

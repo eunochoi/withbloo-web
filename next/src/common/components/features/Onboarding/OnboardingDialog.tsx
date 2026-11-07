@@ -1,7 +1,7 @@
 'use client';
 
-import { PanelDialog } from '@/common/components/ui/Dialog/PanelDialog';
-import { PanelHeader } from '@/common/components/ui/Dialog/PanelDialog/PanelHeader';
+import { BottomSheet } from '@/common/components/ui/BottomSheet/BottomSheet';
+import { BottomSheetTitle } from '@/common/components/ui/BottomSheet/BottomSheetTitle';
 import { ScrollContainer } from '@/common/components/ui/ScrollContainer';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { useRef, useState } from 'react';
@@ -60,12 +60,12 @@ export function OnboardingDialog({
   };
 
   return (
-    <PanelDialog
+    <BottomSheet
       ariaLabel="위블 사용 안내"
       dismissible={!firstRun}
       onClose={onClose}
     >
-      <PanelHeader />
+      <BottomSheetTitle />
       <ScrollContainer
         ref={scrollRef}
         className="min-h-0 flex-1"
@@ -130,6 +130,6 @@ export function OnboardingDialog({
           </div>
         </div>
       </footer>
-    </PanelDialog>
+    </BottomSheet>
   );
 }

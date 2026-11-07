@@ -8,10 +8,10 @@ import { useQuery } from '@tanstack/react-query';
 import { AnimatePresence } from 'framer-motion';
 import { useEffect, useState } from 'react';
 
-import { PanelDialog } from '@/common/components/ui/Dialog/PanelDialog';
-import { PanelBody } from '@/common/components/ui/Dialog/PanelDialog/PanelBody';
-import { PanelHeader } from '@/common/components/ui/Dialog/PanelDialog/PanelHeader';
-import { PanelSubmitButton } from '@/common/components/ui/Dialog/PanelDialog/PanelSubmitButton';
+import { BottomSheet } from '@/common/components/ui/BottomSheet/BottomSheet';
+import { BottomSheetBody } from '@/common/components/ui/BottomSheet/BottomSheetBody';
+import { BottomSheetTitle } from '@/common/components/ui/BottomSheet/BottomSheetTitle';
+import { BottomSheetSubmitButton } from '@/common/components/ui/BottomSheet/BottomSheetSubmitButton';
 import InfoNotice from '@/common/components/ui/InfoNotice';
 import { showNotice } from '@/common/components/ui/Notice/notice';
 import type { HabitSort } from '@/common/types/sort';
@@ -75,11 +75,11 @@ export const HabitSortModal = ({ onClose, sortValue, priorityFirst, customHabitO
   return (
     <AnimatePresence onExitComplete={onClose}>
       {isDialogMounted && (
-        <PanelDialog
+        <BottomSheet
           ariaLabel="습관 정렬 설정"
           onClose={() => setIsDialogMounted(false)}
         >
-          <PanelHeader
+          <BottomSheetTitle
             title="습관 정렬"
             onBack={() => setIsDialogMounted(false)}
             headerLeft={
@@ -103,16 +103,16 @@ export const HabitSortModal = ({ onClose, sortValue, priorityFirst, customHabitO
               </button>
             }
             headerRight={
-              <PanelSubmitButton
+              <BottomSheetSubmitButton
                 disabled={!isStorageReady || (draftSort === 'CUSTOM' && (!tempHabits || !customHabits))}
                 onClick={onSubmit}
                 type="button"
               >
                 적용
-              </PanelSubmitButton>
+              </BottomSheetSubmitButton>
             }
           />
-          <PanelBody showScrollFade>
+          <BottomSheetBody showScrollFade>
             <div className="flex min-w-0 w-full flex-col pb-6">
               <section className="flex min-w-0 flex-col gap-5 pb-8">
                 <label className="flex cursor-pointer items-center gap-2 text-lg font-semibold">
@@ -151,8 +151,8 @@ export const HabitSortModal = ({ onClose, sortValue, priorityFirst, customHabitO
                 </fieldset>
               </section>
             </div>
-          </PanelBody>
-        </PanelDialog>
+          </BottomSheetBody>
+        </BottomSheet>
       )}
     </AnimatePresence>
   );

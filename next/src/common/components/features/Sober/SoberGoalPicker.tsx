@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
-import { PickerDialog } from '@/common/components/ui/Dialog/PickerDialog';
+import { BottomSheetPicker } from '@/common/components/ui/BottomSheet/BottomSheetPicker';
 import { SOBER_GOALS, formatSoberGoal } from '@/common/functions/sober';
 import {
   ChevronRightIcon,
@@ -41,7 +41,7 @@ export default function SoberGoalPicker({
     Number(editor.value) <= 36500;
   return (
     <>
-      <PickerDialog
+      <BottomSheetPicker
         labelledBy="sober-goal-title"
         onClose={() => {
           if (!editor) onClose();
@@ -128,10 +128,10 @@ export default function SoberGoalPicker({
             이 목표로 설정하기
           </button>
         </div>
-      </PickerDialog>
+      </BottomSheetPicker>
       <AnimatePresence>
         {editor && (
-          <PickerDialog
+          <BottomSheetPicker
             labelledBy="sober-goal-editor"
             onClose={() => setEditor(null)}
            header={<div className="relative flex min-h-11 items-center justify-center px-12">
@@ -197,7 +197,7 @@ export default function SoberGoalPicker({
               )}
 
             </div>
-          </PickerDialog>
+          </BottomSheetPicker>
         )}
       </AnimatePresence>
     </>

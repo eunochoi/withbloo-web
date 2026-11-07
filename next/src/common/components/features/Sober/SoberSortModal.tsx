@@ -6,10 +6,10 @@ import { closestCenter, DndContext, KeyboardSensor, MouseSensor, TouchSensor, us
 import { restrictToParentElement, restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { PanelDialog } from '@/common/components/ui/Dialog/PanelDialog';
-import { PanelBody } from '@/common/components/ui/Dialog/PanelDialog/PanelBody';
-import { PanelHeader } from '@/common/components/ui/Dialog/PanelDialog/PanelHeader';
-import { PanelSubmitButton } from '@/common/components/ui/Dialog/PanelDialog/PanelSubmitButton';
+import { BottomSheet } from '@/common/components/ui/BottomSheet/BottomSheet';
+import { BottomSheetBody } from '@/common/components/ui/BottomSheet/BottomSheetBody';
+import { BottomSheetTitle } from '@/common/components/ui/BottomSheet/BottomSheetTitle';
+import { BottomSheetSubmitButton } from '@/common/components/ui/BottomSheet/BottomSheetSubmitButton';
 import InfoNotice from '@/common/components/ui/InfoNotice';
 import ScrollableName from '@/common/components/ui/ScrollableName';
 import { DragIcon, StarIcon } from '@/common/constants/appIcons';
@@ -57,9 +57,9 @@ export function SoberSortModal({ items, isError, onRetry, sort, recordSort, prio
   const options = (value: 'ASC' | 'DESC', setValue: (value: 'ASC' | 'DESC') => void, labels: [string, string]) => (
     <div className="flex gap-3">{(['DESC', 'ASC'] as const).map((choice, index) => <button key={choice} type="button" aria-pressed={value === choice} onClick={() => setValue(choice)} className={`min-h-12 flex-1 rounded-xl border px-1 py-3 ${value === choice ? 'border-theme-accent bg-theme-accent/10 text-theme-accent-deep' : 'border-theme-border/70'}`}>{labels[index]}</button>)}</div>
   );
-  return <AnimatePresence onExitComplete={onClose}>{mounted && <PanelDialog ariaLabel="거리두기 정렬 설정" onClose={() => setMounted(false)}>
-    <PanelHeader title="거리두기 정렬" onBack={() => setMounted(false)} headerLeft={<button type="button" aria-label="선택 초기화" disabled={draftSort === 'CUSTOM' && !items} onClick={() => { if (draftSort === 'CUSTOM') { setOrder(defaults); setReset(true); } else { setSort('DESC'); setStandardSort('DESC'); setRecords('DESC'); setPriority(false); } }} className="min-h-11 text-lg font-normal text-theme-text-secondary/70 disabled:opacity-40">초기화</button>} headerRight={<PanelSubmitButton type="button" disabled={draftSort === 'CUSTOM' && !order} onClick={() => { onApply(draftSort, draftSort === 'CUSTOM' ? false : priority, records, draftSort === 'CUSTOM' ? (isDefault ? [] : ids) : customOrder); setMounted(false); }}>적용</PanelSubmitButton>} />
-    <PanelBody showScrollFade><div className="flex min-w-0 w-full flex-col pb-6">
+  return <AnimatePresence onExitComplete={onClose}>{mounted && <BottomSheet ariaLabel="거리두기 정렬 설정" onClose={() => setMounted(false)}>
+    <BottomSheetTitle title="거리두기 정렬" onBack={() => setMounted(false)} headerLeft={<button type="button" aria-label="선택 초기화" disabled={draftSort === 'CUSTOM' && !items} onClick={() => { if (draftSort === 'CUSTOM') { setOrder(defaults); setReset(true); } else { setSort('DESC'); setStandardSort('DESC'); setRecords('DESC'); setPriority(false); } }} className="min-h-11 text-lg font-normal text-theme-text-secondary/70 disabled:opacity-40">초기화</button>} headerRight={<BottomSheetSubmitButton type="button" disabled={draftSort === 'CUSTOM' && !order} onClick={() => { onApply(draftSort, draftSort === 'CUSTOM' ? false : priority, records, draftSort === 'CUSTOM' ? (isDefault ? [] : ids) : customOrder); setMounted(false); }}>적용</BottomSheetSubmitButton>} />
+    <BottomSheetBody showScrollFade><div className="flex min-w-0 w-full flex-col pb-6">
       <section className="flex min-w-0 flex-col gap-5 pb-8">
         <label className="flex cursor-pointer items-center gap-2 text-lg font-semibold"><input type="radio" name="sober-sort-mode" checked={draftSort !== 'CUSTOM'} onChange={() => setSort(standardSort)} className={radioClass} />기준별 정렬</label>
         <fieldset disabled={draftSort === 'CUSTOM'} className={`flex min-w-0 flex-col gap-5 p-2 ${draftSort === 'CUSTOM' ? 'opacity-40' : ''}`}>
@@ -77,6 +77,6 @@ export function SoberSortModal({ items, isError, onRetry, sort, recordSort, prio
           <InfoNotice>직접 정한 순서로 보여드려요.</InfoNotice>
         </fieldset>
       </section>
-    </div></PanelBody>
-  </PanelDialog>}</AnimatePresence>;
+    </div></BottomSheetBody>
+  </BottomSheet>}</AnimatePresence>;
 }

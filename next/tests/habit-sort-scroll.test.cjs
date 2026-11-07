@@ -20,10 +20,10 @@ function renderManual(habits) {
     '@tanstack/react-query': { useQuery: () => ({ data: habits, isPending: false, isError: false }) },
     '@/common/auth/authAction': { authAction: () => {} },
     '@/common/queries/habitQueries': { habitQueries: { list: () => ({}) } },
-    '@/common/components/ui/Dialog/PanelDialog': { PanelDialog: 'PanelDialog' },
-    '@/common/components/ui/Dialog/PanelDialog/PanelBody': { PanelBody: 'PanelBody' },
-    '@/common/components/ui/Dialog/PanelDialog/PanelHeader': { PanelHeader: 'PanelHeader' },
-    '@/common/components/ui/Dialog/PanelDialog/PanelSubmitButton': { PanelSubmitButton: 'PanelSubmitButton' },
+    '@/common/components/ui/BottomSheet/BottomSheet': { BottomSheet: 'BottomSheet' },
+    '@/common/components/ui/BottomSheet/BottomSheetBody': { BottomSheetBody: 'BottomSheetBody' },
+    '@/common/components/ui/BottomSheet/BottomSheetTitle': { BottomSheetTitle: 'BottomSheetTitle' },
+    '@/common/components/ui/BottomSheet/BottomSheetSubmitButton': { BottomSheetSubmitButton: 'BottomSheetSubmitButton' },
     '@/common/components/ui/Notice/notice': { showNotice: () => {} },
     '@/common/components/ui/AppDotTabs': { __esModule: true, default: 'AppDotTabs' },
     '@/common/components/ui/InfoNotice': { __esModule: true, default: 'InfoNotice' },
@@ -38,7 +38,7 @@ test('both sort sections share the modal scroll area and disable the inactive se
   for (const count of [0, 3, 30]) {
     const habits = Array.from({ length: count }, (_, id) => ({ id, name: `habit ${id}`, priority: 1, createdAt: '2026-01-01' }));
     const tree = renderManual(habits);
-    const body = find(tree, (node) => node.type === 'PanelBody');
+    const body = find(tree, (node) => node.type === 'BottomSheetBody');
     const list = find(body, (node) => node.type === 'HabitManualSortList');
     assert.equal(body.props.showScrollFade, true);
     assert.equal(list.props.tempHabits.length, count);
@@ -68,13 +68,13 @@ test('busy panels keep a disabled handle while intentionally locked panels may h
   const load = sourceLoader({
     react: { useLayoutEffect: () => {}, useRef: () => ({ current: null }) },
     'framer-motion': { motion: { div: 'motion.div' }, useIsPresent: () => true, useReducedMotion: () => false },
-    '../useSheetDismiss': { useSheetDismiss: () => ({ get: () => 0 }) },
-    '../DialogBackdrop': { DialogBackdrop: 'DialogBackdrop' },
-    '../SheetHandle': { SheetHandle: 'SheetHandle' },
+    './useSheetDismiss': { useSheetDismiss: () => ({ get: () => 0 }) },
+    './DialogBackdrop': { DialogBackdrop: 'DialogBackdrop' },
+    './SheetHandle': { SheetHandle: 'SheetHandle' },
   });
-  const { PanelDialog } = load('common/components/ui/Dialog/PanelDialog/index.tsx');
-  const busy = PanelDialog({ ariaLabel: '저장', onClose() {}, dismissible: false, preserveHandle: true });
+  const { BottomSheet } = load('common/components/ui/BottomSheet/BottomSheet.tsx');
+  const busy = BottomSheet({ ariaLabel: '저장', onClose() {}, dismissible: false, preserveHandle: true });
   assert.equal(find(busy, (node) => node.type === 'SheetHandle').props.disabled, true);
-  const locked = PanelDialog({ ariaLabel: '안내', onClose() {}, dismissible: false });
+  const locked = BottomSheet({ ariaLabel: '안내', onClose() {}, dismissible: false });
   assert.equal(find(locked, (node) => node.type === 'SheetHandle'), undefined);
 });

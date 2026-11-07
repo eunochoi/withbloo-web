@@ -3,7 +3,7 @@
 import { AnimatePresence } from 'framer-motion';
 import { useId, useRef, useState } from 'react';
 import { showNotice } from '@/common/components/ui/Notice/notice';
-import { PickerDialog } from './PickerDialog';
+import { BottomSheetPicker } from './BottomSheetPicker';
 import { ChevronRightIcon, DeleteIcon, LogoutIcon, UndoIcon } from '@/common/constants/appIcons';
 
 interface ConfirmDialogProps {
@@ -28,7 +28,7 @@ export const ConfirmDialog = ({ isOpen, title, confirmLabel, confirmDescription,
       if (confirmed.current) { confirmed.current = false; onConfirmed?.(); }
     }}>
       {isOpen && (
-        <PickerDialog labelledBy={`${id}-title`} onClose={close} header={<h2 id={`${id}-title`} className="text-center text-lg font-semibold tracking-tight text-theme-text-primary">{title}</h2>}>
+        <BottomSheetPicker labelledBy={`${id}-title`} onClose={close} header={<h2 id={`${id}-title`} className="text-center text-lg font-semibold tracking-tight text-theme-text-primary">{title}</h2>}>
           <div className="flex w-full flex-col gap-6 pb-[max(1rem,env(safe-area-inset-bottom))]">
 
             <div className="flex flex-col gap-3">
@@ -65,7 +65,7 @@ export const ConfirmDialog = ({ isOpen, title, confirmLabel, confirmDescription,
               </button>
             </div>
           </div>
-        </PickerDialog>
+        </BottomSheetPicker>
       )}
     </AnimatePresence>
   );

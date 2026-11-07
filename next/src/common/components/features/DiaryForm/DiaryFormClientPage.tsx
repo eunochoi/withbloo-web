@@ -12,10 +12,10 @@ import { ko } from 'date-fns/locale';
 import { AnimatePresence } from 'framer-motion';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useRef, useState } from 'react';
-import { PanelDialog } from '../../ui/Dialog/PanelDialog';
-import { PanelBody } from '../../ui/Dialog/PanelDialog/PanelBody';
-import { PanelHeader } from '../../ui/Dialog/PanelDialog/PanelHeader';
-import { PanelSubmitButton } from '../../ui/Dialog/PanelDialog/PanelSubmitButton';
+import { BottomSheet } from '../../ui/BottomSheet/BottomSheet';
+import { BottomSheetBody } from '../../ui/BottomSheet/BottomSheetBody';
+import { BottomSheetTitle } from '../../ui/BottomSheet/BottomSheetTitle';
+import { BottomSheetSubmitButton } from '../../ui/BottomSheet/BottomSheetSubmitButton';
 import DiaryDatePicker from './DiaryDatePicker';
 import DiaryFormEmotionSection from './DiaryFormEmotionSection';
 import DiaryFormImagesSection from './DiaryFormImagesSection';
@@ -129,26 +129,26 @@ const DiaryFormClientPage = ({ isEdit, diaryId }: DiaryFormClientPageProps) => {
   return (
     <AnimatePresence onExitComplete={() => router.back()}>
       {isDialogMounted && (
-        <PanelDialog
+        <BottomSheet
           ariaLabel={headerTitle}
           dismissible={!isSubmitting}
           preserveHandle
           onClose={handleBack}
         >
-          <PanelHeader
+          <BottomSheetTitle
             title={headerTitle}
             onBack={handleBack}
             onTitleClick={allowDateChange && !isSubmitting ? () => setIsDatePickerOpen(true) : undefined}
-          headerRight={<PanelSubmitButton
+          headerRight={<BottomSheetSubmitButton
                 type="button"
                 onClick={handleSubmit}
                 disabled={isSubmitting}
                 aria-busy={isSubmitting}
               >
                 {isSubmitting ? '저장 중' : '저장'}
-              </PanelSubmitButton>}
+              </BottomSheetSubmitButton>}
           />
-          <PanelBody showScrollFade>
+          <BottomSheetBody showScrollFade>
             <fieldset ref={formRef} disabled={isSubmitting} className="m-0 flex w-full flex-col gap-6 border-0 pb-[max(1rem,env(safe-area-inset-bottom))]">
               <DiaryFormEmotionSection
                 emotion={emotion}
@@ -165,11 +165,11 @@ const DiaryFormClientPage = ({ isEdit, diaryId }: DiaryFormClientPageProps) => {
               />
 
             </fieldset>
-          </PanelBody>
+          </BottomSheetBody>
           <AnimatePresence>
             {isDatePickerOpen && <DiaryDatePicker value={effectiveDate} diaryId={diaryId} onClose={() => setIsDatePickerOpen(false)} onApply={(next) => { setSelectedDate(next); setIsDatePickerOpen(false); }} />}
           </AnimatePresence>
-        </PanelDialog>
+        </BottomSheet>
       )
       }
     </AnimatePresence >

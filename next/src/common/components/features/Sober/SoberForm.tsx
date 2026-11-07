@@ -8,10 +8,10 @@ import HabitFormColorPicker from '@/common/components/features/HabitForm/HabitFo
 import HabitFormDatePicker from '@/common/components/features/HabitForm/HabitFormDatePicker';
 import HabitFormPicker from '@/common/components/features/HabitForm/HabitFormPicker';
 import HabitFormPickerRow from '@/common/components/features/HabitForm/HabitFormPickerRow';
-import { PanelDialog } from '@/common/components/ui/Dialog/PanelDialog';
-import { PanelBody } from '@/common/components/ui/Dialog/PanelDialog/PanelBody';
-import { PanelHeader } from '@/common/components/ui/Dialog/PanelDialog/PanelHeader';
-import { PanelSubmitButton } from '@/common/components/ui/Dialog/PanelDialog/PanelSubmitButton';
+import { BottomSheet } from '@/common/components/ui/BottomSheet/BottomSheet';
+import { BottomSheetBody } from '@/common/components/ui/BottomSheet/BottomSheetBody';
+import { BottomSheetTitle } from '@/common/components/ui/BottomSheet/BottomSheetTitle';
+import { BottomSheetSubmitButton } from '@/common/components/ui/BottomSheet/BottomSheetSubmitButton';
 import InfoNotice from '@/common/components/ui/InfoNotice';
 import AppDotTabs from '@/common/components/ui/AppDotTabs';
 import PickerInfoCard from '@/common/components/ui/PickerInfoCard';
@@ -125,22 +125,22 @@ export const SoberForm = ({
   };
   return (
     <>
-      <PanelDialog
+      <BottomSheet
         ariaLabel={item ? '거리두기 수정' : '거리두기 추가'}
         onClose={onClose}
         dismissible={!saving}
         preserveHandle
       >
-        <PanelHeader title={item ? '거리두기 수정' : '거리두기 추가'} headerRight={<PanelSubmitButton
+        <BottomSheetTitle title={item ? '거리두기 수정' : '거리두기 추가'} headerRight={<BottomSheetSubmitButton
             type="button"
             onClick={save}
             disabled={saving}
             aria-busy={saving}
           >
             {saving ? '저장 중' : '저장'}
-          </PanelSubmitButton>}
+          </BottomSheetSubmitButton>}
           />
-        <PanelBody showScrollFade>
+        <BottomSheetBody showScrollFade>
           <fieldset
             disabled={saving}
             className="m-0 flex min-w-0 flex-col gap-7 border-0 pb-8"
@@ -243,9 +243,9 @@ export const SoberForm = ({
               </div>
             </section>
           </fieldset>
-        </PanelBody>
+        </BottomSheetBody>
 
-      </PanelDialog>
+      </BottomSheet>
       <AnimatePresence>
         {picker === 'date' && (
           <HabitFormDatePicker

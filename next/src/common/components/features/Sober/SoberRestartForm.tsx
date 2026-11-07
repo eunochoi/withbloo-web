@@ -7,10 +7,10 @@ import { CalendarGrid } from '@/common/components/ui/Calendar/CalendarGrid';
 import CalendarHeader from '@/common/components/ui/Calendar/CalendarHeader';
 import { useMonthCalendar } from '@/common/components/ui/Calendar/useMonthCalendar';
 import { useMonthSwipe } from '@/common/components/ui/Calendar/useMonthSwipe';
-import { PanelDialog } from '@/common/components/ui/Dialog/PanelDialog';
-import { PanelHeader } from '@/common/components/ui/Dialog/PanelDialog/PanelHeader';
-import { PanelBody } from '@/common/components/ui/Dialog/PanelDialog/PanelBody';
-import { PanelSubmitButton } from '@/common/components/ui/Dialog/PanelDialog/PanelSubmitButton';
+import { BottomSheet } from '@/common/components/ui/BottomSheet/BottomSheet';
+import { BottomSheetTitle } from '@/common/components/ui/BottomSheet/BottomSheetTitle';
+import { BottomSheetBody } from '@/common/components/ui/BottomSheet/BottomSheetBody';
+import { BottomSheetSubmitButton } from '@/common/components/ui/BottomSheet/BottomSheetSubmitButton';
 import { SoberIcon } from './SoberIcon';
 import type { SoberWithRestarts } from './types';
 
@@ -71,17 +71,17 @@ export default function SoberRestartForm({
   };
   const title = editing ? '다시 시작 기록 수정' : '다시 시작 기록 추가';
   return (
-    <PanelDialog ariaLabel={title} dismissible={!saving} preserveHandle onClose={onClose}>
-      <PanelHeader title={title} headerRight={<PanelSubmitButton
+    <BottomSheet ariaLabel={title} dismissible={!saving} preserveHandle onClose={onClose}>
+      <BottomSheetTitle title={title} headerRight={<BottomSheetSubmitButton
           type="button"
           disabled={saving}
           aria-busy={saving}
           onClick={() => void save()}
         >
           {saving ? '저장 중' : editing ? '저장' : '기록'}
-        </PanelSubmitButton>}
+        </BottomSheetSubmitButton>}
           />
-      <PanelBody showScrollFade>
+      <BottomSheetBody showScrollFade>
         <fieldset
           disabled={saving}
           className="m-0 flex min-w-0 flex-col gap-5 border-0 pb-6"
@@ -183,8 +183,8 @@ export default function SoberRestartForm({
             </p>
           )}
         </fieldset>
-      </PanelBody>
+      </BottomSheetBody>
 
-    </PanelDialog>
+    </BottomSheet>
   );
 }

@@ -1,13 +1,13 @@
 "use client";
 
-import { PickerHeader } from "@/common/components/ui/Dialog/PickerDialog/PickerHeader";
+import { BottomSheetPickerHeader } from "@/common/components/ui/BottomSheet/BottomSheetPickerHeader";
 
 import { DiaryIcon } from "@/common/constants/appIcons";
 
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { authAction } from "@/common/auth/authAction";
-import { PickerDialog } from "@/common/components/ui/Dialog/PickerDialog";
+import { BottomSheetPicker } from "@/common/components/ui/BottomSheet/BottomSheetPicker";
 import InfoNotice from "@/common/components/ui/InfoNotice";
 import { CalendarDay } from "@/common/components/ui/Calendar/CalendarDay";
 import CalendarHeader from "@/common/components/ui/Calendar/CalendarHeader";
@@ -57,7 +57,7 @@ const DiaryDatePicker = ({
     query.isFetching;
 
   return (
-    <PickerDialog labelledBy="diary-date-title" onClose={onClose} header={<PickerHeader
+    <BottomSheetPicker labelledBy="diary-date-title" onClose={onClose} header={<BottomSheetPickerHeader
           headerLeft={
             <button
               type="button"
@@ -85,7 +85,7 @@ const DiaryDatePicker = ({
           >
             완료
           </button>
-        </PickerHeader>}>
+        </BottomSheetPickerHeader>}>
       <div className="flex flex-col gap-6 pb-6">
 
 
@@ -170,7 +170,7 @@ const DiaryDatePicker = ({
           </button>
         )}
       </div>
-    </PickerDialog>
+    </BottomSheetPicker>
   );
 };
 

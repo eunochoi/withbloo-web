@@ -2,41 +2,41 @@
 
 import ScrollableName from '@/common/components/ui/ScrollableName';
 
-import { useRef, useState } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
-import { format } from 'date-fns';
-import { AnimatePresence } from 'framer-motion';
-import { authAction } from '@/common/auth/authAction';
 import { deleteSoberRestart, saveSoberRestart } from '@/common/actions/sober';
-import {
-  formatSoberDuration,
-  formatSoberGoal,
-  getSoberSummary,
-} from '@/common/functions/sober';
-import { getTodayString } from '@/common/functions/getTodayString';
+import { authAction } from '@/common/auth/authAction';
+import { BottomSheet } from '@/common/components/ui/BottomSheet/BottomSheet';
+import { BottomSheetBody } from '@/common/components/ui/BottomSheet/BottomSheetBody';
+import { BottomSheetPicker } from '@/common/components/ui/BottomSheet/BottomSheetPicker';
+import { BottomSheetTitle } from '@/common/components/ui/BottomSheet/BottomSheetTitle';
+import { ConfirmDialog } from '@/common/components/ui/BottomSheet/ConfirmDialog';
 import { CalendarDay } from '@/common/components/ui/Calendar/CalendarDay';
 import { CalendarGrid } from '@/common/components/ui/Calendar/CalendarGrid';
 import CalendarHeader from '@/common/components/ui/Calendar/CalendarHeader';
 import { useMonthCalendar } from '@/common/components/ui/Calendar/useMonthCalendar';
 import { useMonthSwipe } from '@/common/components/ui/Calendar/useMonthSwipe';
-import { PanelDialog } from '@/common/components/ui/Dialog/PanelDialog';
-import { PanelHeader } from '@/common/components/ui/Dialog/PanelDialog/PanelHeader';
-import { PanelBody } from '@/common/components/ui/Dialog/PanelDialog/PanelBody';
-import { PickerDialog } from '@/common/components/ui/Dialog/PickerDialog';
-import { ConfirmDialog } from '@/common/components/ui/Dialog/ConfirmDialog';
 import { showNotice } from '@/common/components/ui/Notice/notice';
-import SoberRestartForm from './SoberRestartForm';
-import { useItemAccent } from '@/common/hooks/useItemAccent';
 import {
-  AddIcon,
-  MoreIcon,
   AchievementIcon,
+  AddIcon,
   DescriptionIcon,
+  MoreIcon,
 } from '@/common/constants/appIcons';
-import SoberMenu from './SoberMenu';
+import { getTodayString } from '@/common/functions/getTodayString';
+import {
+  formatSoberDuration,
+  formatSoberGoal,
+  getSoberSummary,
+} from '@/common/functions/sober';
+import { useItemAccent } from '@/common/hooks/useItemAccent';
+import { useQueryClient } from '@tanstack/react-query';
+import { format } from 'date-fns';
+import { AnimatePresence } from 'framer-motion';
+import { useRef, useState } from 'react';
+import { SoberIcon } from './SoberIcon';
 import SoberInfoCarousel from './SoberInfoCarousel';
 import SoberMemos from './SoberMemos';
-import { SoberIcon } from './SoberIcon';
+import SoberMenu from './SoberMenu';
+import SoberRestartForm from './SoberRestartForm';
 import type { SoberWithRestarts } from './types';
 
 const localInput = (date: Date) =>
@@ -143,12 +143,12 @@ export const SoberDetail = ({
   };
   return (
     <>
-      <PanelDialog
+      <BottomSheet
         handleColor={accent}
         ariaLabel="거리두기 상세 정보"
         onClose={onClose}
       >
-        <PanelHeader
+        <BottomSheetTitle
           title="상세 정보"
           headerRight={
             <SoberMenu
@@ -159,7 +159,7 @@ export const SoberDetail = ({
             />
           }
         />
-        <PanelBody showScrollFade>
+        <BottomSheetBody showScrollFade>
           <div className="flex flex-col gap-8 pb-8">
             <div className="flex flex-col gap-7">
               <div className="flex flex-col items-center gap-3">
@@ -328,9 +328,9 @@ export const SoberDetail = ({
                         onClick={
                           available
                             ? () => {
-                                calendar.showDate(day.dateKey);
-                                setSelectedDay(day.dateKey);
-                              }
+                              calendar.showDate(day.dateKey);
+                              setSelectedDay(day.dateKey);
+                            }
                             : undefined
                         }
                       >
@@ -386,9 +386,9 @@ export const SoberDetail = ({
                           {record.current
                             ? '현재'
                             : format(
-                                new Date(record.end),
-                                'yy년 M월 d일 HH:mm',
-                              )}
+                              new Date(record.end),
+                              'yy년 M월 d일 HH:mm',
+                            )}
                         </p>
                       </div>
                     </div>
@@ -407,18 +407,18 @@ export const SoberDetail = ({
               </div>
             </section>
           </div>
-        </PanelBody>
-      </PanelDialog>
+        </BottomSheetBody>
+      </BottomSheet>
       <AnimatePresence>
         {selectedDay && editing === undefined && (
-          <PanelDialog
+          <BottomSheet
             ariaLabel={selectedDay}
             onClose={() => setSelectedDay(null)}
           >
-            <PanelHeader
+            <BottomSheetTitle
               title={format(new Date(`${selectedDay}T12:00`), 'yyyy년 M월 d일')}
             />
-            <PanelBody>
+            <BottomSheetBody>
               <div className="flex flex-col gap-3 pb-8">
                 <button
                   type="button"
@@ -488,8 +488,8 @@ export const SoberDetail = ({
                     </div>
                   )}
               </div>
-            </PanelBody>
-          </PanelDialog>
+            </BottomSheetBody>
+          </BottomSheet>
         )}
         {editing !== undefined && (
           <SoberRestartForm
@@ -504,15 +504,15 @@ export const SoberDetail = ({
           />
         )}
         {recordMenu !== null && (
-          <PickerDialog
+          <BottomSheetPicker
             labelledBy="sober-record-menu"
             onClose={() => setRecordMenu(null)}
-           header={<h2
-                id="sober-record-menu"
-                className="text-center text-lg font-semibold"
-              >
-                다시 시작 기록
-              </h2>}>
+            header={<h2
+              id="sober-record-menu"
+              className="text-center text-lg font-semibold"
+            >
+              다시 시작 기록
+            </h2>}>
             <div className="flex flex-col gap-6 pb-6">
 
               <button
@@ -544,7 +544,7 @@ export const SoberDetail = ({
                 </span>
               </button>
             </div>
-          </PickerDialog>
+          </BottomSheetPicker>
         )}
       </AnimatePresence>
       <AnimatePresence>

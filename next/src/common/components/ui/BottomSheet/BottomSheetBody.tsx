@@ -3,15 +3,15 @@
 import { ScrollContainer } from "@/common/components/ui/ScrollContainer";
 import { cn } from "@/common/utils/cn";
 import { forwardRef, ReactNode } from "react";
-import { PANEL_CONTENT_HORIZONTAL_PADDING_CLASS } from './constants';
+import { PANEL_CONTENT_HORIZONTAL_PADDING_CLASS } from './panelConstants';
 
-interface PanelBodyProps {
+interface BottomSheetBodyProps {
   children: ReactNode;
   showScrollFade?: boolean;
   contentClassName?: string;
 }
 
-export const PanelBody = forwardRef<HTMLDivElement, PanelBodyProps>(function PanelBody({
+export const BottomSheetBody = forwardRef<HTMLDivElement, BottomSheetBodyProps>(function BottomSheetBody({
   children,
   showScrollFade = false,
   contentClassName,

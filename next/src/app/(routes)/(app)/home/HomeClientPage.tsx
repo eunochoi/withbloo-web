@@ -9,9 +9,9 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
 
 import { authAction } from "@/common/auth/authAction";
-import { PanelDialog } from "@/common/components/ui/Dialog/PanelDialog";
-import { PanelBody } from "@/common/components/ui/Dialog/PanelDialog/PanelBody";
-import { PanelHeader } from "@/common/components/ui/Dialog/PanelDialog/PanelHeader";
+import { BottomSheet } from "@/common/components/ui/BottomSheet/BottomSheet";
+import { BottomSheetBody } from "@/common/components/ui/BottomSheet/BottomSheetBody";
+import { BottomSheetTitle } from "@/common/components/ui/BottomSheet/BottomSheetTitle";
 import { usePrefetchPage } from "@/common/hooks/usePrefetchPage";
 import { statsQueries } from "@/common/queries/statsQueries";
 import { AnimatePresence } from 'framer-motion';
@@ -66,9 +66,9 @@ const HomeClientPage = ({ initialDate }: { initialDate: string }) => {
     <>
       <HomePage initialDate={initialDate} onOpenAnalysis={() => setAnalysisOpen(true)} />
       <AnimatePresence>
-        {isAnalysisOpen && <PanelDialog ariaLabel="기록 분석" onClose={() => setAnalysisOpen(false)}>
-          <PanelHeader title="기록 분석" />
-          <PanelBody showScrollFade>
+        {isAnalysisOpen && <BottomSheet ariaLabel="기록 분석" onClose={() => setAnalysisOpen(false)}>
+          <BottomSheetTitle title="기록 분석" />
+          <BottomSheetBody showScrollFade>
             <div className="pb-[max(2rem,env(safe-area-inset-bottom))]">{isStatsError ? (
               <div className="flex min-h-64 w-full flex-col items-center justify-center gap-3 text-center text-theme-text-secondary">
                 <span>홈 기록을 불러오지 못했어요.</span>
@@ -93,8 +93,8 @@ const HomeClientPage = ({ initialDate }: { initialDate: string }) => {
                 onOpenYearPicker={() => setIsYearPickerOpen(true)}
               />
             )}</div>
-          </PanelBody>
-        </PanelDialog>}
+          </BottomSheetBody>
+        </BottomSheet>}
       </AnimatePresence>
       <AnimatePresence>
         {isYearPickerOpen && (

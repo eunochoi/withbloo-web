@@ -1,10 +1,11 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { PANEL_HORIZONTAL_PADDING_CLASS } from "./constants";
-import ScrollableName from '../../ScrollableName';
+import { PANEL_HORIZONTAL_PADDING_CLASS } from "./panelConstants";
+import ScrollableName from '../ScrollableName';
+import { BottomSheetHeader } from './BottomSheetHeader';
 
-interface PanelHeaderProps {
+interface BottomSheetTitleProps {
   title?: string;
   onBack?: () => void;
   backLabel?: string;
@@ -14,15 +15,19 @@ interface PanelHeaderProps {
   scrollableTitle?: boolean;
 }
 
-export const PanelHeader = ({
+export const BottomSheetTitle = ({
   title,
   headerLeft,
   headerRight,
   onTitleClick,
   scrollableTitle = false,
-}: PanelHeaderProps) => title || headerLeft || headerRight ? (
-  <div
+}: BottomSheetTitleProps) => title || headerLeft || headerRight ? (
+  <BottomSheetHeader
     className={`relative flex min-h-12 w-full shrink-0 items-center justify-center ${PANEL_HORIZONTAL_PADDING_CLASS}`}
+    headerLeft={headerLeft}
+    headerRight={headerRight}
+    leftClassName="absolute left-5 flex items-center tablet:left-12 desktop:left-[81px]"
+    rightClassName="absolute right-5 flex items-center tablet:right-12 desktop:right-[81px]"
   >
     {title &&
       (onTitleClick ? (
@@ -39,15 +44,5 @@ export const PanelHeader = ({
           {scrollableTitle ? <ScrollableName name={title} /> : title}
         </h2>
       ))}
-    {headerLeft && (
-      <div className="absolute left-5 flex items-center tablet:left-12 desktop:left-[81px]">
-        {headerLeft}
-      </div>
-    )}
-    {headerRight && (
-      <div className="absolute right-5 flex items-center tablet:right-12 desktop:right-[81px]">
-        {headerRight}
-      </div>
-    )}
-  </div>
+  </BottomSheetHeader>
 ) : null;

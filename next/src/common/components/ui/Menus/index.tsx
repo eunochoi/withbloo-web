@@ -7,8 +7,8 @@ import {
 import { AnimatePresence } from 'framer-motion';
 import { useId, useRef, useState } from 'react';
 
-import { ConfirmDialog } from '../Dialog/ConfirmDialog';
-import { PickerDialog } from '../Dialog/PickerDialog';
+import { ConfirmDialog } from '../BottomSheet/ConfirmDialog';
+import { BottomSheetPicker } from '../BottomSheet/BottomSheetPicker';
 import ScrollableName from '../ScrollableName';
 
 interface Props {
@@ -89,7 +89,7 @@ const Menus = ({
         }}
       >
         {isOpen && (
-          <PickerDialog labelledBy={`${id}-title`} onClose={onClose} header={<div className="flex flex-col items-center gap-2">
+          <BottomSheetPicker labelledBy={`${id}-title`} onClose={onClose} header={<div className="flex flex-col items-center gap-2">
                 <h2
                   id={`${id}-title`}
                   className="w-full min-w-0 text-center text-lg font-semibold tracking-tight text-theme-text-primary"
@@ -134,7 +134,7 @@ const Menus = ({
                 )}
               </div>
             </div>
-          </PickerDialog>
+          </BottomSheetPicker>
         )}
       </AnimatePresence>
       <ConfirmDialog

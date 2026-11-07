@@ -1,13 +1,13 @@
 "use client";
 
-import { PickerHeader } from "@/common/components/ui/Dialog/PickerDialog/PickerHeader";
+import { BottomSheetPickerHeader } from "@/common/components/ui/BottomSheet/BottomSheetPickerHeader";
 
 import { authAction } from "@/common/auth/authAction";
 import { FilterPickerRow } from "@/common/components/ui/FilterPickerRow";
 import SoberCard from "@/common/components/features/Sober/SoberCard";
 import AppPageLayout from "@/common/components/layout/AppPageLayout";
 import AppPageTitle from "@/common/components/layout/AppPageTitle";
-import { PickerDialog } from "@/common/components/ui/Dialog/PickerDialog";
+import { BottomSheetPicker } from "@/common/components/ui/BottomSheet/BottomSheetPicker";
 import EmptyStateCard from "@/common/components/ui/EmptyStateCard";
 import InfoNotice from "@/common/components/ui/InfoNotice";
 import { showNotice } from "@/common/components/ui/Notice/notice";
@@ -276,12 +276,12 @@ function SoberFilterPicker({
 
   return (
     <>
-      <PickerDialog
+      <BottomSheetPicker
         labelledBy="sober-filter-title"
         onClose={() => {
           if (!periodOpen) onClose();
         }}
-       header={<PickerHeader
+       header={<BottomSheetPickerHeader
             headerLeft={
               <button
                 type="button"
@@ -305,7 +305,7 @@ function SoberFilterPicker({
             >
               적용
             </button>
-          </PickerHeader>}>
+          </BottomSheetPickerHeader>}>
         <div className="flex flex-col gap-5 px-2 pb-6 pt-2">
 
 
@@ -335,11 +335,11 @@ function SoberFilterPicker({
           </section>
           <InfoNotice>현재 기록이 선택한 기간 이상인 항목만 보여요.</InfoNotice>
         </div>
-      </PickerDialog>
+      </BottomSheetPicker>
 
       <AnimatePresence>
         {periodOpen && (
-          <PickerDialog
+          <BottomSheetPicker
             labelledBy="sober-period-title"
             onClose={() => setPeriodOpen(false)}
            header={<h2
@@ -366,7 +366,7 @@ function SoberFilterPicker({
                 </button>
               ))}
             </div>
-          </PickerDialog>
+          </BottomSheetPicker>
         )}
       </AnimatePresence>
     </>

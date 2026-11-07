@@ -5,9 +5,9 @@ import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { authAction } from '@/common/auth/authAction';
 import { soberQueries } from '@/common/queries/soberQueries';
-import { PanelDialog } from '@/common/components/ui/Dialog/PanelDialog';
-import { PanelHeader } from '@/common/components/ui/Dialog/PanelDialog/PanelHeader';
-import { PanelBody } from '@/common/components/ui/Dialog/PanelDialog/PanelBody';
+import { BottomSheet } from '@/common/components/ui/BottomSheet/BottomSheet';
+import { BottomSheetTitle } from '@/common/components/ui/BottomSheet/BottomSheetTitle';
+import { BottomSheetBody } from '@/common/components/ui/BottomSheet/BottomSheetBody';
 import { SoberDetail } from './SoberDetail';
 
 export default function SoberDetailEntry({ id }: { id: string }) {
@@ -27,9 +27,9 @@ export default function SoberDetailEntry({ id }: { id: string }) {
   };
   if (!item)
     return (
-      <PanelDialog ariaLabel="거리두기 상세 정보" onClose={close}>
-        <PanelHeader title="상세 정보" />
-        <PanelBody>
+      <BottomSheet ariaLabel="거리두기 상세 정보" onClose={close}>
+        <BottomSheetTitle title="상세 정보" />
+        <BottomSheetBody>
           <div className="pb-12 text-center text-sm text-theme-text-secondary">
             {isPending ? (
               '기록을 불러오는 중이에요.'
@@ -41,8 +41,8 @@ export default function SoberDetailEntry({ id }: { id: string }) {
               '거리두기 항목을 찾을 수 없어요.'
             )}
           </div>
-        </PanelBody>
-      </PanelDialog>
+        </BottomSheetBody>
+      </BottomSheet>
     );
   return (
     <SoberDetail

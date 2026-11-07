@@ -6,9 +6,9 @@ import { format } from 'date-fns';
 import { AnimatePresence } from 'framer-motion';
 import { authAction } from '@/common/auth/authAction';
 import { getSoberMemos } from '@/common/actions/sober';
-import { PanelDialog } from '@/common/components/ui/Dialog/PanelDialog';
-import { PanelHeader } from '@/common/components/ui/Dialog/PanelDialog/PanelHeader';
-import { PanelBody } from '@/common/components/ui/Dialog/PanelDialog/PanelBody';
+import { BottomSheet } from '@/common/components/ui/BottomSheet/BottomSheet';
+import { BottomSheetTitle } from '@/common/components/ui/BottomSheet/BottomSheetTitle';
+import { BottomSheetBody } from '@/common/components/ui/BottomSheet/BottomSheetBody';
 import SortPicker from '@/common/components/ui/SortPicker';
 import { MoreIcon, SortIcon } from '@/common/constants/appIcons';
 import { PiClockCounterClockwise } from 'react-icons/pi';
@@ -36,9 +36,9 @@ export default function SoberMemos({
   const items = query.data?.pages.flatMap((page) => page.items) ?? [];
   return (
     <>
-      <PanelDialog ariaLabel={`${name} 기록`} onClose={onClose}>
-        <PanelHeader title={`${name} 기록`} scrollableTitle />
-        <PanelBody showScrollFade>
+      <BottomSheet ariaLabel={`${name} 기록`} onClose={onClose}>
+        <BottomSheetTitle title={`${name} 기록`} scrollableTitle />
+        <BottomSheetBody showScrollFade>
           <div className="flex flex-col gap-3 pb-7">
             {items.length > 0 && <button
               type="button"
@@ -146,8 +146,8 @@ export default function SoberMemos({
               </button>
             )}
           </div>
-        </PanelBody>
-      </PanelDialog>
+        </BottomSheetBody>
+      </BottomSheet>
       <AnimatePresence>
         {sorting && (
           <SortPicker

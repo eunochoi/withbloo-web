@@ -14,10 +14,10 @@ import { useQuery } from '@tanstack/react-query';
 import { AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
-import { PanelDialog } from '../../ui/Dialog/PanelDialog';
-import { PanelBody } from '../../ui/Dialog/PanelDialog/PanelBody';
-import { PanelHeader } from '../../ui/Dialog/PanelDialog/PanelHeader';
-import { PanelSubmitButton } from '../../ui/Dialog/PanelDialog/PanelSubmitButton';
+import { BottomSheet } from '../../ui/BottomSheet/BottomSheet';
+import { BottomSheetBody } from '../../ui/BottomSheet/BottomSheetBody';
+import { BottomSheetTitle } from '../../ui/BottomSheet/BottomSheetTitle';
+import { BottomSheetSubmitButton } from '../../ui/BottomSheet/BottomSheetSubmitButton';
 import { createHabitRequest } from './functions/createHabitRequest';
 import { updateHabitRequest } from './functions/updateHabitRequest';
 import HabitFormIconSection from './HabitFormIconSection';
@@ -118,25 +118,25 @@ const HabitFormClientPage = ({ isEdit, habitId }: HabitFormClientPageProps) => {
     <>
     <AnimatePresence onExitComplete={() => router.back()}>
       {isDialogMounted && (
-        <PanelDialog
+        <BottomSheet
           ariaLabel={`습관 항목 ${confirmText}`}
           dismissible={!isSubmitting}
           preserveHandle
           onClose={handleBack}
         >
-          <PanelHeader
+          <BottomSheetTitle
             title={`습관 항목 ${confirmText}`}
             onBack={handleBack}
-          headerRight={<PanelSubmitButton
+          headerRight={<BottomSheetSubmitButton
               type="button"
               onClick={handleSubmit}
               disabled={isSubmitting}
               aria-busy={isSubmitting}
             >
               {isSubmitting ? '저장 중' : '저장'}
-            </PanelSubmitButton>}
+            </BottomSheetSubmitButton>}
           />
-          <PanelBody showScrollFade>
+          <BottomSheetBody showScrollFade>
             <fieldset ref={formRef} disabled={isSubmitting} className="m-0 flex min-w-0 w-full flex-col gap-7 border-0 pb-6">
               <div className="flex w-full flex-col gap-7">
                 <HabitFormNameSection name={name} setName={setName} />
@@ -145,9 +145,9 @@ const HabitFormClientPage = ({ isEdit, habitId }: HabitFormClientPageProps) => {
                 <HabitFormRecordOptions iconColor={iconColor} startedAtInput={startedAtInput} isEdit={isEdit} onOpenColor={() => setPicker('color')} onOpenDate={() => setPicker('date')} />
               </div>
             </fieldset>
-          </PanelBody>
+          </BottomSheetBody>
 
-        </PanelDialog>
+        </BottomSheet>
       )}
     </AnimatePresence>
     <AnimatePresence>

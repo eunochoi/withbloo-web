@@ -5,9 +5,9 @@ import { MoreIcon } from '@/common/constants/appIcons';
 import { authAction } from "@/common/auth/authAction";
 import { diaryQueries } from "@/common/queries/diaryQueries";
 import DiaryMenus from "@/common/components/ui/Diary/DiaryMenus";
-import { PanelDialog } from "@/common/components/ui/Dialog/PanelDialog";
-import { PanelBody } from "@/common/components/ui/Dialog/PanelDialog/PanelBody";
-import { PanelHeader } from "@/common/components/ui/Dialog/PanelDialog/PanelHeader";
+import { BottomSheet } from "@/common/components/ui/BottomSheet/BottomSheet";
+import { BottomSheetBody } from "@/common/components/ui/BottomSheet/BottomSheetBody";
+import { BottomSheetTitle } from "@/common/components/ui/BottomSheet/BottomSheetTitle";
 import { parseLocalDate } from "@/common/utils/date/parseLocalDate";
 import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
@@ -44,11 +44,11 @@ const DiaryDetailClientPage = ({ diaryId }: DiaryDetailClientPageProps) => {
   return (
     <AnimatePresence onExitComplete={() => router.back()}>
       {isDialogMounted && (
-        <PanelDialog
+        <BottomSheet
           ariaLabel={headerTitle}
           onClose={() => setIsDialogMounted(false)}
         >
-          <PanelHeader
+          <BottomSheetTitle
             title={headerTitle}
             onBack={() => setIsDialogMounted(false)}
             backLabel="뒤로가기"
@@ -72,13 +72,13 @@ const DiaryDetailClientPage = ({ diaryId }: DiaryDetailClientPageProps) => {
               </>
             )}
           />
-          <PanelBody>
+          <BottomSheetBody>
             <div className="flex w-full min-w-0 flex-col gap-12 pb-[max(2rem,env(safe-area-inset-bottom))] landscape-short:gap-6">
               <DiaryDetailContent diaryData={diaryData} />
               {hasImages && <DiaryDetailGallery key={diaryData.id} images={diaryData.Images} />}
             </div>
-          </PanelBody>
-        </PanelDialog>
+          </BottomSheetBody>
+        </BottomSheet>
       )}
     </AnimatePresence>
   );

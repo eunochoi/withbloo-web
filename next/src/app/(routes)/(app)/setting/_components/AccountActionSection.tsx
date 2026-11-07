@@ -3,7 +3,7 @@
 import { DeleteIcon, LogoutIcon } from '@/common/constants/appIcons';
 
 import { logout } from "@/common/auth/logout";
-import { ConfirmDialog } from "@/common/components/ui/Dialog/ConfirmDialog";
+import { ConfirmDialog } from "@/common/components/ui/BottomSheet/ConfirmDialog";
 import { useState } from "react";
 
 import { SettingItem } from "./SettingItem";
