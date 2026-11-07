@@ -2,6 +2,7 @@ import { AddIcon, CloseIcon, DragIcon } from '@/common/constants/appIcons';
 import { DIARY_IMAGE_ALLOWED_MIME_TYPES, DIARY_IMAGE_MAX_COUNT } from '@/common/constants/image';
 import { cn } from '@/common/utils/cn';
 import { closestCenter, DndContext, DragOverlay, KeyboardSensor, MouseSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { restrictToFirstScrollableAncestor, restrictToHorizontalAxis } from '@dnd-kit/modifiers';
 import { horizontalListSortingStrategy, SortableContext, sortableKeyboardCoordinates, useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { useReducedMotion } from 'framer-motion';
@@ -37,7 +38,7 @@ const SortableDiaryImage = ({ id, src, index, disabled, onRemove }: {
     <div
       ref={setNodeRef}
       style={{ transform: CSS.Transform.toString(transform), transition: reducedMotion ? undefined : transition }}
-      className={cn(tileClass, isDragging ? 'bg-theme-accent/10' : 'shadow-card')}
+      className={cn(tileClass, isDragging && 'bg-theme-accent/10')}
     >
       <div className={cn('relative h-full w-full touch-auto', isDragging && 'opacity-0')}>
         <Image src={src} alt={`첨부 이미지 ${index + 1}`} width={192} height={224} sizes="96px" unoptimized={src.startsWith('blob:')} draggable={false} className="h-full w-full object-cover" />
@@ -98,6 +99,7 @@ const DiaryFormImages = ({ diaryImages, handleImageChange, getImageUrl, handleRe
   return (
     <DndContext
       sensors={sensors}
+      modifiers={[restrictToHorizontalAxis, restrictToFirstScrollableAncestor]}
       collisionDetection={closestCenter}
       accessibility={{
         screenReaderInstructions: { draggable: '스페이스 키로 이미지을 선택하고 좌우 방향키로 이동한 뒤 스페이스 키로 놓으세요. Escape 키로 취소합니다.' },
@@ -118,7 +120,7 @@ const DiaryFormImages = ({ diaryImages, handleImageChange, getImageUrl, handleRe
         if (from >= 0 && to >= 0) onReorder(from, to);
       }}
     >
-      <div className="flex w-full gap-3 overflow-x-auto py-2">
+      <div className="flex w-full gap-3 overflow-x-auto">
         <SortableContext items={items.map((item) => item.id)} strategy={horizontalListSortingStrategy}>
           {items.map((item, index) => (
             <SortableDiaryImage key={item.id} {...item} index={index} disabled={isLoading} onRemove={() => handleRemoveImage(index)} />
@@ -139,9 +141,9 @@ const DiaryFormImages = ({ diaryImages, handleImageChange, getImageUrl, handleRe
       <input ref={fileInputRef} type="file" accept={DIARY_IMAGE_ALLOWED_MIME_TYPES.join(',')} name="image" multiple hidden disabled={isLoading} onChange={handleImageChange} />
       {/* Keep the preview in the dialog top layer, outside the animated panel. */}
       {overlayContainer && createPortal(
-        <DragOverlay dropAnimation={null} style={{ pointerEvents: 'none' }}>
+        <DragOverlay dropAnimation={null} modifiers={[restrictToHorizontalAxis, restrictToFirstScrollableAncestor]} style={{ pointerEvents: 'none' }}>
           {activeItem && (
-            <div className={cn(tileClass, 'ring-2 ring-theme-accent shadow-theme-floating')}>
+            <div className={cn(tileClass, 'ring-2 ring-theme-accent')}>
               <Image src={activeItem.src} alt="이동 중인 이미지" width={192} height={224} sizes="96px" unoptimized={activeItem.src.startsWith('blob:')} draggable={false} className="h-full w-full object-cover" />
             </div>
           )}
