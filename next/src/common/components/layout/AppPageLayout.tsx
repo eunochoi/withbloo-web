@@ -73,7 +73,7 @@ const AppPageLayout = ({ header, children, scrollRef, toolbar, fixedDesktop = fa
             {hasToolbar && (
               <div ref={toolbarRef} data-component="pageToolbar" className="relative bg-theme-surface py-2">
                 <AppPageContainer>{toolbar}</AppPageContainer>
-                <ScrollEdgeFade edge="top" visible={isToolbarPinned} className="absolute inset-x-0 top-full h-6" />
+                <ScrollEdgeFade edge="top" visible={isToolbarPinned} className="absolute inset-x-0 top-full h-8" />
               </div>
             )}
           </div>
