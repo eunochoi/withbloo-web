@@ -100,24 +100,38 @@ export function BackupDialog({
         return;
       }
       const picker = (window as BackupWindow).showSaveFilePicker;
-      if (destination === 'device' && picker)
-        saveHandle = await picker.call(window, {
-          suggestedName: filename,
-          types: [
-            {
-              description: "'위블' 백업",
-              accept: { 'application/x-bloolog-backup': ['.bloo'] },
-            },
-          ],
-        });
+      if (destination === 'device' && picker) {
+        try {
+          saveHandle = await picker.call(window, {
+            suggestedName: filename,
+            types: [
+              {
+                description: "'위블' 백업",
+                accept: { 'application/x-bloolog-backup': ['.bloo'] },
+              },
+            ],
+          });
+        } catch (reason) {
+          if (reason instanceof DOMException && reason.name === 'AbortError')
+            throw reason;
+        }
+      }
       const response = await request('/api/backup/export', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ password }),
       });
       await checkResponse(response);
+      let writable: WritableStream<Uint8Array> | undefined;
       if (saveHandle && response.body) {
-        const writable = await saveHandle.createWritable();
+        try {
+          writable = await saveHandle.createWritable();
+        } catch (reason) {
+          if (reason instanceof DOMException && reason.name === 'AbortError')
+            throw reason;
+        }
+      }
+      if (writable && response.body) {
         await response.body.pipeTo(writable);
       } else {
         const blob = await response.blob();
