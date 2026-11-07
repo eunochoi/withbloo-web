@@ -128,7 +128,7 @@ const TodayRecordSection = ({ initialDate }: { initialDate: string }) => {
             : diaryQuery.isError
               ? '불러오기 실패'
               : emotion
-                ? `'${emotion.nameKr}' 기록 남김`
+                ? `'${emotion.nameKr}' 일기`
                 : '기록 없음'}
         </span>
       </button>
