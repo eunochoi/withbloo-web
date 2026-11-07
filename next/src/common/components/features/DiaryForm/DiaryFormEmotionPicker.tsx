@@ -110,7 +110,7 @@ const DiaryFormEmotionPicker = ({
           </span>
         </PickerInfoCard>
         <div
-          className="grid auto-rows-fr grid-cols-[repeat(auto-fit,minmax(min(100%,12rem),1fr))] gap-3"
+          className="grid auto-rows-fr grid-cols-2 gap-3"
           role="group"
           aria-label="감정 선택"
         >
