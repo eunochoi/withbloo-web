@@ -11,6 +11,7 @@ import { PanelHeader } from '@/common/components/ui/Dialog/PanelDialog/PanelHead
 import { PanelBody } from '@/common/components/ui/Dialog/PanelDialog/PanelBody';
 import SortPicker from '@/common/components/ui/SortPicker';
 import { MoreIcon, SortIcon } from '@/common/constants/appIcons';
+import { PiClockCounterClockwise } from 'react-icons/pi';
 
 export default function SoberMemos({
   soberId,
@@ -39,7 +40,7 @@ export default function SoberMemos({
         <PanelHeader title={`${name} 기록`} scrollableTitle />
         <PanelBody showScrollFade>
           <div className="flex flex-col gap-3 pb-7">
-            <button
+            {items.length > 0 && <button
               type="button"
               aria-label={`다시 시작 기록 정렬, ${sort === 'DESC' ? '최신순' : '과거순'}`}
               onClick={() => setSorting(true)}
@@ -47,7 +48,7 @@ export default function SoberMemos({
             >
               <SortIcon />
               {sort === 'DESC' ? '최신순' : '과거순'}
-            </button>
+            </button>}
             {query.isPending ? (
               <p
                 role="status"
@@ -97,20 +98,19 @@ export default function SoberMemos({
                           <MoreIcon />
                         </button>
                       </div>
-                      {record.memo && (
-                        <p className="whitespace-pre-wrap text-sm tracking-tighter text-theme-text-secondary">
-                          {record.memo}
-                        </p>
-                      )}
+                      <p className="whitespace-pre-wrap text-sm tracking-tighter text-theme-text-secondary">
+                        {record.memo || '메모 없이 다시 시작했어요.'}
+                      </p>
                     </div>
                   </div>
                 );
               })
             ) : (
-              <div className="flex min-h-48 flex-col items-center justify-center gap-3 text-center">
-                <p>아직 다시 시작한 기록이 없어요.</p>
-                <p className="text-sm text-theme-text-secondary">
-                  다시 시작한 기록을 여기서 모아볼 수 있어요.
+              <div className="flex min-h-48 flex-col items-center justify-center gap-4 pt-8 text-center">
+                <PiClockCounterClockwise aria-hidden className="h-10 w-10 text-theme-text-secondary" />
+                <p className="text-lg font-semibold">아직 다시 시작한 기록이 없어요.</p>
+                <p className="text-base leading-relaxed text-theme-text-secondary">
+                  거리두기를 다시 시작하면<br />이곳에 지난 기록이 차곡차곡 쌓여요.
                 </p>
               </div>
             )}

@@ -278,7 +278,7 @@ export const SoberDetail = ({
                   onClick={() => setMemosOpen(true)}
                   className="min-h-12 rounded-full border border-theme-text-secondary/10 bg-theme-surface-muted"
                 >
-                  기록보기
+                  기록 모아보기
                 </button>
               </div>
             </div>
