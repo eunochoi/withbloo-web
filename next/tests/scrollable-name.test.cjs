@@ -4,34 +4,33 @@ const fs = require('node:fs');
 const ts = require('typescript');
 const vm = require('node:vm');
 
-test('long names enable scrolling on click while short names preserve their parent action', () => {
-  let expanded = false;
-  const ref = { current: { scrollWidth: 100, clientWidth: 100 } };
+test('ellipsis follows complete character boundaries while preserving scrolling and parent clicks', () => {
+  let markerLeft = null;
+  let measure;
+  let refIndex = 0;
+  const characters = Array.from({ length: 18 }, (_, index) => ({
+    getBoundingClientRect: () => ({ right: (index + 1) * 10 - element.scrollLeft }),
+  }));
+  const element = { scrollWidth: 180, clientWidth: 100, scrollLeft: 0, firstElementChild: { children: characters }, getBoundingClientRect: () => ({ left: 0, right: 100 }), addEventListener: (_, fn) => { measure = fn; }, removeEventListener: () => {} };
+  const marker = { getBoundingClientRect: () => ({ width: 15 }) };
   const exports = {};
   const jsx = (type, props) => ({ type, props });
   const code = ts.transpileModule(fs.readFileSync('src/common/components/ui/ScrollableName/index.tsx', 'utf8'), { compilerOptions: { jsx: ts.JsxEmit.ReactJSX, module: ts.ModuleKind.CommonJS } }).outputText;
-  vm.runInNewContext(code, { exports, require: (id) => {
-    if (id === 'react') return { useRef: () => ref, useState: () => [expanded, (value) => { expanded = value; }], useEffect: () => {} };
+  vm.runInNewContext(code, { exports, document: {}, Intl, require: (id) => {
+    if (id === 'react') return { useRef: () => ({ current: refIndex++ % 2 === 0 ? element : marker }), useState: () => [markerLeft, value => { markerLeft = value; }], useEffect: fn => fn() };
     if (id === 'react/jsx-runtime') return { jsx, jsxs: jsx };
     if (id === '@/common/utils/cn') return { cn: (...values) => values.filter(Boolean).join(' ') };
     throw Error(id);
   } });
-  let prevented = 0;
-  let stopped = 0;
-  const event = { preventDefault: () => prevented++, stopPropagation: () => stopped++ };
-  exports.default({ name: 'Short' }).props.onClick(event);
-  assert.equal(expanded, false);
-  assert.equal(stopped, 0);
-  ref.current.scrollWidth = 180;
-  exports.default({ name: 'A long habit name' }).props.onClick(event);
-  assert.equal(expanded, true);
-  assert.equal(prevented, 1);
-  assert.equal(stopped, 1);
-  assert.match(exports.default({ name: 'A long habit name' }).props.className, /overflow-x-auto/);
-  ref.current.scrollLeft = 40;
-  exports.default({ name: 'A long habit name' }).props.onClick(event);
-  assert.equal(expanded, false);
-  assert.equal(ref.current.scrollLeft, 0);
-  assert.equal(stopped, 2);
-  assert.match(exports.default({ name: 'A long habit name' }).props.className, /truncate/);
+  exports.default({ name: 'Long name' });
+  assert.equal(markerLeft, 80);
+  element.scrollLeft = 5;
+  measure();
+  assert.equal(markerLeft, 85);
+  const tree = exports.default({ name: 'Long name' });
+  assert.equal(tree.props.onClick, undefined);
+  assert.equal(tree.props.children[2].props.children, '…');
+  element.scrollLeft = 80;
+  measure();
+  assert.equal(markerLeft, null);
 });
