@@ -7,7 +7,7 @@ import { authAction } from "@/common/auth/authAction";
 import HabitMenus from "@/common/components/ui/Habit/HabitMenus";
 import { habitQueries } from "@/common/queries/habitQueries";
 import { useQuery } from "@tanstack/react-query";
-import { differenceInCalendarDays, format, parseISO } from 'date-fns';
+import { format } from 'date-fns';
 import { AnimatePresence } from "framer-motion";
 import { notFound, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -19,6 +19,8 @@ import { BottomSheetBody } from "../../ui/BottomSheet/BottomSheetBody";
 import { BottomSheetTitle } from "../../ui/BottomSheet/BottomSheetTitle";
 import HabitInfoHeader from "./HabitInfoHeader";
 import MonthInfo from "./MonthInfo";
+import { HabitInfoCarousel } from "./HabitInfoCarousel";
+import ActivityRecords, { type RecordView } from '../ActivityRecords';
 import YearInfo from "./YearInfo";
 
 interface Props {
@@ -28,6 +30,7 @@ interface Props {
 
 const HabitDetailClientPage = ({ habitId, today }: Props) => {
   const router = useRouter();
+  const [recordView, setRecordView] = useState<RecordView | null>(null);
   const [isDialogMounted, setIsDialogMounted] = useState(true);
   const [isMenuOpen, setMenuOpen] = useState(false);
   const [chartDate, setChartDate] = useState<Date>(new Date());
@@ -36,6 +39,15 @@ const HabitDetailClientPage = ({ habitId, today }: Props) => {
     ...habitQueries.byId(habitId, authAction),
     enabled: habitId !== null,
   });
+  const monthQuery = useQuery({
+    ...habitQueries.month(habitId, today.slice(0, 7), authAction),
+    enabled: !!habitDataById,
+  });
+  const yearQuery = useQuery({
+    ...habitQueries.year(habitId, today.slice(0, 4), authAction),
+    enabled: !!habitDataById && habitDataById.priority > 0,
+  });
+  const monthRate = monthQuery.isError ? null : (monthQuery.data?.summary?.completionRate ?? null);
 
   const accent = useItemAccent(habitDataById?.iconColor);
 
@@ -44,6 +56,7 @@ const HabitDetailClientPage = ({ habitId, today }: Props) => {
   }, [isError, isDialogMounted]);
 
   return (
+    <>
     <AnimatePresence onExitComplete={() => router.back()}>
       {isDialogMounted && (
         <BottomSheet
@@ -78,26 +91,41 @@ const HabitDetailClientPage = ({ habitId, today }: Props) => {
           />
           <BottomSheetBody showScrollFade>
             <div className="flex w-full flex-col gap-8 pb-6 tablet:pb-7">
-              <HabitInfoHeader habitData={habitDataById} />
+              <div className="flex flex-col gap-8">
+                <HabitInfoHeader habitData={habitDataById} />
+                {habitDataById && <HabitInfoCarousel free={habitDataById.priority === 0} today={today}
+                  latestDate={habitDataById.latestRecordedDate} month={monthQuery.isError ? undefined : monthQuery.data?.summary}
+                  year={yearQuery.isError ? undefined : yearQuery.data} color={accent.color} />}
+                {habitDataById?.description?.trim() && (
+                  <p className="w-[90%] min-w-0 self-center whitespace-pre-wrap [overflow-wrap:anywhere] text-center text-base leading-relaxed text-theme-text-secondary">{habitDataById.description}</p>
+                )}
+                {habitDataById && habitDataById.priority > 0 && (
+                  <div className="flex w-[90%] flex-col gap-3 self-center">
+                    <div className="flex justify-between gap-2 text-sm text-theme-text-secondary"><span>이번 달 실천도</span><span>{monthRate === null ? '—' : `${monthRate.toFixed(1)}%`}</span></div>
+                    {monthRate === null ? <div className="h-5 rounded-full bg-theme-border/80" /> : (
+                      <div role="progressbar" aria-label="이번 달 실천도" aria-valuemin={0} aria-valuemax={100} aria-valuenow={monthRate} className="h-5 overflow-hidden rounded-full bg-theme-border/80">
+                        <div className="h-full" style={{ width: `${Math.min(100, Math.max(0, monthRate))}%`, backgroundColor: accent.color }} />
+                      </div>
+                    )}
+                  </div>
+                )}
+                {habitDataById && <div className="flex flex-col gap-3 px-1">
+                  <button type="button" onClick={() => setRecordView({ mode: 'new', type: 'MEMO' })} className="min-h-12 rounded-full border border-black/10 text-theme-surface" style={{ backgroundColor: accent.color }}>기록 추가하기</button>
+                  <button type="button" onClick={() => setRecordView({ mode: 'list' })} className="min-h-12 rounded-full border border-theme-text-secondary/10 bg-theme-surface-muted">기록 모두보기</button>
+                </div>}
+              </div>
 
-              {habitDataById?.priority === 0 && (
-                <section className="space-y-3 px-2 pt-2">
-                  <h2 className="text-lg font-semibold">최근 기록</h2>
-                  <p className="text-sm text-theme-text-secondary">{habitDataById.latestRecordedDate
-                    ? `${format(parseISO(habitDataById.latestRecordedDate), 'yyyy년 M월 d일')} · ${habitDataById.latestRecordedDate === today ? '오늘' : `${differenceInCalendarDays(parseISO(today), parseISO(habitDataById.latestRecordedDate))}일 전`}`
-                    : '아직 기록이 없어요.'}</p>
-                </section>
-              )}
+              <div className="flex flex-col gap-8">
               <MonthInfo
                 key={habitId}
                 habitId={habitId}
+                onSelectDate={(date) => setRecordView({ mode: 'day', date })}
                 today={today}
                 iconKey={habitDataById?.iconKey}
                 iconColor={habitDataById?.iconColor}
-                isFree={habitDataById?.priority === 0}
                 startedDate={habitDataById?.startedDate}
-                accent={accent}
               />
+              </div>
 
               {habitDataById && habitDataById.priority > 0 && <YearInfo
                 displayDate={chartDate}
@@ -108,6 +136,7 @@ const HabitDetailClientPage = ({ habitId, today }: Props) => {
                 setDisplayDate={setChartDate} />}
               {habitDataById && <div className="space-y-2 px-1">
                 <InfoNotice>{format(new Date(habitDataById.initialStartedAt), 'yy년 M월 d일 HH:mm')} 시작</InfoNotice>
+                {habitDataById.priority === 0 && <InfoNotice>습관 시작일을 반영한 월간 경과 일수 ÷ 기록 횟수예요.</InfoNotice>}
                 {habitDataById.priority > 0 && <><InfoNotice>실천 가능일은 선택 기간 내 시작일~오늘이에요.</InfoNotice><InfoNotice>실천율 = 실천 횟수 ÷ 실천 가능일 × 100</InfoNotice></>}
               </div>}
             </div>
@@ -115,6 +144,8 @@ const HabitDetailClientPage = ({ habitId, today }: Props) => {
         </BottomSheet>
       )}
     </AnimatePresence>
+    {recordView && habitDataById && <ActivityRecords scope="habit" parentId={Number(habitId)} name={habitDataById.name} initialStartedAt={habitDataById.initialStartedAt} view={recordView} onClose={() => setRecordView(null)} />}
+    </>
   );
 };
 

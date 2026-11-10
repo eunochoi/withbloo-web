@@ -5,6 +5,8 @@ import type { HabitMonthData } from '@/common/types/calendar';
 import HabitIcon from '@/common/components/ui/HabitIcon';
 
 interface Props {
+  memoDates: string[];
+  onSelectDate: (date: string) => void;
   habitMonthData?: HabitMonthData;
   monthLabel: string;
   days: CalendarDayModel[];
@@ -16,7 +18,7 @@ interface Props {
 }
 
 const HabitMonthCalendar = ({
-  habitMonthData, monthLabel, days, today, isFetching,
+  memoDates, onSelectDate, habitMonthData, monthLabel, days, today, isFetching,
   onShowDate, iconKey, iconColor,
 }: Props) => {
   return (
@@ -35,10 +37,11 @@ const HabitMonthCalendar = ({
               isToday={day.dateKey === today}
               showTodayIndicator={false}
               className={unavailable && !day.isOutsideMonth ? 'opacity-30' : undefined}
-              onClick={day.isOutsideMonth && !unavailable ? () => onShowDate(day.dateKey) : undefined}
+              onClick={!unavailable && !isFetching && habitMonthData ? () => day.isOutsideMonth ? onShowDate(day.dateKey) : onSelectDate(day.dateKey) : undefined}
               label={[
                 day.dateKey,
                 isCompleted ? '완료 기록 있음' : '',
+                memoDates.includes(day.dateKey) ? '메모 있음' : '',
                 !isCompleted && !unavailable && !day.isOutsideMonth ? '기록 없음' : '',
                 isBeforeStart ? '시작일 이전, 통계 제외' : '',
                 isFuture ? '미래 날짜' : '',
@@ -49,6 +52,7 @@ const HabitMonthCalendar = ({
                   <HabitIcon iconKey={iconKey} iconColor={iconColor} className="h-full w-full" />
                 </span>
               ) : <span>{day.dayNumber}</span>}
+              {!day.isOutsideMonth && !unavailable && memoDates.includes(day.dateKey) && <span aria-hidden="true" className="absolute bottom-1 h-1 w-1 rounded-full bg-theme-text-secondary" />}
             </CalendarDay>
           );
         })}
