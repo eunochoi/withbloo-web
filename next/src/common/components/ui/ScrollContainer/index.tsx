@@ -68,7 +68,7 @@ export const ScrollContainer = forwardRef<HTMLDivElement, ScrollContainerProps>(
             <ScrollEdgeFade
               edge="bottom"
               visible={isVisibleBottomFade}
-              className={cn("absolute inset-x-0 z-[90] h-8", fadeOutset ? "-bottom-1" : "bottom-0", scrollFadeClassName)}
+              className={cn("absolute inset-x-0 z-[90] h-16", fadeOutset ? "-bottom-1" : "bottom-0", scrollFadeClassName)}
             />
           </>
         )}
