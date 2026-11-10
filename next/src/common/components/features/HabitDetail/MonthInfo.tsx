@@ -137,7 +137,7 @@ const MonthInfo = ({
       </div>
 
       {isFree && (
-        <InfoNotice accent={accent}>
+        <InfoNotice>
           습관 시작일을 반영한 월간 경과 일수 ÷ 기록 횟수예요.
         </InfoNotice>
       )}

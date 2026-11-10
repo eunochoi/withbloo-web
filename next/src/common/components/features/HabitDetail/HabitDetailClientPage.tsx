@@ -107,8 +107,8 @@ const HabitDetailClientPage = ({ habitId, today }: Props) => {
                 today={today}
                 setDisplayDate={setChartDate} />}
               {habitDataById && <div className="space-y-2 px-1">
-                <InfoNotice accent={accent}>{format(new Date(habitDataById.initialStartedAt), 'yy년 M월 d일 HH:mm')} 시작</InfoNotice>
-                {habitDataById.priority > 0 && <><InfoNotice accent={accent}>실천 가능일은 선택 기간 내 시작일~오늘이에요.</InfoNotice><InfoNotice accent={accent}>실천율 = 실천 횟수 ÷ 실천 가능일 × 100</InfoNotice></>}
+                <InfoNotice>{format(new Date(habitDataById.initialStartedAt), 'yy년 M월 d일 HH:mm')} 시작</InfoNotice>
+                {habitDataById.priority > 0 && <><InfoNotice>실천 가능일은 선택 기간 내 시작일~오늘이에요.</InfoNotice><InfoNotice>실천율 = 실천 횟수 ÷ 실천 가능일 × 100</InfoNotice></>}
               </div>}
             </div>
           </BottomSheetBody>
