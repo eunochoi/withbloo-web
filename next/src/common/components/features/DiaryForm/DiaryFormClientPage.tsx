@@ -1,6 +1,7 @@
 "use client";
 
 import { authAction } from '@/common/auth/authAction';
+import { DateOutlineIcon } from '@/common/constants/appIcons';
 import { diaryQueries } from '@/common/queries/diaryQueries';
 import { showNotice } from '@/common/components/ui/Notice/notice';
 import { isValidLocalDateString } from '@/common/utils/date/isValidLocalDateString';
@@ -70,12 +71,10 @@ const DiaryFormClientPage = ({ isEdit, diaryId }: DiaryFormClientPageProps) => {
   });
   const imageHandlers = useImageAttachments({ images: diaryImages, setImages: setDiaryImages });
   const dateParam = searchParams.get('date');
-  const allowDateChange = isEdit || searchParams.get('allowDateChange') === 'true';
-  const [selectedDate, setSelectedDate] = useState<string | null>(() => isEdit ? null : isValidLocalDateString(dateParam) ? dateParam : allowDateChange ? null : format(new Date(), 'yyyy-MM-dd'));
+  const [selectedDate, setSelectedDate] = useState<string | null>(() => !isEdit && isValidLocalDateString(dateParam) ? dateParam : null);
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
-  const date = isEdit ? selectedDate ?? diaryData?.date ?? null : selectedDate;
-  const effectiveDate = isEdit && diaryData && selectedDate === null ? diaryData.date : date;
-  const headerTitle = effectiveDate ? format(parseLocalDate(effectiveDate), 'yyyy. M. d. EEEE', { locale: ko }) : '날짜를 선택해주세요';
+  const effectiveDate = selectedDate ?? (isEdit ? diaryData?.date ?? null : null);
+  const headerTitle = isEdit ? '일기 수정' : '일기 작성';
   const saveDiary = isEdit
     ? (imageContentIds: string[]) => {
       if (!diaryId) {
@@ -138,7 +137,6 @@ const DiaryFormClientPage = ({ isEdit, diaryId }: DiaryFormClientPageProps) => {
           <BottomSheetTitle
             title={headerTitle}
             onBack={handleBack}
-            onTitleClick={allowDateChange && !isSubmitting ? () => setIsDatePickerOpen(true) : undefined}
           headerButton={<BottomSheetSubmitButton
                 type="button"
                 onClick={handleSubmit}
@@ -150,6 +148,21 @@ const DiaryFormClientPage = ({ isEdit, diaryId }: DiaryFormClientPageProps) => {
           />
           <BottomSheetBody showScrollFade>
             <fieldset ref={formRef} disabled={isSubmitting} className="m-0 flex w-full flex-col gap-6 border-0 pb-[max(1rem,env(safe-area-inset-bottom))]">
+              <section>
+                <button type="button" aria-haspopup="dialog" aria-expanded={isDatePickerOpen}
+                  onClick={() => setIsDatePickerOpen(true)}
+                  className="flex w-full items-center gap-3 text-left disabled:cursor-wait">
+                  <span className="flex min-w-0 flex-1 flex-col gap-3">
+                    <span className="text-lg font-semibold text-theme-text-primary">날짜</span>
+                    <span className="px-1 text-base text-theme-text-secondary">
+                      {effectiveDate ? format(parseLocalDate(effectiveDate), 'yyyy년 M월 d일', { locale: ko }) : '날짜를 선택해주세요'}
+                    </span>
+                  </span>
+                  <span className="flex h-16 w-16 shrink-0 items-center justify-center">
+                    <DateOutlineIcon aria-hidden="true" className="h-10 w-10 text-theme-accent" />
+                  </span>
+                </button>
+              </section>
               <DiaryFormEmotionSection
                 emotion={emotion}
                 setEmotion={setEmotion}

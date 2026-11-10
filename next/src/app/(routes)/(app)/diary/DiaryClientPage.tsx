@@ -197,7 +197,7 @@ const DiaryClientPage = () => {
             onSort={() => setIsSortOpen(true)}
             onFilter={() => setFilterOpen(true)}
             onAdd={() =>
-              router.push('/diary/new?allowDateChange=true', { scroll: false })
+              router.push('/diary/new', { scroll: false })
             }
             sortValue={sortValue}
             filterLabel={filterLabel}

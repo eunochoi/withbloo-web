@@ -1,18 +1,18 @@
 "use client";
 
+
+import { DateSelectionCalendar } from '@/common/components/ui/DateSelectionCalendar';
+import { DateSelectionForm } from '@/common/components/ui/DateSelectionForm';
+import { BottomSheetHeading } from '@/common/components/ui/BottomSheet/BottomSheetHeading';
 import { BottomSheetPickerHeader } from "@/common/components/ui/BottomSheet/BottomSheetPickerHeader";
 
 import { DiaryIcon } from "@/common/constants/appIcons";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { authAction } from "@/common/auth/authAction";
 import { BottomSheetPicker } from "@/common/components/ui/BottomSheet/BottomSheetPicker";
 import InfoNotice from "@/common/components/ui/InfoNotice";
-import { CalendarDay } from "@/common/components/ui/Calendar/CalendarDay";
-import CalendarHeader from "@/common/components/ui/Calendar/CalendarHeader";
-import { CalendarGrid } from "@/common/components/ui/Calendar/CalendarGrid";
-import { useMonthSwipe } from "@/common/components/ui/Calendar/useMonthSwipe";
 import { useMonthCalendar } from "@/common/components/ui/Calendar/useMonthCalendar";
 
 import { getTodayString } from "@/common/functions/getTodayString";
@@ -33,10 +33,6 @@ const DiaryDatePicker = ({
   const today = getTodayString();
   const [draft, setDraft] = useState(value ?? "");
   const calendar = useMonthCalendar(value ?? today, { maxDate: today });
-  const swipeProps = useMonthSwipe(
-    calendar.goPreviousMonth,
-    calendar.goNextMonth,
-  );
   const monthQuery = useQuery({
     ...diaryQueries.habitMonth(calendar.visibleMonth, authAction),
   });
@@ -47,6 +43,16 @@ const DiaryDatePicker = ({
     enabled: valid,
   });
   const occupied = !!query.data && String(query.data.id) !== diaryId;
+  const notice = useRef("일기를 작성할 날짜를 선택해주세요.");
+  if (!draft) notice.current = "일기를 작성할 날짜를 선택해주세요.";
+  else if (!valid) notice.current = "오늘 또는 이전 날짜를 선택해주세요.";
+  else if (!query.isFetching && !query.isPending) {
+    notice.current = query.isError
+      ? "선택한 날짜의 일기를 확인하지 못했어요."
+      : occupied
+        ? "이미 일기가 있는 날짜예요. 다른 날짜를 선택해주세요."
+        : "날짜를 바꿔도 작성 중인 내용과 이미지는 유지돼요.";
+  }
   const disabled =
     !valid ||
     query.isPending ||
@@ -57,26 +63,10 @@ const DiaryDatePicker = ({
     query.isFetching;
 
   return (
-    <BottomSheetPicker labelledBy="diary-date-title" onClose={onClose} header={<BottomSheetPickerHeader
-          headerLeft={
-            <button
-              type="button"
-              onClick={() => {
-                setDraft(today);
-                calendar.showDate(today);
-              }}
-              className="min-h-11 text-lg font-normal text-theme-text-secondary/70"
-            >
-              오늘
-            </button>
-          }
-        >
-          <h2
-            id="diary-date-title"
-            className="text-center text-lg font-semibold"
-          >
-            일기 날짜 선택
-          </h2>
+    <BottomSheetPicker labelledBy="diary-date-title" onClose={onClose} header={<BottomSheetPickerHeader>
+          <BottomSheetHeading id="diary-date-title">
+            날짜 선택
+          </BottomSheetHeading>
           <button
             type="button"
             disabled={disabled}
@@ -89,73 +79,10 @@ const DiaryDatePicker = ({
       <div className="flex flex-col gap-6 pb-6">
 
 
-        <CalendarHeader
-          monthLabel={calendar.monthLabel}
-          onPreviousMonth={calendar.goPreviousMonth}
-          onNextMonth={calendar.goNextMonth}
-          onToday={() => calendar.showDate(today)}
-          canGoPrevious={calendar.canGoPrevious}
-          canGoNext={calendar.canGoNext}
-        />
-        <CalendarGrid
-          {...swipeProps}
-          aria-label="일기 날짜 선택"
-          aria-busy={monthQuery.isFetching}
-        >
-          {calendar.days.map((day) => {
-            const available = calendar.isDateAvailable(day.dateKey);
-            const recorded =
-              !day.isOutsideMonth &&
-              monthQuery.data?.daysByDate[day.dateKey]?.hasDiary;
-            return (
-              <CalendarDay
-                key={day.dateKey}
-                day={day}
-                isToday={day.dateKey === today}
-                isSelected={day.dateKey === draft}
-                showTodayIndicator={false}
-                className={!available ? "opacity-30" : undefined}
-                onClick={
-                  available
-                    ? () => {
-                        setDraft(day.dateKey);
-                        calendar.showDate(day.dateKey);
-                      }
-                    : undefined
-                }
-                label={`${day.dateKey}${recorded ? ", 일기 있음" : ""}`}
-              >
-                <span
-                  className={`flex h-9 w-9 items-center justify-center rounded-full ${day.dateKey === draft ? "bg-theme-accent text-theme-text-on-accent" : ""}`}
-                >
-                  {recorded ? (
-                    <DiaryIcon
-                      className={
-                        day.dateKey === draft
-                          ? "text-xl text-theme-text-on-accent"
-                          : "text-xl text-theme-accent"
-                      }
-                      aria-hidden="true"
-                    />
-                  ) : (
-                    day.dayNumber
-                  )}
-                </span>
-              </CalendarDay>
-            );
-          })}
-        </CalendarGrid>
-        <InfoNotice>
-          {!valid
-            ? "오늘 이전의 날짜를 선택해주세요."
-            : query.isError
-              ? "선택한 날짜를 확인하지 못했어요."
-              : query.isFetching
-                ? "선택한 날짜를 확인하고 있어요."
-                : occupied
-                  ? "이미 일기가 있는 날짜예요. 다른 날짜를 선택해주세요."
-                  : "날짜를 바꿔도 작성 중인 내용과 이미지은 유지돼요."}
-        </InfoNotice>
+        <DateSelectionForm date={draft}>
+        <DateSelectionCalendar calendar={calendar} selected={draft} today={today} onSelect={(date) => { setDraft(date); }} marker={(date, selected) => monthQuery.data?.daysByDate[date]?.hasDiary ? { icon: <DiaryIcon className={selected ? "text-xl text-theme-text-on-accent" : "text-xl text-theme-accent"} aria-hidden="true" />, label: "일기 있음" } : undefined} busy={monthQuery.isFetching} />
+        </DateSelectionForm>
+        <InfoNotice>{monthQuery.isError ? "일기가 있는 날짜를 확인하지 못했어요." : notice.current}</InfoNotice>
         {(query.isError || monthQuery.isError) && (
           <button
             type="button"

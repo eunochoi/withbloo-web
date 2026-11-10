@@ -1,4 +1,4 @@
-import { AddIcon } from '@/common/constants/appIcons';
+import { EmotionOutlineIcon } from '@/common/constants/appIcons';
 import EmotionImage from '@/common/components/ui/EmotionImage';
 import { EMOTIONS } from '@/common/constants/emotions';
 import { AnimatePresence } from 'framer-motion';
@@ -37,9 +37,7 @@ const DiaryFormEmotionSection = ({
           {selectedEmotion ? (
             <EmotionImage emotion={selectedEmotion} alt="" width={64} height={64} className="h-16 w-16 object-contain" />
           ) : (
-            <span className="flex h-14 w-14 items-center justify-center rounded-full border border-dashed border-theme-accent text-theme-accent">
-              <AddIcon aria-hidden="true" className="h-7 w-7" />
-            </span>
+            <EmotionOutlineIcon aria-hidden="true" className="h-10 w-10 text-theme-accent" />
           )}
         </span>
       </button>
