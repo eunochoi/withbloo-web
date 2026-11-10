@@ -6,15 +6,16 @@ interface HabitIconProps {
   iconKey?: string | null;
   className?: string;
   iconColor?: string | null;
+  colorOverride?: string;
 }
 
-const HabitIcon = ({ iconKey, iconColor, className }: HabitIconProps) => {
+const HabitIcon = ({ iconKey, iconColor, colorOverride, className }: HabitIconProps) => {
   const Icon = HABIT_ICONS[getHabitIconKey(iconKey)];
 
   return (
     <Icon
       className={cn('text-theme-accent', className)}
-      style={{ color: resolveHabitIconColor(iconColor) }}
+      style={{ color: colorOverride ?? resolveHabitIconColor(iconColor) }}
       aria-hidden="true"
       focusable="false"
     />
