@@ -12,7 +12,7 @@ import { ko } from 'date-fns/locale';
 import { AnimatePresence } from 'framer-motion';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useRef, useState } from 'react';
-import { BottomSheet } from '../../ui/BottomSheet/BottomSheet';
+import { BottomSheet, type BottomSheetHandle } from '../../ui/BottomSheet/BottomSheet';
 import { BottomSheetBody } from '../../ui/BottomSheet/BottomSheetBody';
 import { BottomSheetTitle } from '../../ui/BottomSheet/BottomSheetTitle';
 import { BottomSheetSubmitButton } from '../../ui/BottomSheet/BottomSheetSubmitButton';
@@ -36,7 +36,7 @@ interface DiaryFormClientPageProps {
 const DiaryFormClientPage = ({ isEdit, diaryId }: DiaryFormClientPageProps) => {
   const router = useRouter();
   const formRef = useRef<HTMLFieldSetElement>(null);
-  const [isDialogMounted, setIsDialogMounted] = useState(true);
+  const sheetRef = useRef<BottomSheetHandle>(null);
   const searchParams = useSearchParams();
   const {
     data: diaryData,
@@ -105,7 +105,7 @@ const DiaryFormClientPage = ({ isEdit, diaryId }: DiaryFormClientPageProps) => {
     saveDiary,
     successMessage: isEdit ? '일기를 수정했어요' : '일기를 저장했어요',
     failureMessage: isEdit ? '저장하지 못했어요' : '저장하지 못했어요',
-    onSuccess: () => setIsDialogMounted(false),
+    onSuccess: () => sheetRef.current?.close(),
     onInvalidText: () => formRef.current?.querySelector<HTMLTextAreaElement>('textarea[name="diary-form-text"]')?.focus(),
   });
 
@@ -115,7 +115,7 @@ const DiaryFormClientPage = ({ isEdit, diaryId }: DiaryFormClientPageProps) => {
       return;
     }
 
-    setIsDialogMounted(false);
+    router.back();
   };
 
   const shouldHideEditForm = isEdit && (
@@ -127,9 +127,9 @@ const DiaryFormClientPage = ({ isEdit, diaryId }: DiaryFormClientPageProps) => {
   }
 
   return (
-    <AnimatePresence onExitComplete={() => router.back()}>
-      {isDialogMounted && (
+    <>
         <BottomSheet
+          ref={sheetRef}
           ariaLabel={headerTitle}
           dismissible={!isSubmitting}
           preserveHandle
@@ -170,9 +170,7 @@ const DiaryFormClientPage = ({ isEdit, diaryId }: DiaryFormClientPageProps) => {
             {isDatePickerOpen && <DiaryDatePicker value={effectiveDate} diaryId={diaryId} onClose={() => setIsDatePickerOpen(false)} onApply={(next) => { setSelectedDate(next); setIsDatePickerOpen(false); }} />}
           </AnimatePresence>
         </BottomSheet>
-      )
-      }
-    </AnimatePresence >
+    </>
   );
 };
 

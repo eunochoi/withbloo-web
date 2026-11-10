@@ -5,16 +5,15 @@ import { MoreIcon } from '@/common/constants/appIcons';
 import { authAction } from "@/common/auth/authAction";
 import { diaryQueries } from "@/common/queries/diaryQueries";
 import DiaryMenus from "@/common/components/ui/Diary/DiaryMenus";
-import { BottomSheet } from "@/common/components/ui/BottomSheet/BottomSheet";
+import { BottomSheet, type BottomSheetHandle } from "@/common/components/ui/BottomSheet/BottomSheet";
 import { BottomSheetBody } from "@/common/components/ui/BottomSheet/BottomSheetBody";
 import { BottomSheetTitle } from "@/common/components/ui/BottomSheet/BottomSheetTitle";
 import { parseLocalDate } from "@/common/utils/date/parseLocalDate";
 import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
-import { AnimatePresence } from "framer-motion";
 import { notFound, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { DiaryDetailContent } from "./DiaryDetailContent";
 import { DiaryDetailGallery } from "./DiaryDetailGallery";
@@ -25,7 +24,7 @@ interface DiaryDetailClientPageProps {
 
 const DiaryDetailClientPage = ({ diaryId }: DiaryDetailClientPageProps) => {
   const router = useRouter();
-  const [isDialogMounted, setIsDialogMounted] = useState(true);
+  const sheetRef = useRef<BottomSheetHandle>(null);
   const [isMenuOpen, setMenuOpen] = useState(false);
   const { data: diaryData, isError } = useQuery({
     ...diaryQueries.byId(diaryId, authAction),
@@ -33,8 +32,8 @@ const DiaryDetailClientPage = ({ diaryId }: DiaryDetailClientPageProps) => {
   });
 
   useEffect(() => {
-    if (isError && isDialogMounted) notFound();
-  }, [isError, isDialogMounted]);
+    if (isError) notFound();
+  }, [isError]);
 
   if (!diaryData) return null;
 
@@ -42,15 +41,15 @@ const DiaryDetailClientPage = ({ diaryId }: DiaryDetailClientPageProps) => {
   const hasImages = diaryData.Images.length > 0;
 
   return (
-    <AnimatePresence onExitComplete={() => router.back()}>
-      {isDialogMounted && (
+    <>
         <BottomSheet
+          ref={sheetRef}
           ariaLabel={headerTitle}
-          onClose={() => setIsDialogMounted(false)}
+          onClose={() => router.back()}
         >
           <BottomSheetTitle
             title={headerTitle}
-            onBack={() => setIsDialogMounted(false)}
+            onBack={() => sheetRef.current?.close()}
             backLabel="뒤로가기"
             headerRight={(
               <>
@@ -67,7 +66,7 @@ const DiaryDetailClientPage = ({ diaryId }: DiaryDetailClientPageProps) => {
                   isMenuOpen={isMenuOpen}
                   setMenuOpen={setMenuOpen}
                   diaryData={diaryData}
-                  onDeleted={() => setIsDialogMounted(false)}
+                  onDeleted={() => sheetRef.current?.close()}
                 />
               </>
             )}
@@ -79,8 +78,7 @@ const DiaryDetailClientPage = ({ diaryId }: DiaryDetailClientPageProps) => {
             </div>
           </BottomSheetBody>
         </BottomSheet>
-      )}
-    </AnimatePresence>
+    </>
   );
 };
 
