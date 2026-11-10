@@ -154,11 +154,7 @@ export default function ActivityRecordListModal({
                     <div className="flex items-center justify-between gap-3">
                       <span>
                         {format(new Date(record.recordedAt), 'HH:mm')}
-                        {scope === 'sober' && (
-                          <span className="ml-2 text-sm text-theme-text-secondary">
-                            {record.type === 'RESTART' ? '다시 시작' : '기록'}
-                          </span>
-                        )}
+                        {' · '}{scope === 'sober' && record.type === 'RESTART' ? '다시 시작 기록' : '기록'}
                       </span>
                       <button
                         type="button"
