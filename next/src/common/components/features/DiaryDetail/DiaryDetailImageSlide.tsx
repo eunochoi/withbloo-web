@@ -8,9 +8,10 @@ interface DiaryDetailImageSlideProps {
   priority?: boolean;
   isFullView: boolean;
   onToggleView: () => void;
+  recordPhoto?: boolean;
 }
 
-export const DiaryDetailImageSlide = ({ image, index, priority = false, isFullView, onToggleView }: DiaryDetailImageSlideProps) => (
+export const DiaryDetailImageSlide = ({ image, index, priority = false, isFullView, onToggleView, recordPhoto = false }: DiaryDetailImageSlideProps) => (
   <button
     type="button"
     className={cn(
@@ -24,7 +25,7 @@ export const DiaryDetailImageSlide = ({ image, index, priority = false, isFullVi
     <Image
       className={cn("rounded-theme bg-black/75", isFullView ? "object-contain" : "object-cover")}
       src={image.src}
-      alt={`일기에 첨부한 사진 ${index + 1}`}
+      alt={`${recordPhoto ? '기록' : '일기'}에 첨부한 사진 ${index + 1}`}
       fill
       priority={priority}
       sizes="(min-width: 500px) 452px, 90vw"
