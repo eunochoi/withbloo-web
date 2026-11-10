@@ -19,6 +19,7 @@ import { unwrapQueryAction } from '@/common/queries/queryAction';
 import type { DateKey, DiaryHabitDayData } from '@/common/types/calendar';
 import { parseLocalDate } from '@/common/utils/date/parseLocalDate';
 import CalendarHeader from '@/common/components/ui/Calendar/CalendarHeader';
+import { CalendarHabitProgress } from '../CalendarHabitProgress';
 
 interface Props {
   today: DateKey;
@@ -113,9 +114,6 @@ const DiaryHabitMonthCalendar = ({
             const rotationDegrees = ((hash >>> 0) % 21) - 10;
             const done = record?.countedHabitCount ?? 0;
             const total = record?.totalHabitCount ?? 0;
-            const progress = total ? Math.min(100, (done / total) * 100) : 0;
-            const color =
-              progress < 25 ? '#E599A5' : progress < 75 ? '#EFBE48' : '#7BBDAD';
             const isSelected = day.dateKey === selectedDate;
 
             return (
@@ -156,15 +154,7 @@ const DiaryHabitMonthCalendar = ({
                 </span>
                 <span className="h-2 w-full shrink-0 px-2.5">
                   {done > 0 && day.dateKey <= today && (
-                    <span className="mx-auto block h-2 w-full overflow-hidden rounded-full bg-theme-border/80 tablet:max-w-[40px]">
-                      <span
-                        className="block h-full"
-                        style={{
-                          width: `${progress}%`,
-                          backgroundColor: color,
-                        }}
-                      />
-                    </span>
+                    <CalendarHabitProgress done={done} total={total} />
                   )}
                 </span>
               </CalendarDay>

@@ -18,6 +18,7 @@ import DayInfoDiarySection from './DayInfoDiarySection';
 import DayInfoHabitSection from './DayInfoHabitSection';
 import DayInfoHeader from './DayInfoHeader';
 import EmotionImage from '@/common/components/ui/EmotionImage';
+import { CalendarHabitProgress } from '../CalendarHabitProgress';
 
 interface Props {
   date: string;
@@ -133,14 +134,11 @@ const DayInfo = ({
             height={64}
             className="h-16 w-16"
           />
-          <div className="mx-2 h-1 overflow-hidden rounded-full bg-theme-border">
-            <div
-              className="h-full bg-theme-accent"
-              style={{
-                width: `${habitData?.summary.total ? (habitData.summary.completed / habitData.summary.total) * 100 : 0}%`,
-              }}
-            />
-          </div>
+          {!!habitData?.summary.completed && (
+            <div className="mx-2">
+              <CalendarHabitProgress done={habitData.summary.completed} total={habitData.summary.total} />
+            </div>
+          )}
         </div>
       )}
       {(isDiaryError || isHabitError) && !isTransitioning && (
