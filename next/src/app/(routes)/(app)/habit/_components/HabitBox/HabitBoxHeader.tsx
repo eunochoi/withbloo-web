@@ -26,11 +26,11 @@ const HabitBoxHeader = ({ id, name, priority, iconKey, iconColor, isMenuOpen, se
           href={`/habit/${id}`}
           scroll={false}
           className="flex min-w-0 flex-col items-center gap-2"
-          aria-label={`${name} 습관 정보`}
+          aria-label={`${name} 습관 정보${priority === 0 ? ", 자유 기록" : ""}`}
         >
           <HabitIcon iconKey={iconKey} iconColor={iconColor} className="shrink-0 text-3xl" />
           <ScrollableName name={name} className="w-full text-center text-base font-semibold text-theme-text-primary" />
-          <span className="flex h-5 items-center justify-center" >{priority === 0 ? <span className="text-sm text-theme-text-secondary">자유 기록</span> : <HabitPriority priority={priority} className="gap-0.5 text-base" />}</span>
+          <span className="flex h-5 items-center justify-center"><HabitPriority priority={priority} className="gap-0.5 text-base" /></span>
         </Link>
         <button
           type="button"

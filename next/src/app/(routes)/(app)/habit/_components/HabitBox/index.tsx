@@ -78,7 +78,7 @@ const HabitBox = ({ name, id, priority, iconKey, iconColor, startedDate, recentD
   const controlsDisabled = isUpdating;
 
   return (
-    <article className={cn("gap-4 relative mx-auto flex h-full w-full min-w-0 flex-col bg-theme-surface px-2 py-5 desktop:px-4", isMenuOpen && "z-10")}>
+    <article className={cn("gap-6 relative mx-auto flex h-full w-full min-w-0 flex-col bg-theme-surface px-2 py-5 desktop:px-4", isMenuOpen && "z-10")}>
       <HabitBoxHeader
         id={id}
         name={name}
