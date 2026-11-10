@@ -1,25 +1,21 @@
 'use client';
 
+import ActivityRecords, { type RecordView } from '../ActivityRecords';
+
 import ScrollableName from '@/common/components/ui/ScrollableName';
 
-import { deleteSoberRestart, saveSoberRestart } from '@/common/actions/sober';
+import { getActivityDates } from '@/common/actions/records';
 import { authAction } from '@/common/auth/authAction';
 import { BottomSheet } from '@/common/components/ui/BottomSheet/BottomSheet';
 import { BottomSheetBody } from '@/common/components/ui/BottomSheet/BottomSheetBody';
-import { BottomSheetPicker } from '@/common/components/ui/BottomSheet/BottomSheetPicker';
 import { BottomSheetTitle } from '@/common/components/ui/BottomSheet/BottomSheetTitle';
-import { ConfirmDialog } from '@/common/components/ui/BottomSheet/ConfirmDialog';
 import { CalendarDay } from '@/common/components/ui/Calendar/CalendarDay';
 import { CalendarGrid } from '@/common/components/ui/Calendar/CalendarGrid';
 import CalendarHeader from '@/common/components/ui/Calendar/CalendarHeader';
 import { useMonthCalendar } from '@/common/components/ui/Calendar/useMonthCalendar';
 import { useMonthSwipe } from '@/common/components/ui/Calendar/useMonthSwipe';
-import { showNotice } from '@/common/components/ui/Notice/notice';
 import {
-  AchievementIcon,
-  AddIcon,
-  DescriptionIcon,
-  MoreIcon,
+  AchievementIcon
 } from '@/common/constants/appIcons';
 import { getTodayString } from '@/common/functions/getTodayString';
 import {
@@ -28,21 +24,14 @@ import {
   getSoberSummary,
 } from '@/common/functions/sober';
 import { useItemAccent } from '@/common/hooks/useItemAccent';
-import { useQueryClient } from '@tanstack/react-query';
-import { format } from 'date-fns';
-import { AnimatePresence } from 'framer-motion';
-import { useRef, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { addDays, format } from 'date-fns';
+import { useState } from 'react';
 import { SoberIcon } from './SoberIcon';
 import SoberInfoCarousel from './SoberInfoCarousel';
-import SoberMemos from './SoberMemos';
 import SoberMenu from './SoberMenu';
-import SoberRestartForm from './SoberRestartForm';
 import type { SoberWithRestarts } from './types';
 
-const localInput = (date: Date) =>
-  new Date(date.getTime() - date.getTimezoneOffset() * 60000)
-    .toISOString()
-    .slice(0, 16);
 export const SoberDetail = ({
   item,
   now,
@@ -54,25 +43,19 @@ export const SoberDetail = ({
   onClose: () => void;
   onEdit: () => void;
 }) => {
-  const query = useQueryClient();
   const today = getTodayString();
   const startDay = format(new Date(item.initialStartedAt), 'yyyy-MM-dd');
   const calendar = useMonthCalendar(today, {
     minDate: startDay,
     maxDate: today,
   });
+  const from = new Date(`${calendar.days[0].dateKey}T00:00:00`);
+  const memoDates = useQuery({ queryKey: ['sober', 'memo-dates', item.id, calendar.visibleMonth], queryFn: () => authAction(() => getActivityDates('sober', item.id, from.toISOString(), addDays(from, 42).toISOString())) });
+  const memoDays = new Set((memoDates.data ?? []).map((time) => format(new Date(time), 'yyyy-MM-dd')));
   const swipe = useMonthSwipe(calendar.goPreviousMonth, calendar.goNextMonth);
-  const [selectedDay, setSelectedDay] = useState<string | null>(null);
-  const [editing, setEditing] = useState<number | null | undefined>(undefined);
-  const [restartAt, setRestartAt] = useState(localInput(new Date()));
-  const [memo, setMemo] = useState('');
-  const [deleting, setDeleting] = useState<number | null>(null);
   const [hoursOnly, setHoursOnly] = useState(false);
-  const [recordMenu, setRecordMenu] = useState<number | null>(null);
   const [expandedRecords, setExpandedRecords] = useState(false);
-  const [memosOpen, setMemosOpen] = useState(false);
-  const [saving, setSaving] = useState(false);
-  const savingRef = useRef(false);
+  const [recordView, setRecordView] = useState<RecordView | null>(null);
   const summary = getSoberSummary(item, item.restarts, now);
   const itemAccent = useItemAccent(item.iconColor);
   const accent = itemAccent.color;
@@ -93,54 +76,6 @@ export const SoberDetail = ({
     },
     {},
   );
-  const openRestart = (id?: number, day?: string) => {
-    const record = item.restarts.find((entry) => entry.id === id);
-    setEditing(id ?? null);
-    setRestartAt(
-      record
-        ? localInput(new Date(record.restartedAt))
-        : day
-          ? `${day}T${day === today ? localInput(new Date()).slice(11) : '12:00'}`
-          : localInput(new Date()),
-    );
-    setMemo(record?.memo ?? '');
-  };
-  const save = async (value: string, note: string) => {
-    if (savingRef.current) return;
-    savingRef.current = true;
-    setSaving(true);
-    try {
-      await authAction(() =>
-        saveSoberRestart({
-          id: editing ?? undefined,
-          soberId: item.id,
-          restartedAt: new Date(value).toISOString(),
-          memo: note,
-        }),
-      );
-      await query.invalidateQueries({ queryKey: ['sober'] });
-      setEditing(undefined);
-      showNotice(
-        editing ? '다시 시작 기록을 수정했어요' : '다시 시작 기록을 추가했어요',
-      );
-    } catch (error) {
-      showNotice(error instanceof Error ? error.message : '저장하지 못했어요.');
-    } finally {
-      savingRef.current = false;
-      setSaving(false);
-    }
-  };
-  const remove = async () => {
-    const target = deleting;
-    try {
-      if (typeof target === 'number')
-        await authAction(() => deleteSoberRestart(item.id, target));
-      await query.invalidateQueries({ queryKey: ['sober'] });
-      showNotice('다시 시작 기록을 삭제했어요');
-    } catch (error) {
-      throw error;
-    }
-  };
   return (
     <>
       <BottomSheet
@@ -161,121 +96,119 @@ export const SoberDetail = ({
         />
         <BottomSheetBody showScrollFade>
           <div className="flex flex-col gap-8 pb-8">
-            <div className="flex flex-col gap-7">
+            <div className="flex flex-col gap-8">
               <div className="flex flex-col items-center gap-3">
                 <SoberIcon
                   name={item.iconKey}
                   color={item.iconColor}
                   className="h-16 w-16"
                 />
-                <h2 className="w-full min-w-0 text-center text-xl font-semibold">
+                <h2 className="w-[90%] min-w-0 text-center text-xl font-semibold">
                   <ScrollableName name={item.name} />
                 </h2>
               </div>
-              <div className="flex w-full flex-col gap-7 px-1">
-                <SoberInfoCarousel
-                  color={accent}
-                  pages={[
-                    <div
-                      key="current"
-                      className="flex w-full flex-col items-center gap-0.5 text-center"
-                    >
-                      <p className="text-sm text-theme-text-secondary">
-                        현재 진행중인 시간
-                      </p>
-                      <button
-                        type="button"
-                        aria-label="현재 진행중인 시간"
-                        title="누르면 일·시간·분과 총 시간·분 표시를 전환해요."
-                        onClick={() => setHoursOnly((value) => !value)}
-                        className="min-h-12 w-full text-3xl font-bold leading-tight"
-                      >
-                        {durationText}
-                      </button>
-                      <p className="text-sm text-theme-text-secondary">
-                        {format(
-                          new Date(summary.current.start),
-                          'yy년 M월 d일 HH:mm',
-                        )}{' '}
-                        시작
-                      </p>
-                    </div>,
-                    <div key="summary" className="grid w-full grid-cols-2">
-                      {[
-                        {
-                          label: '최고 기록',
-                          value: formatSoberDuration(summary.longest),
-                        },
-                        {
-                          label: '첫 시작일',
-                          value: format(
-                            new Date(item.initialStartedAt),
-                            'yy년 M월 d일 HH:mm',
-                          ),
-                        },
-                      ].map((stat) => (
-                        <div
-                          key={stat.label}
-                          className="flex min-w-0 flex-col items-center gap-1 px-2 text-center"
-                        >
-                          <p className="text-base font-semibold">
-                            {stat.label}
-                          </p>
-                          <p className="text-base font-medium tracking-tighter">
-                            {stat.value}
-                          </p>
-                        </div>
-                      ))}
-                    </div>,
-                  ]}
-                />
-                {item.description?.trim() && (
-                  <p className="w-[90%] self-center whitespace-pre-wrap text-center text-base leading-relaxed text-theme-text-secondary">
-                    {item.description}
-                  </p>
-                )}
-                <div className="flex w-[90%] flex-col gap-3 self-center">
-                  <div className="flex flex-wrap justify-between gap-2 text-sm">
-                    <span className="text-theme-text-secondary">
-                      목표 {formatSoberGoal(summary.goalDays)}
-                    </span>
-                    <span
-                      className="font-semibold"
-                      style={{ color: itemAccent.text }}
-                    >
-                      {summary.progress.toFixed(0)}%
-                    </span>
-                  </div>
+              <SoberInfoCarousel
+                color={accent}
+                pages={[
                   <div
-                    role="progressbar"
-                    aria-label={`목표 ${formatSoberGoal(summary.goalDays)}`}
-                    aria-valuemin={0}
-                    aria-valuemax={100}
-                    aria-valuenow={summary.progress}
-                    className="h-4 overflow-hidden rounded-full bg-theme-border/80"
+                    key="current"
+                    className="flex w-full flex-col items-center gap-0.5 text-center"
                   >
-                    <div
-                      className="h-full"
-                      style={{
-                        width: `${summary.progress}%`,
-                        backgroundColor: accent,
-                      }}
-                    />
-                  </div>
+                    <p className="text-sm text-theme-text-secondary">
+                      현재 거리두기 중
+                    </p>
+                    <button
+                      type="button"
+                      aria-label="현재 거리두기 중"
+                      title="누르면 일·시간·분과 총 시간·분 표시를 전환해요."
+                      onClick={() => setHoursOnly((value) => !value)}
+                      className="min-h-12 w-full text-3xl font-bold leading-tight"
+                    >
+                      {durationText}
+                    </button>
+                    <p className="text-sm text-theme-text-secondary">
+                      {format(
+                        new Date(summary.current.start),
+                        'yy년 M월 d일 HH:mm',
+                      )}{' '}
+                      시작
+                    </p>
+                  </div>,
+                  <div key="summary" className="grid w-full grid-cols-2">
+                    {[
+                      {
+                        label: '최고 기록',
+                        value: formatSoberDuration(summary.longest),
+                      },
+                      {
+                        label: '첫 시작일',
+                        value: format(
+                          new Date(item.initialStartedAt),
+                          'yy년 M월 d일 HH:mm',
+                        ),
+                      },
+                    ].map((stat) => (
+                      <div
+                        key={stat.label}
+                        className="flex min-w-0 flex-col items-center gap-1 px-2 text-center"
+                      >
+                        <p className="text-base font-semibold">
+                          {stat.label}
+                        </p>
+                        <p className="text-base font-medium tracking-tighter">
+                          {stat.value}
+                        </p>
+                      </div>
+                    ))}
+                  </div>,
+                ]}
+              />
+              {item.description?.trim() && (
+                <p className="w-[90%] self-center whitespace-pre-wrap [overflow-wrap:anywhere] text-center text-base leading-relaxed text-theme-text-secondary">
+                  {item.description}
+                </p>
+              )}
+              <div className="flex w-[90%] flex-col gap-3 self-center">
+                <div className="flex flex-wrap justify-between gap-2 text-sm">
+                  <span className="text-theme-text-secondary">
+                    목표 {formatSoberGoal(summary.goalDays)}
+                  </span>
+                  <span
+                    className="font-semibold"
+                    style={{ color: itemAccent.text }}
+                  >
+                    {summary.progress.toFixed(0)}%
+                  </span>
+                </div>
+                <div
+                  role="progressbar"
+                  aria-label={`목표 ${formatSoberGoal(summary.goalDays)}`}
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                  aria-valuenow={summary.progress}
+                  className="h-5 overflow-hidden rounded-full bg-theme-border/80"
+                >
+                  <div
+                    className="h-full"
+                    style={{
+                      width: `${summary.progress}%`,
+                      backgroundColor: accent,
+                    }}
+                  />
                 </div>
               </div>
               <div className="flex flex-col gap-3 px-1">
                 <button
                   type="button"
-                  onClick={() => openRestart()}
+                  onClick={() => setRecordView({ mode: 'new', type: 'RESTART' })}
                   className="min-h-12 rounded-full border border-black/10 text-theme-surface"
                   style={{ backgroundColor: accent }}
                 >
-                  다시 시작하기
+                  다시 시작
                 </button>
                 <button
                   type="button"
-                  onClick={() => setMemosOpen(true)}
+                  onClick={() => setRecordView({ mode: 'list' })}
                   className="min-h-12 rounded-full border border-theme-text-secondary/10 bg-theme-surface-muted"
                 >
                   기록 모아보기
@@ -315,6 +248,7 @@ export const SoberDetail = ({
                         className={!available ? 'opacity-30' : 'font-medium'}
                         label={[
                           day.dateKey,
+                          memoDays.has(day.dateKey) ? '기록 있음' : '',
                           restart
                             ? '다시 시작한 날'
                             : achievement
@@ -329,7 +263,7 @@ export const SoberDetail = ({
                           available
                             ? () => {
                               calendar.showDate(day.dateKey);
-                              setSelectedDay(day.dateKey);
+                              setRecordView({ mode: 'day', date: day.dateKey });
                             }
                             : undefined
                         }
@@ -345,6 +279,7 @@ export const SoberDetail = ({
                         ) : (
                           <span>{day.dayNumber}</span>
                         )}
+                        {!day.isOutsideMonth && available && memoDays.has(day.dateKey) && <span aria-hidden="true" className="absolute bottom-1 h-1 w-1 rounded-full bg-theme-text-secondary" />}
                       </CalendarDay>
                     );
                   })}
@@ -409,163 +344,7 @@ export const SoberDetail = ({
           </div>
         </BottomSheetBody>
       </BottomSheet>
-      <AnimatePresence>
-        {selectedDay && editing === undefined && (
-          <BottomSheet
-            ariaLabel={selectedDay}
-            onClose={() => setSelectedDay(null)}
-          >
-            <BottomSheetTitle
-              title={format(new Date(`${selectedDay}T12:00`), 'yyyy년 M월 d일')}
-            />
-            <BottomSheetBody>
-              <div className="flex flex-col gap-3 pb-8">
-                <button
-                  type="button"
-                  onClick={() => openRestart(undefined, selectedDay)}
-                  aria-label="이 날짜에 다시 시작 기록 추가"
-                  className="flex min-h-11 items-center gap-1 self-end text-sm text-theme-accent"
-                >
-                  <AddIcon />
-                  기록 추가
-                </button>
-                {summary.achievements
-                  .filter(
-                    (achievement) =>
-                      format(new Date(achievement.achievedAt), 'yyyy-MM-dd') ===
-                      selectedDay,
-                  )
-                  .map((achievement) => (
-                    <div
-                      key={`${achievement.days}-${achievement.achievedAt}`}
-                      className="flex items-center gap-3 rounded-2xl border border-theme-border/50 p-4"
-                    >
-                      <AchievementIcon className="text-2xl text-theme-accent" />
-                      <div className="space-y-1">
-                        <p className="font-semibold">
-                          {achievement.days}일 달성!
-                        </p>
-                        <p className="text-sm text-theme-text-tertiary">
-                          {format(new Date(achievement.achievedAt), 'HH:mm')}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                {(dates[selectedDay] ?? []).map((record) => (
-                  <div
-                    key={record.id}
-                    className="space-y-2 rounded-2xl border border-theme-border/50 p-4"
-                  >
-                    <div className="flex items-center justify-between gap-3">
-                      <p>{format(new Date(record.restartedAt), 'HH:mm')}</p>
-                      <button
-                        type="button"
-                        aria-label={`${format(new Date(record.restartedAt), 'HH:mm')} 다시 시작 기록 메뉴`}
-                        onClick={() => setRecordMenu(record.id)}
-                        className="-mr-5 flex h-11 w-11 items-center justify-center text-xl text-theme-text-secondary"
-                      >
-                        <MoreIcon />
-                      </button>
-                    </div>
-                    {record.memo && (
-                      <p className="whitespace-pre-wrap text-sm tracking-tighter text-theme-text-secondary">
-                        {record.memo}
-                      </p>
-                    )}
-                  </div>
-                ))}
-                {!dates[selectedDay]?.length &&
-                  !summary.achievements.some(
-                    (achievement) =>
-                      format(new Date(achievement.achievedAt), 'yyyy-MM-dd') ===
-                      selectedDay,
-                  ) && (
-                    <div className="flex flex-col items-center gap-3 pt-8">
-                      <DescriptionIcon className="text-2xl text-theme-accent" />
-                      <p className="text-center">
-                        이날은 다시 시작한 기록이 없어요.
-                      </p>
-                    </div>
-                  )}
-              </div>
-            </BottomSheetBody>
-          </BottomSheet>
-        )}
-        {editing !== undefined && (
-          <SoberRestartForm
-            key={editing ?? 'new'}
-            item={item}
-            editing={editing !== null}
-            initialValue={restartAt}
-            initialMemo={memo}
-            saving={saving}
-            onClose={() => setEditing(undefined)}
-            onSave={save}
-          />
-        )}
-        {recordMenu !== null && (
-          <BottomSheetPicker
-            labelledBy="sober-record-menu"
-            onClose={() => setRecordMenu(null)}
-            header={<h2
-              id="sober-record-menu"
-              className="text-center text-lg font-semibold"
-            >
-              다시 시작 기록
-            </h2>}>
-            <div className="flex flex-col gap-6 pb-6">
-
-              <button
-                type="button"
-                onClick={() => {
-                  openRestart(recordMenu);
-                  setRecordMenu(null);
-                }}
-                className="flex min-h-16 flex-col gap-1 rounded-2xl border border-theme-border/50 p-4 text-left"
-              >
-                <span className="font-semibold">기록 수정하기</span>
-                <span className="text-sm text-theme-text-secondary">
-                  일시와 메모를 바꿔요.
-                </span>
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setDeleting(recordMenu);
-                  setRecordMenu(null);
-                }}
-                className="flex min-h-16 flex-col gap-1 rounded-2xl border border-theme-border/50 p-4 text-left"
-              >
-                <span className="font-semibold text-theme-danger">
-                  기록 삭제하기
-                </span>
-                <span className="text-sm text-theme-text-secondary">
-                  이 재시작 기록을 삭제해요.
-                </span>
-              </button>
-            </div>
-          </BottomSheetPicker>
-        )}
-      </AnimatePresence>
-      <AnimatePresence>
-        {memosOpen && (
-          <SoberMemos
-            soberId={item.id}
-            name={item.name}
-            onClose={() => setMemosOpen(false)}
-            onMenu={(id) => setRecordMenu(id)}
-          />
-        )}
-      </AnimatePresence>
-      <ConfirmDialog
-        isOpen={deleting !== null}
-        title="기록을 삭제하시겠어요?"
-        confirmLabel="삭제하기"
-        confirmDescription="기록과 메모가 삭제되고 통계가 다시 계산돼요. 삭제 후 되돌릴 수 없어요."
-        danger
-        onClose={() => setDeleting(null)}
-        onConfirm={remove}
-      />
+      {recordView && <ActivityRecords scope="sober" parentId={item.id} name={item.name} initialStartedAt={item.initialStartedAt} view={recordView} achievements={summary.achievements} onClose={() => setRecordView(null)} />}
     </>
   );
 };

@@ -1,4 +1,5 @@
 'use client';
+import { ContentTopButton, ContentTopButtons } from '@/common/components/ui/ContentTopButton';
 
 import { useState } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
@@ -40,15 +41,14 @@ export default function SoberMemos({
         <BottomSheetTitle title={`${name} 기록`} scrollableTitle />
         <BottomSheetBody showScrollFade>
           <div className="flex flex-col gap-3 pb-7">
-            {items.length > 0 && <button
+            {items.length > 0 && <ContentTopButtons><ContentTopButton
               type="button"
               aria-label={`다시 시작 기록 정렬, ${sort === 'DESC' ? '최신순' : '과거순'}`}
               onClick={() => setSorting(true)}
-              className="mb-3 flex min-h-11 items-center gap-1 self-end text-sm text-theme-accent"
             >
               <SortIcon />
               {sort === 'DESC' ? '최신순' : '과거순'}
-            </button>}
+            </ContentTopButton></ContentTopButtons>}
             {query.isPending ? (
               <p
                 role="status"
