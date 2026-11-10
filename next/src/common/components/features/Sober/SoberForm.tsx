@@ -249,7 +249,6 @@ export const SoberForm = ({
       <AnimatePresence>
         {picker === 'date' && (
           <HabitFormDatePicker
-            title="언제부터 거리를 두기 시작했나요?"
             value={startedAt}
             onClose={() => setPicker(null)}
             onApply={(value) => {
