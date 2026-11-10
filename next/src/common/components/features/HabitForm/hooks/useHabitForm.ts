@@ -6,6 +6,7 @@ import { useState } from 'react';
 
 export const useHabitForm = () => {
   const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
   const [priority, setPriority] = useState(DEFAULT_HABIT_PRIORITY);
   const [iconKey, setIconKey] = useState<HabitIconKey>(DEFAULT_HABIT_ICON_KEY);
 
@@ -19,6 +20,8 @@ export const useHabitForm = () => {
     setStartedAtInput,
     name,
     setName,
+    description,
+    setDescription,
     priority,
     setPriority,
     iconKey,

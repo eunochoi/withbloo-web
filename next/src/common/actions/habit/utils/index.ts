@@ -85,6 +85,7 @@ export const formatHabitData = (habit: Habit, timezone: string): HabitData => {
     id: habit.id,
     email: habit.email,
     name: habit.name,
+    description: habit.description,
     priority: habit.priority,
     iconKey: getHabitIconKey(habit.iconKey),
     iconColor: getHabitIconColor(habit.iconColor),

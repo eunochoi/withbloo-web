@@ -25,6 +25,7 @@ export type HabitYearParams = {
 export type HabitFormParams = {
   habitId?: string | number | null;
   habitName: string;
+  description?: string | null;
   priority: number;
   iconKey?: string;
   iconColor?: string;

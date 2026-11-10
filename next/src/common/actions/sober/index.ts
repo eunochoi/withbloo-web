@@ -24,7 +24,7 @@ export async function getSobers() {
     const items = await prisma.sober.findMany({
       where: { userId: auth.userId },
       include: {
-        restarts: { orderBy: [{ restartedAt: 'asc' }, { id: 'asc' }] },
+        restarts: { where: { isRestart: true }, orderBy: [{ restartedAt: 'asc' }, { id: 'asc' }] },
       },
       orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
     });
@@ -61,7 +61,7 @@ export async function saveSober(input: SoberInput) {
   if (
     !input.name.trim() ||
     input.name.trim().length > SOBER_NAME_MAX_LENGTH ||
-    input.description.length > 500 ||
+    input.description.length > 50 ||
     !isHabitIconColor(input.iconColor) ||
     !Object.hasOwn(SOBER_ICONS, input.iconKey) ||
     !Number.isFinite(start.getTime()) ||
@@ -149,6 +149,7 @@ export async function saveSoberRestart(input: {
   soberId: number;
   restartedAt: string;
   memo: string;
+  type?: 'MEMO' | 'RESTART';
 }) {
   const auth = await getAuth();
   if (!auth.ok) return auth;
@@ -159,7 +160,9 @@ export async function saveSoberRestart(input: {
     (input.id !== undefined &&
       (!Number.isSafeInteger(input.id) || input.id <= 0)) ||
     typeof input.restartedAt !== 'string' ||
-    typeof input.memo !== 'string'
+    (input.type !== undefined && input.type !== 'MEMO' && input.type !== 'RESTART') ||
+    typeof input.memo !== 'string' ||
+    (input.type === 'MEMO' && !input.memo.trim())
   )
     return {
       ok: false as const,
@@ -184,17 +187,18 @@ export async function saveSoberRestart(input: {
       });
       if (!sober || timestamp < sober.initialStartedAt)
         throw new Error('시작 일시 이후로 입력해주세요.');
+      const type = input.type ?? 'RESTART';
       const data = { restartedAt: timestamp, memo: input.memo.trim() || null };
       if (input.id) {
-        const result = await tx.soberRestart.updateMany({
-          where: { id: input.id, soberId: sober.id },
+        const result = await tx.soberRecord.updateMany({
+          where: { id: input.id, soberId: sober.id, isRestart: type === 'RESTART' },
           data,
         });
         if (!result.count) throw new Error('기록을 찾을 수 없어요.');
         return input.id;
       }
       return (
-        await tx.soberRestart.create({ data: { ...data, soberId: sober.id } })
+        await tx.soberRecord.create({ data: { ...data, soberId: sober.id, isRestart: type === 'RESTART' } })
       ).id;
     });
     return { ok: true as const, data: item };
@@ -214,7 +218,7 @@ export async function deleteSoberRestart(soberId: number, id: number) {
   const auth = await getAuth();
   if (!auth.ok) return auth;
   try {
-    const result = await prisma.soberRestart.deleteMany({
+    const result = await prisma.soberRecord.deleteMany({
       where: { id, soberId, sober: { userId: auth.userId } },
     });
     return result.count
@@ -256,7 +260,7 @@ export async function getSoberMemos(
     };
   try {
     const date = cursor ? new Date(cursor.restartedAt) : null;
-    const rows = await prisma.soberRestart.findMany({
+    const rows = await prisma.soberRecord.findMany({
       where: {
         soberId,
         sober: { userId: auth.userId },

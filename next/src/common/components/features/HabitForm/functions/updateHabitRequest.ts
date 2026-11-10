@@ -6,6 +6,7 @@ import type { HabitIconKey } from '@/common/constants/habitIcons';
 type UpdateHabitRequestParams = {
   habitId: string;
   name: string;
+  description: string;
   priority: number;
   iconKey: HabitIconKey;
   iconColor: string;
@@ -14,6 +15,7 @@ type UpdateHabitRequestParams = {
 export const updateHabitRequest = async ({
   habitId,
   name,
+  description,
   priority,
   iconKey,
   iconColor,
@@ -22,6 +24,7 @@ export const updateHabitRequest = async ({
     updateHabit({
       habitId,
       habitName: name,
+      description,
       priority,
       iconKey,
       iconColor,

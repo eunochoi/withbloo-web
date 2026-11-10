@@ -1,4 +1,4 @@
-export const SOBER_NAME_MAX_LENGTH = 30;
+export const SOBER_NAME_MAX_LENGTH = 20;
 
 export const SOBER_ICONS = {
   "favorite": "기본 1",

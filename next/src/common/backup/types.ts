@@ -1,7 +1,7 @@
 export const MAX_BACKUP_BYTES = 1024 * 1024 * 1024;
 export const MAX_ENCRYPTED_BACKUP_BYTES = MAX_BACKUP_BYTES + 1024 * 1024;
 export const MAX_DATABASE_BYTES = 64 * 1024 * 1024;
-export const BACKUP_SCHEMA_VERSION = 8;
+export const BACKUP_SCHEMA_VERSION = 12;
 export class BackupError extends Error {
   constructor(
     message: string,
@@ -22,6 +22,7 @@ export interface DiaryRecord {
 export interface HabitRecord {
   id: number;
   name: string;
+  description: string | null;
   priority: number;
   icon_key: string;
   icon_color: string;
@@ -42,7 +43,16 @@ export interface SoberRecord {
   created_at: string;
   updated_at: string;
 }
+export interface HabitMemoRecord {
+  id: number;
+  habit_id: number;
+  recorded_at: string;
+  memo: string;
+  created_at: string;
+  updated_at: string;
+}
 export interface RestartRecord {
+  type?: 'MEMO' | 'RESTART';
   id: number;
   sober_id: number;
   restarted_at: string;
@@ -61,13 +71,18 @@ export interface ImageRecord {
   file_name: string;
   position: number;
 }
+export interface HabitMemoImageRecord { id: number; habit_memo_id: number; file_name: string; position: number; }
+export interface SoberRecordImageRecord { id: number; sober_record_id: number; file_name: string; position: number; }
 export interface BackupRecords {
   diaries: DiaryRecord[];
   habits: HabitRecord[];
   sobers: SoberRecord[];
   soberRestarts: RestartRecord[];
+  habitMemos?: HabitMemoRecord[];
   completions: CompletionRecord[];
   images: ImageRecord[];
+  habitMemoImages?: HabitMemoImageRecord[];
+  soberRecordImages?: SoberRecordImageRecord[];
 }
 export interface BackupBundle {
   records: BackupRecords;
@@ -78,6 +93,6 @@ export const backupSummary = (r: BackupRecords) => ({
   habits: r.habits.length,
   completions: r.completions.length,
   sobers: r.sobers.length,
-  restarts: r.soberRestarts.length,
-  photos: r.images.length,
+  restarts: r.soberRestarts.filter((row) => (row.type ?? 'RESTART') === 'RESTART').length,
+  photos: r.images.length + (r.habitMemoImages?.length ?? 0) + (r.soberRecordImages?.length ?? 0),
 });

@@ -22,6 +22,7 @@ model Habit {
   id        Int      @id @default(autoincrement())
   email     String   @db.VarChar(30)
   name      String   @db.VarChar(50)
+  description String? @db.VarChar(100)
   priority  Int
   iconKey   String   @default("goal") @db.VarChar(32)
   iconColor String   @default("theme") @db.VarChar(32)
@@ -33,6 +34,7 @@ model Habit {
   // Habit N : 1 User, onDelete: Cascade - 사용자를 삭제하면 습관도 함께 삭제
   user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   completions HabitCompletion[]
+  records HabitRecord[]
 
   @@unique([userId, name])
   @@index([userId])
@@ -49,6 +51,19 @@ model HabitCompletion {
   @@index([date])
 }
 
+model HabitRecord {
+  id         Int      @id @default(autoincrement())
+  habitId    Int
+  recordedAt DateTime
+  memo       String   @map("text") @db.VarChar(500)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  habit      Habit    @relation(fields: [habitId], references: [id], onDelete: Cascade)
+  images     HabitRecordImage[]
+
+  @@index([habitId, recordedAt, id])
+}
+
 // Keep one-off SQL data migrations recorded across prisma db push operations.
 model DataMigration {
   name      String   @id
@@ -61,7 +76,7 @@ model Sober {
   id               Int            @id @default(autoincrement())
   userId           Int
   name             String         @db.VarChar(30)
-  description      String?        @db.VarChar(500)
+  description      String?        @db.VarChar(100)
   iconKey          String
   iconColor        String         @default("theme")
   isPriority       Boolean        @default(false)
@@ -71,20 +86,45 @@ model Sober {
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @updatedAt
   user             User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  restarts         SoberRestart[]
+  restarts         SoberRecord[]
 
   @@unique([userId, name])
   @@index([userId, createdAt])
 }
 
-model SoberRestart {
+model SoberRecord {
   id          Int      @id @default(autoincrement())
   soberId     Int
-  restartedAt DateTime
-  memo        String?  @db.VarChar(500)
+  isRestart   Boolean  @default(false)
+  restartedAt DateTime @map("recordedAt")
+  memo        String?  @map("text") @db.VarChar(500)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   sober       Sober    @relation(fields: [soberId], references: [id], onDelete: Cascade)
+  images      SoberRecordImage[]
 
   @@index([soberId, restartedAt, id])
+  @@index([soberId, isRestart, restartedAt, id])
+}
+
+model HabitRecordImage {
+  id Int @id @default(autoincrement())
+  habitRecordId Int
+  imageContentId String
+  position Int
+  habitRecord HabitRecord @relation(fields: [habitRecordId], references: [id], onDelete: Cascade)
+  imageContent ImageContent @relation(fields: [imageContentId], references: [id], onDelete: Restrict)
+  @@unique([habitRecordId, position])
+  @@index([imageContentId])
+}
+
+model SoberRecordImage {
+  id Int @id @default(autoincrement())
+  soberRecordId Int
+  imageContentId String
+  position Int
+  soberRecord SoberRecord @relation(fields: [soberRecordId], references: [id], onDelete: Cascade)
+  imageContent ImageContent @relation(fields: [imageContentId], references: [id], onDelete: Restrict)
+  @@unique([soberRecordId, position])
+  @@index([imageContentId])
 }

@@ -9,6 +9,7 @@ type UseSyncHabitDataToFormParams = {
   enabled: boolean;
   habitData: HabitData | undefined;
   setName: (value: string) => void;
+  setDescription: (value: string) => void;
   setPriority: (value: number) => void;
   setIconKey: (value: HabitIconKey) => void;
   setIconColor: (value: HabitIconColorKey) => void;
@@ -19,6 +20,7 @@ export const useSyncHabitDataToForm = ({
   enabled,
   habitData,
   setName,
+  setDescription,
   setPriority,
   setIconKey,
   setIconColor,
@@ -34,13 +36,14 @@ export const useSyncHabitDataToForm = ({
     if (initializedHabitIdRef.current === habitData.id) return;
 
     setName(habitData.name ?? '');
+    setDescription(habitData.description ?? '');
     setPriority(habitData.priority ?? DEFAULT_HABIT_PRIORITY);
     setIconKey(getHabitIconKey(habitData.iconKey));
     setIconColor(getHabitIconColor(habitData.iconColor));
     setStartedAtInput(format(new Date(habitData.initialStartedAt), "yyyy-MM-dd'T'HH:mm"));
     initializedHabitIdRef.current = habitData.id;
     setInitializedHabitId(habitData.id);
-  }, [enabled, habitData, setName, setPriority, setIconKey, setIconColor, setStartedAtInput]);
+  }, [enabled, habitData, setName, setDescription, setPriority, setIconKey, setIconColor, setStartedAtInput]);
 
   return !enabled || initializedHabitId === habitData?.id;
 };

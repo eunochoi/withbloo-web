@@ -40,6 +40,7 @@ export function validateBackupRecords(
     !unique(r.sobers, (row) =>
       typeof row.name === "string" ? row.name.trim() : null,
     ) ||
+    !unique(r.habitMemos ?? [], (row) => row.id) ||
     !unique(r.soberRestarts, (row) => row.id) ||
     !unique(r.images, (row) => row.id) ||
     !unique(r.images, (row) => row.file_name) ||
@@ -68,6 +69,7 @@ export function validateBackupRecords(
     if (
       !id(row.id) ||
       !name(row.name) ||
+      (row.description !== null && (typeof row.description !== "string" || row.description.length > 100)) ||
       !Number.isInteger(row.priority) ||
       row.priority < 0 ||
       row.priority > 3 ||
@@ -85,7 +87,7 @@ export function validateBackupRecords(
       !name(row.name) ||
       (row.description !== null &&
         (typeof row.description !== "string" ||
-          row.description.length > 500)) ||
+          row.description.length > 100)) ||
       typeof row.icon_key !== "string" ||
       !Object.hasOwn(SOBER_ICONS, row.icon_key) ||
       !isHabitIconColor(row.icon_color) ||
@@ -102,11 +104,17 @@ export function validateBackupRecords(
           row.goal_days! > 36500)
     )
       invalid();
+  for (const row of r.habitMemos ?? []) {
+    const habit = habits.get(row.habit_id);
+    if (!id(row.id) || !habit || !time(row.recorded_at) || Date.parse(row.recorded_at) < Date.parse(habit.initial_started_at) || Date.parse(row.recorded_at) > now || typeof row.memo !== 'string' || !row.memo.trim() || row.memo.length > 500 || !timestamps(row)) invalid();
+  }
   for (const row of r.soberRestarts) {
     const sober = sobers.get(row.sober_id);
     if (
       !id(row.id) ||
       !sober ||
+      (row.type !== undefined && !['MEMO', 'RESTART'].includes(row.type)) ||
+      (row.type === 'MEMO' && !row.memo?.trim()) ||
       !time(row.restarted_at) ||
       Date.parse(row.restarted_at) < Date.parse(sober.initial_started_at) ||
       Date.parse(row.restarted_at) > now ||
@@ -140,8 +148,17 @@ export function validateBackupRecords(
     )
       invalid();
   }
+  const habitImages = r.habitMemoImages ?? [];
+  const soberImages = r.soberRecordImages ?? [];
+  const allImages = [...r.images, ...habitImages, ...soberImages];
+  if (!unique(allImages, (row) => row.file_name) || !unique(habitImages, (row) => row.id) || !unique(soberImages, (row) => row.id) ||
+      !unique(habitImages, (row) => `${row.habit_memo_id}:${row.position}`) || !unique(soberImages, (row) => `${row.sober_record_id}:${row.position}`)) invalid();
+  for (const row of [...habitImages, ...soberImages]) {
+    const parentExists = 'habit_memo_id' in row ? (r.habitMemos ?? []).some((memo) => memo.id === row.habit_memo_id) : r.soberRestarts.some((record) => record.id === row.sober_record_id);
+    if (!id(row.id) || !parentExists || !/^[a-zA-Z0-9_-]+\.jpg$/.test(row.file_name) || !Number.isInteger(row.position) || row.position < 0 || row.position > 4 || !media[`media/${row.file_name}`]) invalid();
+  }
   if (
-    Object.keys(media).length !== r.images.length ||
+    Object.keys(media).length !== allImages.length ||
     Object.keys(media).some((key) => !/^media\/[a-zA-Z0-9_-]+\.jpg$/.test(key))
   )
     invalid();
@@ -152,6 +169,7 @@ export const recordColumns = {
   habits: [
     "id",
     "name",
+    "description",
     "priority",
     "icon_key",
     "icon_color",
@@ -172,7 +190,9 @@ export const recordColumns = {
     "created_at",
     "updated_at",
   ],
+  habitMemos: ["id", "habit_id", "recorded_at", "memo", "created_at", "updated_at"],
   soberRestarts: [
+    "type",
     "id",
     "sober_id",
     "restarted_at",
@@ -182,4 +202,6 @@ export const recordColumns = {
   ],
   completions: ["habit_id", "date", "created_at"],
   images: ["id", "diary_id", "file_name", "position"],
+  habitMemoImages: ["id", "habit_memo_id", "file_name", "position"],
+  soberRecordImages: ["id", "sober_record_id", "file_name", "position"],
 } satisfies Record<keyof BackupRecords, string[]>;

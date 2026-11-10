@@ -49,6 +49,8 @@ const HabitFormClientPage = ({ isEdit, habitId }: HabitFormClientPageProps) => {
   const {
     name,
     setName,
+    description,
+    setDescription,
     priority,
     setPriority,
     iconKey,
@@ -62,6 +64,7 @@ const HabitFormClientPage = ({ isEdit, habitId }: HabitFormClientPageProps) => {
     enabled: isEdit,
     habitData,
     setName,
+    setDescription,
     setPriority,
     setIconKey,
     setIconColor,
@@ -77,14 +80,14 @@ const HabitFormClientPage = ({ isEdit, habitId }: HabitFormClientPageProps) => {
   const saveHabit = async (habitName: string) => {
     if (isEdit) {
       if (!habitId) throw new Error('습관 정보를 다시 불러와주세요.');
-      return updateHabitRequest({ habitId, name: habitName, priority, iconKey, iconColor });
+      return updateHabitRequest({ habitId, name: habitName, description, priority, iconKey, iconColor });
     }
     const date = new Date(startedAtInput);
     if (!Number.isFinite(date.getTime()) || format(date, "yyyy-MM-dd'T'HH:mm") !== startedAtInput
       || !isValidHabitStartedAt(date.toISOString())) {
       throw new Error('시작 일시는 1900년 이후의 현재 또는 과거 시각으로 입력해주세요.');
     }
-    return createHabitRequest({ name: habitName, priority, iconKey, iconColor, initialStartedAt: date.toISOString() });
+    return createHabitRequest({ name: habitName, description, priority, iconKey, iconColor, initialStartedAt: date.toISOString() });
   };
   const confirmText = isEdit ? '수정' : '추가';
   const { isSubmitting, handleSubmit } = useHabitSubmission({
@@ -140,6 +143,13 @@ const HabitFormClientPage = ({ isEdit, habitId }: HabitFormClientPageProps) => {
             <fieldset ref={formRef} disabled={isSubmitting} className="m-0 flex min-w-0 w-full flex-col gap-7 border-0 pb-6">
               <div className="flex w-full flex-col gap-7">
                 <HabitFormNameSection name={name} setName={setName} />
+                <section className="space-y-3">
+                  <h2 className="text-lg font-semibold">설명 <span className="text-base font-normal text-theme-text-tertiary">(선택)</span></h2>
+                  <div className="space-y-3 px-2">
+                    <textarea aria-label="습관 설명" value={description} onChange={(event) => setDescription(event.target.value)} maxLength={50} placeholder="하루 최소 1리터 마시기" className="h-28 w-full resize-none border-0 bg-transparent p-0 text-base leading-8 placeholder:text-theme-text-tertiary" />
+                    <p className="text-right text-xs text-theme-text-secondary">{description.length} / 50</p>
+                  </div>
+                </section>
                 <HabitFormPrioritySection priority={priority} onOpen={() => setPicker('priority')} />
                 <HabitFormIconSection iconKey={iconKey} iconColor={iconColor} onOpen={() => setPicker('icon')} />
                 <HabitFormRecordOptions iconColor={iconColor} startedAtInput={startedAtInput} isEdit={isEdit} onOpenColor={() => setPicker('color')} onOpenDate={() => setPicker('date')} />

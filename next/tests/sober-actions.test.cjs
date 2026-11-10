@@ -9,7 +9,7 @@ function harness() {
     findFirst: async ({ where }) => rows.find((row) => row.id === where.id && row.userId === where.userId) ?? null,
     create: async ({ data }) => { const item = { id: rows.length + 1, ...data }; rows.push(item); return item; },
     update: async ({ where, data }) => Object.assign(rows.find((row) => row.id === where.id), data),
-  }, soberRestart: { create: async ({ data }) => ({ id: 7, ...data }), updateMany: async () => ({ count: 0 }) } };
+  }, soberRecord: { create: async ({ data }) => ({ id: 7, ...data }), updateMany: async () => ({ count: 0 }) } };
   const load = loadSource({ '../../../../lib/prisma': { prisma: { $transaction: (fn) => fn(tx) } }, '@/common/auth/getAuth': { getAuth: async () => ({ ok: true, userId: 5 }) }, '@/common/constants/habitIconColors': { isHabitIconColor: (value) => value === 'theme' } });
   return { actions: load('common/actions/sober/index.ts'), rows };
 }
@@ -33,10 +33,10 @@ test('rejects invalid options and restarts before start', async () => {
   assert.equal((await actions.saveSoberRestart({ soberId: 1, restartedAt: '2021-01-01T00:00:00Z', memo: '다시' })).ok, true);
 });
 
-test('sober names accept 30 characters and reject 31 characters on create and update', async () => {
+test('sober names accept 20 characters and reject 21 characters on create and update', async () => {
   const { actions, rows } = harness();
-  assert.equal((await actions.saveSober({ ...input, name: 'a'.repeat(30) })).ok, true);
-  assert.equal((await actions.saveSober({ ...input, name: 'b'.repeat(31) })).ok, false);
-  assert.equal((await actions.saveSober({ ...input, id: rows[0].id, name: '한'.repeat(30) })).ok, true);
-  assert.equal((await actions.saveSober({ ...input, id: rows[0].id, name: '한'.repeat(31) })).ok, false);
+  assert.equal((await actions.saveSober({ ...input, name: 'a'.repeat(20) })).ok, true);
+  assert.equal((await actions.saveSober({ ...input, name: 'b'.repeat(21) })).ok, false);
+  assert.equal((await actions.saveSober({ ...input, id: rows[0].id, name: '한'.repeat(20) })).ok, true);
+  assert.equal((await actions.saveSober({ ...input, id: rows[0].id, name: '한'.repeat(21) })).ok, false);
 });

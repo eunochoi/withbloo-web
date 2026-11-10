@@ -82,10 +82,10 @@ test('saving a priority/color change invalidates home, calendar and diary projec
   queryClient.clear();
 });
 
-test('habit names accept up to 30 characters', () => {
+test('habit names accept up to 20 characters', () => {
   const { isValidHabitName } = load('common/actions/habit/utils/index.ts');
-  assert.equal(isValidHabitName('a'.repeat(30)), true);
-  assert.equal(isValidHabitName('한'.repeat(30)), true);
-  assert.equal(isValidHabitName('a'.repeat(31)), false);
-  assert.equal(isValidHabitName(' '.repeat(30)), false);
+  assert.equal(isValidHabitName('a'.repeat(20)), true);
+  assert.equal(isValidHabitName('한'.repeat(20)), true);
+  assert.equal(isValidHabitName('a'.repeat(21)), false);
+  assert.equal(isValidHabitName(' '.repeat(20)), false);
 });

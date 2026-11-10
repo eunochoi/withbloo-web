@@ -5,6 +5,7 @@ import type { HabitIconKey } from '@/common/constants/habitIcons';
 
 type CreateHabitRequestParams = {
   name: string;
+  description: string;
   priority: number;
   iconKey: HabitIconKey;
   iconColor: string;
@@ -13,6 +14,7 @@ type CreateHabitRequestParams = {
 
 export const createHabitRequest = async ({
   name,
+  description,
   priority,
   iconKey,
   iconColor,
@@ -21,6 +23,7 @@ export const createHabitRequest = async ({
   authAction(() =>
     createHabit({
       habitName: name,
+      description,
       priority,
       iconKey,
       iconColor,

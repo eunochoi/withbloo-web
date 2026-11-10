@@ -109,7 +109,7 @@ export function readArchive(bytes: Uint8Array): {
     manifest.format !== "took-backup" ||
     manifest.version !== 1 ||
     manifest.set ||
-    ![5, 6, 7, 8].includes(manifest.schemaVersion) ||
+    ![5, 6, 7, 8, 9, 10, 11, 12, 13].includes(manifest.schemaVersion) ||
     typeof manifest.createdAt !== "string" ||
     !Number.isFinite(Date.parse(manifest.createdAt)) ||
     !manifest.files ||

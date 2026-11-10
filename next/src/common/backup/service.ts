@@ -17,7 +17,7 @@ interface Owner {
 }
 const photoLimit = 10 * 1024 * 1024;
 async function snapshot(tx: Prisma.TransactionClient, userId: number) {
-  const [diaries, habits, completions, sobers] = await Promise.all([
+  const [diaries, habits, completions, sobers, habitMemos] = await Promise.all([
     tx.diary.findMany({
       where: { userId },
       include: {
@@ -35,11 +35,12 @@ async function snapshot(tx: Prisma.TransactionClient, userId: number) {
     }),
     tx.sober.findMany({
       where: { userId },
-      include: { restarts: { orderBy: { id: "asc" } } },
+      include: { restarts: { include: { images: { include: { imageContent: true }, orderBy: { position: "asc" } } }, orderBy: { id: "asc" } } },
       orderBy: { id: "asc" },
     }),
+    tx.habitRecord.findMany({ where: { habit: { userId } }, include: { images: { include: { imageContent: true }, orderBy: { position: "asc" } } }, orderBy: { id: "asc" } }),
   ]);
-  return { diaries, habits, completions, sobers };
+  return { diaries, habits, completions, sobers, habitMemos };
 }
 type Snapshot = Awaited<ReturnType<typeof snapshot>>;
 export async function decodeBackup(
@@ -93,6 +94,7 @@ async function snapshotBundle(data: Snapshot, directory: string): Promise<Backup
     habits: data.habits.map((row) => ({
       id: row.id,
       name: row.name,
+      description: row.description,
       priority: row.priority,
       icon_key: row.iconKey,
       icon_color: row.iconColor,
@@ -100,6 +102,7 @@ async function snapshotBundle(data: Snapshot, directory: string): Promise<Backup
       created_at: row.createdAt.toISOString(),
       updated_at: row.updatedAt.toISOString(),
     })),
+    habitMemos: data.habitMemos.map((row) => ({ id: row.id, habit_id: row.habitId, recorded_at: row.recordedAt.toISOString(), memo: row.memo, created_at: row.createdAt.toISOString(), updated_at: row.updatedAt.toISOString() })),
     completions: data.completions.map((row) => ({
       habit_id: row.habitId,
       date: row.date,
@@ -122,12 +125,15 @@ async function snapshotBundle(data: Snapshot, directory: string): Promise<Backup
       row.restarts.map((item) => ({
         id: item.id,
         sober_id: row.id,
+        type: item.isRestart ? 'RESTART' as const : 'MEMO' as const,
         restarted_at: item.restartedAt.toISOString(),
         memo: item.memo,
         created_at: item.createdAt.toISOString(),
         updated_at: item.updatedAt.toISOString(),
       })),
     ),
+    habitMemoImages: data.habitMemos.flatMap((row) => row.images.map((image, position) => ({ id: image.id, habit_memo_id: row.id, file_name: `habit-photo-${image.id}.jpg`, position }))),
+    soberRecordImages: data.sobers.flatMap((row) => row.restarts.flatMap((record) => record.images.map((image, position) => ({ id: image.id, sober_record_id: record.id, file_name: `sober-photo-${image.id}.jpg`, position })))),
     images: data.diaries.flatMap((row) =>
       row.images.map((image, position) => ({
         id: image.id,
@@ -139,10 +145,14 @@ async function snapshotBundle(data: Snapshot, directory: string): Promise<Backup
   };
   const media: BackupBundle["media"] = Object.create(null);
   let total = Buffer.byteLength(JSON.stringify(records));
-  const images = data.diaries.flatMap((row) => row.images);
+  const images = [
+    ...data.diaries.flatMap((row) => row.images.map((image) => ({ image, filename: `photo-${image.id}.jpg` }))),
+    ...data.habitMemos.flatMap((row) => row.images.map((image) => ({ image, filename: `habit-photo-${image.id}.jpg` }))),
+    ...data.sobers.flatMap((row) => row.restarts.flatMap((record) => record.images.map((image) => ({ image, filename: `sober-photo-${image.id}.jpg` })))),
+  ];
   if (images.length) {
     const s3 = createS3Client();
-    for (const image of images) {
+    for (const { image, filename } of images) {
       if (image.imageContent.status !== "READY")
         throw new BackupError(
           "준비되지 않은 사진이 있어요. 사진을 확인한 뒤 다시 백업해주세요.",
@@ -171,9 +181,9 @@ async function snapshotBundle(data: Snapshot, directory: string): Promise<Backup
         throw new BackupError(
           "JPEG 사진만 앱 호환 백업에 포함할 수 있어요. 사진을 확인해주세요.",
         );
-      const path = join(directory, `photo-${image.id}.jpg`);
+      const path = join(directory, filename);
       await writeFile(path, bytes, { mode: 0o600 });
-      media[`media/photo-${image.id}.jpg`] = path;
+      media[`media/${filename}`] = path;
     }
   }
   return { records, media };

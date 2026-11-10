@@ -145,22 +145,8 @@ export const SoberForm = ({
             disabled={saving}
             className="m-0 flex min-w-0 flex-col gap-7 border-0 pb-8"
           >
-            <label className="flex min-h-12 items-center justify-between gap-3 text-lg font-semibold">
-              중요 항목으로 저장
-              <input
-                type="checkbox"
-                role="switch"
-                checked={priority}
-                onChange={(event) => setPriority(event.target.checked)}
-                className="peer sr-only"
-              />
-              <span
-                aria-hidden="true"
-                className="relative h-7 w-12 shrink-0 rounded-full bg-theme-border after:absolute after:left-1 after:top-1 after:h-5 after:w-5 after:rounded-full after:bg-theme-surface after:transition-transform peer-checked:bg-theme-accent peer-checked:after:translate-x-5"
-              />
-            </label>
             <section className="space-y-3">
-              <h3 className="text-lg font-semibold">거리를 두고 싶은 것</h3>
+              <h3 className="text-lg font-semibold">이름</h3>
               <div className="space-y-3 px-1">
                 <input
                   ref={nameInput}
@@ -176,6 +162,36 @@ export const SoberForm = ({
                 </p>
               </div>
             </section>
+            <section className="space-y-3">
+              <h3 className="text-lg font-semibold">설명 <span className="text-base font-normal text-theme-text-tertiary">(선택)</span></h3>
+              <div className="space-y-3 px-2">
+                <textarea
+                  aria-label="거리두기 설명"
+                  value={description}
+                  maxLength={50}
+                  onChange={(event) => setDescription(event.target.value)}
+                  placeholder="잠들기 전에는 쇼츠 보지 않기"
+                  className="h-28 w-full resize-none border-0 bg-transparent p-0 text-base leading-8 placeholder:text-theme-text-tertiary"
+                />
+                <p className="text-right text-xs text-theme-text-secondary">
+                  {description.length} / 50
+                </p>
+              </div>
+            </section>
+            <label className="flex min-h-12 items-center justify-between gap-3 text-lg font-semibold">
+              중요 항목
+              <input
+                type="checkbox"
+                role="switch"
+                checked={priority}
+                onChange={(event) => setPriority(event.target.checked)}
+                className="peer sr-only"
+              />
+              <span
+                aria-hidden="true"
+                className="relative h-7 w-12 shrink-0 rounded-full bg-theme-border after:absolute after:left-1 after:top-1 after:h-5 after:w-5 after:rounded-full after:bg-theme-surface after:transition-transform peer-checked:bg-theme-accent peer-checked:after:translate-x-5"
+              />
+            </label>
             <section className="space-y-3">
               <h3 className="text-lg font-semibold">아이콘</h3>
               <HabitFormPickerRow
@@ -209,7 +225,7 @@ export const SoberForm = ({
               />
             </section>
             <section className="space-y-3">
-              <h3 className="text-lg font-semibold">거리두기 목표</h3>
+              <h3 className="text-lg font-semibold">목표</h3>
               <HabitFormPickerRow
                 accessibilityLabel="목표 선택"
                 label={mode === 'AUTO' ? '자동 목표' : formatSoberGoal(goal)}
@@ -225,22 +241,6 @@ export const SoberForm = ({
                 onClick={() => setPicker('date')}
               />
               <InfoNotice>시작 일시는 저장 후 변경할 수 없어요.</InfoNotice>
-            </section>
-            <section className="space-y-3">
-              <h3 className="text-lg font-semibold">나의 다짐 (선택)</h3>
-              <div className="space-y-3 px-2">
-                <textarea
-                  aria-label="나의 다짐"
-                  value={description}
-                  maxLength={500}
-                  onChange={(event) => setDescription(event.target.value)}
-                  placeholder="밤에는 속을 편하게 하기"
-                  className="h-28 w-full resize-none border-0 bg-transparent p-0 text-base leading-8 placeholder:text-theme-text-tertiary"
-                />
-                <p className="text-right text-xs text-theme-text-secondary">
-                  {description.length} / 500
-                </p>
-              </div>
             </section>
           </fieldset>
         </BottomSheetBody>

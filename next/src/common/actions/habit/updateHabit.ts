@@ -22,7 +22,7 @@ import {
   parseHabitId,
 } from './utils';
 
-export const updateHabit = async ({ habitId, habitName, priority, iconKey, iconColor, initialStartedAt }: HabitFormParams): Promise<ActionResult<HabitData>> => {
+export const updateHabit = async ({ habitId, habitName, description, priority, iconKey, iconColor, initialStartedAt }: HabitFormParams): Promise<ActionResult<HabitData>> => {
   try {
     const auth = await getAuth();
     if (!auth.ok) return createAuthErrorResult(auth);
@@ -34,6 +34,9 @@ export const updateHabit = async ({ habitId, habitName, priority, iconKey, iconC
     }
     if (!isValidHabitName(habitName)) {
       return { ok: false, code: 'INVALID_HABIT_NAME', message: `습관 이름은 ${HABIT_NAME_MIN_LENGTH}~${HABIT_NAME_MAX_LENGTH}자로 입력해주세요.` };
+    }
+    if (description != null && (typeof description !== 'string' || description.length > 50)) {
+      return { ok: false, code: 'INVALID_HABIT_DESCRIPTION', message: '설명은 50자까지 입력해주세요.' };
     }
     if (!isValidHabitPriority(priority)) {
       return { ok: false, code: 'INVALID_HABIT_PRIORITY', message: '습관 우선순위가 올바르지 않습니다.' };
@@ -77,6 +80,7 @@ export const updateHabit = async ({ habitId, habitName, priority, iconKey, iconC
       where: { id: habit.id },
       data: {
         name: normalizedHabitName,
+        ...(description !== undefined ? { description: description?.trim() || null } : {}),
         priority,
         ...(iconKey !== undefined ? { iconKey } : {}),
         ...(iconColor !== undefined ? { iconColor } : {}),

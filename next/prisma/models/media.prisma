@@ -32,6 +32,8 @@ model ImageContent {
   users  User[]  @relation("UserImageContent")
   // ImageContent 1 : N Image
   images Image[]
+  habitRecordImages HabitRecordImage[]
+  soberRecordImages SoberRecordImage[]
 
   @@map("ImageContent")
 }

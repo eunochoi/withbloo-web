@@ -10,7 +10,7 @@ const HabitFormNameSection = ({
   setName,
 }: HabitFormNameSectionProps) => (
   <section aria-labelledby="habit-name-title" className="flex w-full flex-col gap-3">
-    <h2 id="habit-name-title" className=" text-lg font-semibold text-theme-text-primary">습관 이름</h2>
+    <h2 id="habit-name-title" className=" text-lg font-semibold text-theme-text-primary">이름</h2>
     <HabitFormNameInput name={name} setName={setName} />
   </section>
 );
