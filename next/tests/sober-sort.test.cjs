@@ -36,7 +36,7 @@ test('custom mode applies dragged order without changing it before apply', () =>
   assert.equal(applied.length, 0);
   tree = render();
   const header = find(tree, (node) => node.type === 'BottomSheetTitle');
-  assert.equal(header.props.headerRight.props.disabled, false);
-  header.props.headerRight.props.onClick();
+  assert.equal(header.props.headerButton.props.disabled, false);
+  header.props.headerButton.props.onClick();
   assert.deepEqual(applied, [['CUSTOM', false, 'DESC', [2, 3, 1]]]);
 });

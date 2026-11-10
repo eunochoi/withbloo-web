@@ -51,7 +51,7 @@ const DiaryDetailClientPage = ({ diaryId }: DiaryDetailClientPageProps) => {
             title={headerTitle}
             onBack={() => sheetRef.current?.close()}
             backLabel="뒤로가기"
-            headerRight={(
+            headerButton={(
               <>
                 <button
                   className="-mr-5 flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-xl text-theme-text-tertiary"

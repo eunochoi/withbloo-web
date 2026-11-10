@@ -3,18 +3,18 @@ import type { ReactNode } from 'react';
 type Props = {
   children: ReactNode;
   headerLeft?: ReactNode;
-  headerRight?: ReactNode;
+  headerButton?: ReactNode;
   className: string;
   leftClassName: string;
   rightClassName?: string;
 };
 
-export function BottomSheetHeader({ children, headerLeft, headerRight, className, leftClassName, rightClassName }: Props) {
+export function BottomSheetHeader({ children, headerLeft, headerButton, className, leftClassName, rightClassName }: Props) {
   return (
     <div className={className}>
       {children}
       {headerLeft && <div className={leftClassName}>{headerLeft}</div>}
-      {headerRight && <div className={rightClassName}>{headerRight}</div>}
+      {headerButton && <div className={rightClassName}>{headerButton}</div>}
     </div>
   );
 }

@@ -127,7 +127,7 @@ const HabitFormClientPage = ({ isEdit, habitId }: HabitFormClientPageProps) => {
           <BottomSheetTitle
             title={`습관 항목 ${confirmText}`}
             onBack={handleBack}
-          headerRight={<BottomSheetSubmitButton
+          headerButton={<BottomSheetSubmitButton
               type="button"
               onClick={handleSubmit}
               disabled={isSubmitting}

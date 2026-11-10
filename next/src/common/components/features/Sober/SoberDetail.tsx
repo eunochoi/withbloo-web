@@ -150,7 +150,7 @@ export const SoberDetail = ({
       >
         <BottomSheetTitle
           title="상세 정보"
-          headerRight={
+          headerButton={
             <SoberMenu
               id={item.id}
               name={item.name}

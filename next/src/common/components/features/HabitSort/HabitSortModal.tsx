@@ -102,7 +102,7 @@ export const HabitSortModal = ({ onClose, sortValue, priorityFirst, customHabitO
                 초기화
               </button>
             }
-            headerRight={
+            headerButton={
               <BottomSheetSubmitButton
                 disabled={!isStorageReady || (draftSort === 'CUSTOM' && (!tempHabits || !customHabits))}
                 onClick={onSubmit}

@@ -72,7 +72,7 @@ export default function SoberRestartForm({
   const title = editing ? '다시 시작 기록 수정' : '다시 시작 기록 추가';
   return (
     <BottomSheet ariaLabel={title} dismissible={!saving} preserveHandle onClose={onClose}>
-      <BottomSheetTitle title={title} headerRight={<BottomSheetSubmitButton
+      <BottomSheetTitle title={title} headerButton={<BottomSheetSubmitButton
           type="button"
           disabled={saving}
           aria-busy={saving}

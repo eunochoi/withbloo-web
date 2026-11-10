@@ -131,7 +131,7 @@ export const SoberForm = ({
         dismissible={!saving}
         preserveHandle
       >
-        <BottomSheetTitle title={item ? '거리두기 수정' : '거리두기 추가'} headerRight={<BottomSheetSubmitButton
+        <BottomSheetTitle title={item ? '거리두기 수정' : '거리두기 추가'} headerButton={<BottomSheetSubmitButton
             type="button"
             onClick={save}
             disabled={saving}

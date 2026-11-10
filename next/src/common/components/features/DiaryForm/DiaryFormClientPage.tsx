@@ -139,7 +139,7 @@ const DiaryFormClientPage = ({ isEdit, diaryId }: DiaryFormClientPageProps) => {
             title={headerTitle}
             onBack={handleBack}
             onTitleClick={allowDateChange && !isSubmitting ? () => setIsDatePickerOpen(true) : undefined}
-          headerRight={<BottomSheetSubmitButton
+          headerButton={<BottomSheetSubmitButton
                 type="button"
                 onClick={handleSubmit}
                 disabled={isSubmitting}

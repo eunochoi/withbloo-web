@@ -54,7 +54,7 @@ const HabitDetailClientPage = ({ habitId, today }: Props) => {
           <BottomSheetTitle
             title="상세 정보"
             onBack={() => setIsDialogMounted(false)}
-            headerRight={habitDataById && (
+            headerButton={habitDataById && (
               <>
                 <button
                   className="-mr-5 flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-xl text-theme-text-tertiary"

@@ -10,7 +10,7 @@ interface BottomSheetTitleProps {
   onBack?: () => void;
   backLabel?: string;
   headerLeft?: ReactNode;
-  headerRight?: ReactNode;
+  headerButton?: ReactNode;
   onTitleClick?: () => void;
   scrollableTitle?: boolean;
 }
@@ -18,14 +18,14 @@ interface BottomSheetTitleProps {
 export const BottomSheetTitle = ({
   title,
   headerLeft,
-  headerRight,
+  headerButton,
   onTitleClick,
   scrollableTitle = false,
-}: BottomSheetTitleProps) => title || headerLeft || headerRight ? (
+}: BottomSheetTitleProps) => title || headerLeft || headerButton ? (
   <BottomSheetHeader
     className={`relative flex min-h-12 w-full shrink-0 items-center justify-center ${PANEL_HORIZONTAL_PADDING_CLASS}`}
     headerLeft={headerLeft}
-    headerRight={headerRight}
+    headerButton={headerButton}
     leftClassName="absolute left-5 flex items-center tablet:left-12 desktop:left-[81px]"
     rightClassName="absolute right-5 flex items-center tablet:right-12 desktop:right-[81px]"
   >
