@@ -350,7 +350,7 @@ export const SoberDetail = ({
       </BottomSheet>
       {isRecordListOpen && <ActivityRecordListModal scope="sober" parentId={item.id} name={item.name} day={null} onOpenForm={(record, day) => setRecordForm({ record, day })} onClose={() => setRecordListOpen(false)} />}
       {recordDay && <ActivityRecordListModal scope="sober" parentId={item.id} name={item.name} day={recordDay} achievements={summary.achievements} onOpenForm={(record, day) => setRecordForm({ record, day })} onClose={() => setRecordDay(null)} />}
-      {recordForm && <ActivityRecordFormModal scope="sober" parentId={item.id} initialStartedAt={item.initialStartedAt} {...recordForm} onClose={() => setRecordForm(null)} />}
+      {recordForm && <ActivityRecordFormModal scope="sober" parentId={item.id} name={item.name} initialStartedAt={item.initialStartedAt} {...recordForm} onClose={() => setRecordForm(null)} />}
     </>
   );
 };

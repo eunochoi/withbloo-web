@@ -151,7 +151,7 @@ const HabitDetailClientPage = ({ habitId, today }: Props) => {
       {habitDataById && <>
       {isRecordListOpen && <ActivityRecordListModal scope="habit" parentId={Number(habitId)} name={habitDataById.name} day={null} onOpenForm={(record, day) => setRecordForm({ record, day })} onClose={() => setRecordListOpen(false)} />}
       {recordDay && <ActivityRecordListModal scope="habit" parentId={Number(habitId)} name={habitDataById.name} day={recordDay} onOpenForm={(record, day) => setRecordForm({ record, day })} onClose={() => setRecordDay(null)} />}
-      {recordForm && <ActivityRecordFormModal scope="habit" parentId={Number(habitId)} initialStartedAt={habitDataById.initialStartedAt} {...recordForm} onClose={() => setRecordForm(null)} />}
+      {recordForm && <ActivityRecordFormModal scope="habit" parentId={Number(habitId)} name={habitDataById.name} initialStartedAt={habitDataById.initialStartedAt} {...recordForm} onClose={() => setRecordForm(null)} />}
     </>}
     </>
   );

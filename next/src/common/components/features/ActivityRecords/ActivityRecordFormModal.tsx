@@ -9,9 +9,10 @@ import { format } from 'date-fns';
 import { useRef, useState } from 'react';
 import ActivityRecordForm from './ActivityRecordForm';
 
-export default function ActivityRecordFormModal({ scope, parentId, initialStartedAt, record, day, onClose }: {
+export default function ActivityRecordFormModal({ scope, parentId, name, initialStartedAt, record, day, onClose }: {
   scope: RecordScope;
   parentId: number;
+  name: string;
   initialStartedAt: Date | string;
   record: Partial<ActivityRecord>;
   day: string | null;
@@ -27,7 +28,7 @@ export default function ActivityRecordFormModal({ scope, parentId, initialStarte
   if (!record.recordedAt && +initial < +new Date(initialStartedAt)) initial = new Date(initialStartedAt);
 
   return <ActivityRecordForm
-    sheetRef={sheet} initialStartedAt={initialStartedAt} scope={scope} parentId={parentId}
+    sheetRef={sheet} initialStartedAt={initialStartedAt} scope={scope} parentId={parentId} name={name}
     recordType={record.type ?? 'MEMO'} errorMessage={error} editing={!!record.id}
     initialValue={format(initial, "yyyy-MM-dd'T'HH:mm")} initialMemo={record.memo ?? ''}
     initialImages={record.images ?? []} saving={saving} onClose={onClose}

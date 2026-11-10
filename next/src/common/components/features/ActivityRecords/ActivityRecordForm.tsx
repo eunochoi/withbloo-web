@@ -30,6 +30,7 @@ export default function ActivityRecordForm({
   initialStartedAt,
   scope,
   parentId,
+  name,
   editing,
   initialValue,
   initialMemo,
@@ -44,6 +45,7 @@ export default function ActivityRecordForm({
   initialStartedAt: Date | string;
   scope: RecordScope;
   parentId: number;
+  name: string;
   recordType?: 'MEMO' | 'RESTART';
   errorMessage?: string;
   editing: boolean;
@@ -161,7 +163,7 @@ export default function ActivityRecordForm({
                 setMemo(event.target.value);
                 setError('');
               }}
-              placeholder={isRestart ? "다시 시작하는 이유나 지금의 생각을 남겨보세요." : "지금의 생각과 마음을 남겨보세요."}
+              placeholder={`'${name}' 항목과 관련된 내용을 입력하세요.`}
               className="mx-1 h-[200px] resize-none bg-transparent p-0 text-base leading-6 text-theme-text-primary placeholder:text-theme-text-secondary"
             />
             <span className="px-1 text-right text-xs text-theme-text-tertiary">
