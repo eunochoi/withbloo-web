@@ -5,9 +5,11 @@ import { useRef, useState, type ReactNode } from 'react';
 export default function SoberInfoCarousel({
   pages,
   color,
+  labels = ['현재 거리두기 중', '기록 요약'],
 }: {
   pages: [ReactNode, ReactNode];
   color: string;
+  labels?: [string, string];
 }) {
   const scroll = useRef<HTMLDivElement>(null);
   const [page, setPage] = useState(0);
@@ -44,7 +46,7 @@ export default function SoberInfoCarousel({
         ))}
       </div>
       <div className="flex justify-center">
-        {['현재 진행중인 시간', '기록 요약'].map((label, index) => (
+        {labels.map((label, index) => (
           <button
             key={label}
             type="button"
