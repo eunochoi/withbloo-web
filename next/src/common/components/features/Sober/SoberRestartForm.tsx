@@ -93,7 +93,6 @@ export default function SoberRestartForm({
             onPreviousMonth={calendar.goPreviousMonth}
             onNextMonth={calendar.goNextMonth}
             onToday={() => calendar.showDate(today)}
-            centerTitle
           />
           <CalendarGrid {...swipe} aria-label="다시 시작 날짜 선택">
             {calendar.days.map((day) => {

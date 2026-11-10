@@ -74,7 +74,6 @@ const HabitFormDatePicker = ({
           onToday={() => calendar.showDate(today)}
           canGoPrevious={calendar.canGoPrevious}
           canGoNext={calendar.canGoNext}
-          centerTitle
         />
         <CalendarGrid {...swipeProps} aria-label="습관 시작 날짜 선택">
           {calendar.days.map((day) => {

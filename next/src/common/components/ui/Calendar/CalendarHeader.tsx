@@ -13,7 +13,6 @@ interface Props {
   onToday: () => void;
   canGoPrevious?: boolean;
   canGoNext?: boolean;
-  centerTitle?: boolean;
   detail?: boolean;
 }
 
@@ -24,7 +23,6 @@ const CalendarHeader = ({
   onToday,
   canGoPrevious = true,
   canGoNext = true,
-  centerTitle = false,
   detail = false,
 }: Props) => {
   const previous = (
@@ -52,31 +50,26 @@ const CalendarHeader = ({
 
   return (
     <header className="flex h-10 items-center justify-between">
-      {centerTitle && previous}
       <button
         type="button"
         onClick={onToday}
         aria-label={`${monthLabel}, 이번 달로 이동`}
-        className={`flex flex-1 ${centerTitle ? 'justify-center' : 'justify-start'} ${detail ? 'text-base font-medium' : 'text-lg font-semibold'} text-theme-text-primary`}
+        className={`flex flex-1 justify-start ${detail ? 'text-base font-medium' : 'text-lg font-semibold'} text-theme-text-primary`}
       >
         {monthLabel}
       </button>
-      {centerTitle ? (
-        next
-      ) : (
-        <div className="-mr-2 flex items-center">
-          {previous}
-          <button
-            type="button"
-            onClick={onToday}
-            aria-label="오늘로 이동"
-            className="flex h-10 w-10 items-center justify-center rounded-xl text-theme-text-tertiary"
-          >
-            <TodayIcon size="1.1rem" aria-hidden="true" />
-          </button>
-          {next}
-        </div>
-      )}
+      <div className="-mr-2 flex items-center">
+        {previous}
+        <button
+          type="button"
+          onClick={onToday}
+          aria-label="오늘로 이동"
+          className="flex h-10 w-10 items-center justify-center rounded-xl text-theme-text-tertiary"
+        >
+          <TodayIcon size="1.1rem" aria-hidden="true" />
+        </button>
+        {next}
+      </div>
     </header>
   );
 };

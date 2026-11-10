@@ -96,7 +96,6 @@ const DiaryDatePicker = ({
           onToday={() => calendar.showDate(today)}
           canGoPrevious={calendar.canGoPrevious}
           canGoNext={calendar.canGoNext}
-          centerTitle
         />
         <CalendarGrid
           {...swipeProps}
