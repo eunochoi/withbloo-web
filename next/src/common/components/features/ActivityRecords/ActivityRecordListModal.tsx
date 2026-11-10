@@ -166,9 +166,7 @@ export default function ActivityRecordListModal({
                       </button>
                     </div>
                     {!!record.images.length && <DiaryDetailGallery images={record.images} cardAspect />}
-                    <p className="whitespace-pre-wrap text-sm tracking-tighter text-theme-text-secondary">
-                      {record.memo || '내용 없이 다시 시작했어요.'}
-                    </p>
+                    {record.memo && <p className="whitespace-pre-wrap text-sm tracking-tighter text-theme-text-secondary">{record.memo}</p>}
                   </div>
                 </div>
               ))
