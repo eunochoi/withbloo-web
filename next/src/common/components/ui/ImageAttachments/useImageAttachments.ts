@@ -7,23 +7,23 @@ import {
 import { showNotice } from '@/common/components/ui/Notice/notice';
 import type { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import { useEffect, useRef } from 'react';
-import type { DiaryImageDraft } from '../types';
+import type { ImageAttachmentDraft } from './types';
 
-type UseDiaryImagesParams = {
-  diaryImages: DiaryImageDraft[];
-  setDiaryImages: Dispatch<SetStateAction<DiaryImageDraft[]>>;
+type UseImageAttachmentsParams = {
+  images: ImageAttachmentDraft[];
+  setImages: Dispatch<SetStateAction<ImageAttachmentDraft[]>>;
 };
 
-type UseDiaryImagesResult = {
+type UseImageAttachmentsResult = {
   handleImageChange: (event: ChangeEvent<HTMLInputElement>) => void;
-  getImageUrl: (image: DiaryImageDraft) => string;
+  getImageUrl: (image: ImageAttachmentDraft) => string;
   handleRemoveImage: (index: number) => void;
 };
 
-export const useDiaryImages = ({
-  diaryImages,
-  setDiaryImages,
-}: UseDiaryImagesParams): UseDiaryImagesResult => {
+export const useImageAttachments = ({
+  images,
+  setImages,
+}: UseImageAttachmentsParams): UseImageAttachmentsResult => {
   const blobUrlCacheRef = useRef<Map<File, string>>(new Map());
 
   useEffect(() => {
@@ -43,7 +43,7 @@ export const useDiaryImages = ({
     const newImageFiles = Array.from(event.target.files);
 
     if (
-      diaryImages.length + newImageFiles.length >
+      images.length + newImageFiles.length >
       DIARY_IMAGE_MAX_COUNT
     ) {
       showNotice(
@@ -78,14 +78,14 @@ export const useDiaryImages = ({
       return;
     }
 
-    setDiaryImages((currentImages) => [
+    setImages((currentImages) => [
       ...currentImages,
       ...newImageFiles,
     ]);
     event.target.value = '';
   };
 
-  const getImageUrl = (image: DiaryImageDraft) => {
+  const getImageUrl = (image: ImageAttachmentDraft) => {
     if (!(image instanceof File)) return image.src;
 
     let blobUrl = blobUrlCacheRef.current.get(image);
@@ -99,7 +99,7 @@ export const useDiaryImages = ({
   };
 
   const handleRemoveImage = (index: number) => {
-    const image = diaryImages[index];
+    const image = images[index];
 
     if (image instanceof File) {
       const blobUrl = blobUrlCacheRef.current.get(image);
@@ -110,7 +110,7 @@ export const useDiaryImages = ({
       }
     }
 
-    setDiaryImages((currentImages) =>
+    setImages((currentImages) =>
       currentImages.filter((_, imageIndex) => imageIndex !== index),
     );
   };

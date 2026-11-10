@@ -1,17 +1,17 @@
-import type { DiaryImageDraft } from '../types';
+import type { ImageAttachmentDraft } from './types';
 import { uploadImages } from '@/common/actions/image';
 import { authAction } from '@/common/auth/authAction';
-import { collectFinalImageContentIds, type CollectedDiaryImageContentIds } from './collectFinalImageContentIds';
+import { collectFinalImageContentIds, type CollectedImageContentIds } from './collectFinalImageContentIds';
 
-export const uploadDiaryImagesAndCollectIds = async (
-  diaryImageDrafts: DiaryImageDraft[],
-): Promise<CollectedDiaryImageContentIds> => {
-  const newImageFiles = diaryImageDrafts.filter(
+export const uploadImagesAndCollectIds = async (
+  imageDrafts: ImageAttachmentDraft[],
+): Promise<CollectedImageContentIds> => {
+  const newImageFiles = imageDrafts.filter(
     (image): image is File => image instanceof File,
   );
 
   if (newImageFiles.length === 0) {
-    return collectFinalImageContentIds(diaryImageDrafts, []);
+    return collectFinalImageContentIds(imageDrafts, []);
   }
 
   const imageFormData = new FormData();
@@ -27,7 +27,7 @@ export const uploadDiaryImagesAndCollectIds = async (
   }
 
   return collectFinalImageContentIds(
-    diaryImageDrafts,
+    imageDrafts,
     uploadedDiaryImages,
   );
 };

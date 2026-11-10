@@ -1,11 +1,11 @@
 import { EMOTION_UNSELECTED } from '@/common/constants/filterDefaults';
 import { useState } from 'react';
-import type { DiaryImageDraft } from '../types';
+import type { ImageAttachmentDraft } from '@/common/components/ui/ImageAttachments/types';
 
 export const useDiaryForm = () => {
   const [text, setText] = useState('');
   const [emotion, setEmotion] = useState(EMOTION_UNSELECTED);
-  const [diaryImages, setDiaryImages] = useState<DiaryImageDraft[]>([]);
+  const [diaryImages, setDiaryImages] = useState<ImageAttachmentDraft[]>([]);
 
   return {
     text,

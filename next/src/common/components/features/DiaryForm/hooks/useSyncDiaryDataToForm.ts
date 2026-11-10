@@ -1,14 +1,14 @@
 import { EMOTION_UNSELECTED } from '@/common/constants/filterDefaults';
 import type { DiaryData } from '@/common/types/diary';
 import { useEffect, useRef, useState } from 'react';
-import type { DiaryImageDraft } from '../types';
+import type { ImageAttachmentDraft } from '@/common/components/ui/ImageAttachments/types';
 
 type UseSyncDiaryDataToFormParams = {
   enabled: boolean;
   diaryData: DiaryData | null | undefined;
   setText: (value: string) => void;
   setEmotion: (value: number) => void;
-  setDiaryImages: (value: DiaryImageDraft[]) => void;
+  setDiaryImages: (value: ImageAttachmentDraft[]) => void;
 };
 
 export const useSyncDiaryDataToForm = ({

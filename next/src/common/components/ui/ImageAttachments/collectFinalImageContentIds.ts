@@ -1,18 +1,18 @@
 import type { UploadedImage } from '@/common/actions/image/types';
-import type { DiaryImageDraft } from '../types';
+import type { ImageAttachmentDraft } from './types';
 
-export type CollectedDiaryImageContentIds = {
+export type CollectedImageContentIds = {
   imageContentIds: string[];
   duplicateImageCount: number;
 };
 
 export const collectFinalImageContentIds = (
-  diaryImageDrafts: DiaryImageDraft[],
+  imageDrafts: ImageAttachmentDraft[],
   uploadedDiaryImages: UploadedImage[],
-): CollectedDiaryImageContentIds => {
+): CollectedImageContentIds => {
   let uploadedImageIndex = 0;
 
-  const finalDiaryImages = diaryImageDrafts.map((image) => {
+  const finalDiaryImages = imageDrafts.map((image) => {
     if (image instanceof File) {
       const uploadedImage = uploadedDiaryImages[uploadedImageIndex++];
 

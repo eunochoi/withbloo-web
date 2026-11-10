@@ -4,14 +4,14 @@ import { DIARY_TEXT_MAX_LENGTH } from '@/common/constants/diary';
 import { useQueryClient } from '@tanstack/react-query';
 import { showNotice } from '@/common/components/ui/Notice/notice';
 import { useState } from 'react';
-import { uploadDiaryImagesAndCollectIds } from '../functions/uploadDiaryImagesAndCollectIds';
-import type { DiaryImageDraft } from '../types';
+import { uploadImagesAndCollectIds } from '@/common/components/ui/ImageAttachments/uploadImagesAndCollectIds';
+import type { ImageAttachmentDraft } from '@/common/components/ui/ImageAttachments/types';
 
 type UseDiarySubmissionParams = {
   date: string | null;
   text: string;
   emotion: number;
-  diaryImages: DiaryImageDraft[];
+  diaryImages: ImageAttachmentDraft[];
   saveDiary: (imageContentIds: string[]) => Promise<DiaryData>;
   successMessage: string;
   failureMessage: string;
@@ -60,7 +60,7 @@ export const useDiarySubmission = ({
       const {
         imageContentIds,
         duplicateImageCount,
-      } = await uploadDiaryImagesAndCollectIds(diaryImages);
+      } = await uploadImagesAndCollectIds(diaryImages);
       const savedDiary = await saveDiary(imageContentIds);
 
       queryClient.setQueryData(['diary', 'date', savedDiary.date], savedDiary);

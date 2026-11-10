@@ -10,21 +10,21 @@ import Image from 'next/image';
 import { useEffect, useRef, useState, type ChangeEvent } from 'react';
 import { createPortal } from 'react-dom';
 
-import type { DiaryImageDraft } from './types';
+import type { ImageAttachmentDraft } from './types';
 
 const tileClass = 'relative h-28 w-24 shrink-0 overflow-hidden rounded-2xl';
 const imageControlClass = 'flex h-6 w-6 items-center justify-center rounded-full bg-black/50 text-white disabled:opacity-40';
 
 interface Props {
-  diaryImages: DiaryImageDraft[];
+  images: ImageAttachmentDraft[];
   handleImageChange: (event: ChangeEvent<HTMLInputElement>) => void;
-  getImageUrl: (image: DiaryImageDraft) => string;
+  getImageUrl: (image: ImageAttachmentDraft) => string;
   handleRemoveImage: (index: number) => void;
   onReorder: (from: number, to: number) => void;
   isLoading: boolean;
 }
 
-const SortableDiaryImage = ({ id, src, index, disabled, onRemove }: {
+const SortableAttachmentImage = ({ id, src, index, disabled, onRemove }: {
   id: string;
   src: string;
   index: number;
@@ -69,10 +69,10 @@ const SortableDiaryImage = ({ id, src, index, disabled, onRemove }: {
   );
 };
 
-const DiaryFormImages = ({ diaryImages, handleImageChange, getImageUrl, handleRemoveImage, onReorder, isLoading }: Props) => {
+const ImageAttachments = ({ images, handleImageChange, getImageUrl, handleRemoveImage, onReorder, isLoading }: Props) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   // Object identity survives reordering, even for files with identical names.
-  const imageIds = useRef(new WeakMap<DiaryImageDraft, string>());
+  const imageIds = useRef(new WeakMap<ImageAttachmentDraft, string>());
   const nextId = useRef(0);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [overlayContainer, setOverlayContainer] = useState<HTMLElement | null>(null);
@@ -86,7 +86,7 @@ const DiaryFormImages = ({ diaryImages, handleImageChange, getImageUrl, handleRe
     useSensor(TouchSensor),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
   );
-  const items = diaryImages.map((image) => {
+  const items = images.map((image) => {
     let id = imageIds.current.get(image);
     if (!id) {
       id = `diary-photo-${nextId.current++}`;
@@ -123,10 +123,10 @@ const DiaryFormImages = ({ diaryImages, handleImageChange, getImageUrl, handleRe
       <div className="flex w-full gap-3 overflow-x-auto">
         <SortableContext items={items.map((item) => item.id)} strategy={horizontalListSortingStrategy}>
           {items.map((item, index) => (
-            <SortableDiaryImage key={item.id} {...item} index={index} disabled={isLoading} onRemove={() => handleRemoveImage(index)} />
+            <SortableAttachmentImage key={item.id} {...item} index={index} disabled={isLoading} onRemove={() => handleRemoveImage(index)} />
           ))}
         </SortableContext>
-        {diaryImages.length < DIARY_IMAGE_MAX_COUNT && (
+        {images.length < DIARY_IMAGE_MAX_COUNT && (
           <button
             type="button"
             disabled={isLoading}
@@ -154,4 +154,4 @@ const DiaryFormImages = ({ diaryImages, handleImageChange, getImageUrl, handleRe
   );
 };
 
-export default DiaryFormImages;
+export default ImageAttachments;

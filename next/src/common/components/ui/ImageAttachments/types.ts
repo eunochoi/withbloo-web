@@ -1,5 +1,5 @@
 import type { DiaryImage } from '@/common/types/diary';
 
-export type DiaryImageDraft =
+export type ImageAttachmentDraft =
   | Pick<DiaryImage, 'imageContentId' | 'src'>
   | File;

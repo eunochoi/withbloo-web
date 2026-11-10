@@ -23,7 +23,7 @@ import DiaryFormTextSection from './DiaryFormTextSection';
 import { createDiaryRequest } from './functions/createDiaryRequest';
 import { updateDiaryRequest } from './functions/updateDiaryRequest';
 import { useDiaryForm } from './hooks/useDiaryForm';
-import { useDiaryImages } from './hooks/useDiaryImages';
+import { useImageAttachments } from '@/common/components/ui/ImageAttachments/useImageAttachments';
 import { useDiarySubmission } from './hooks/useDiarySubmission';
 import { useHandleDiaryFormLoadFailure } from './hooks/useHandleDiaryFormLoadFailure';
 import { useSyncDiaryDataToForm } from './hooks/useSyncDiaryDataToForm';
@@ -68,7 +68,7 @@ const DiaryFormClientPage = ({ isEdit, diaryId }: DiaryFormClientPageProps) => {
     isError,
     isPending,
   });
-  const imageHandlers = useDiaryImages({ diaryImages, setDiaryImages });
+  const imageHandlers = useImageAttachments({ images: diaryImages, setImages: setDiaryImages });
   const dateParam = searchParams.get('date');
   const allowDateChange = isEdit || searchParams.get('allowDateChange') === 'true';
   const [selectedDate, setSelectedDate] = useState<string | null>(() => isEdit ? null : isValidLocalDateString(dateParam) ? dateParam : allowDateChange ? null : format(new Date(), 'yyyy-MM-dd'));
