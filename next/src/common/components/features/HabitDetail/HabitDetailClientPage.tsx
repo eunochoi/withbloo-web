@@ -114,8 +114,8 @@ const HabitDetailClientPage = ({ habitId, today }: Props) => {
                     </div>
                   )}
                   {habitDataById && <div className="flex flex-col gap-3 px-1">
-                    <button type="button" onClick={() => setRecordForm({ record: { type: 'MEMO' }, day: null })} className="min-h-12 rounded-full border border-black/10 text-theme-surface" style={{ backgroundColor: accent.color }}>기록 추가하기</button>
-                    <button type="button" onClick={() => setRecordListOpen(true)} className="min-h-12 rounded-full border border-theme-text-secondary/10 bg-theme-surface-muted">기록 모두보기</button>
+                    <button type="button" onClick={() => setRecordForm({ record: { type: 'MEMO' }, day: null })} className="min-h-12 rounded-full border border-black/10 text-theme-surface" style={{ backgroundColor: accent.color }}>기록 추가</button>
+                    <button type="button" onClick={() => setRecordListOpen(true)} className="min-h-12 rounded-full border border-theme-text-secondary/10 bg-theme-surface-muted">기록 모아보기</button>
                   </div>}
                 </div>
 

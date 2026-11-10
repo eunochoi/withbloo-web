@@ -101,15 +101,19 @@ export default function ActivityRecordListModal({
 
               >
                 <AddIcon />
-                기록 추가하기
+                기록 추가
               </ContentTopButton></ContentTopButtons>
             ) : (
-              records.length > 0 && (
-                <ContentTopButtons><ContentTopButton onClick={() => setSorting(true)}>
+              <ContentTopButtons>
+                {records.length > 0 && <ContentTopButton onClick={() => setSorting(true)}>
                   <SortIcon />
                   {sort === 'DESC' ? '최신순' : '과거순'}
-                </ContentTopButton></ContentTopButtons>
-              )
+                </ContentTopButton>}
+                <ContentTopButton onClick={() => onOpenForm({ type: 'MEMO' }, null)} disabled={busy}>
+                  <AddIcon />
+                  기록 추가
+                </ContentTopButton>
+              </ContentTopButtons>
             )}
             {day &&
               achievements
