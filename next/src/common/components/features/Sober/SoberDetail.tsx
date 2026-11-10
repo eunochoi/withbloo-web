@@ -1,6 +1,8 @@
 'use client';
 
-import ActivityRecords, { type RecordView } from '../ActivityRecords';
+import ActivityRecordListModal from '../ActivityRecords/ActivityRecordListModal';
+import ActivityRecordFormModal from '../ActivityRecords/ActivityRecordFormModal';
+import type { ActivityRecord } from '@/common/actions/records';
 
 import ScrollableName from '@/common/components/ui/ScrollableName';
 
@@ -55,7 +57,9 @@ export const SoberDetail = ({
   const swipe = useMonthSwipe(calendar.goPreviousMonth, calendar.goNextMonth);
   const [hoursOnly, setHoursOnly] = useState(false);
   const [expandedRecords, setExpandedRecords] = useState(false);
-  const [recordView, setRecordView] = useState<RecordView | null>(null);
+  const [isRecordListOpen, setRecordListOpen] = useState(false);
+  const [recordDay, setRecordDay] = useState<string | null>(null);
+  const [recordForm, setRecordForm] = useState<{ record: Partial<ActivityRecord>; day: string | null } | null>(null);
   const summary = getSoberSummary(item, item.restarts, now);
   const itemAccent = useItemAccent(item.iconColor);
   const accent = itemAccent.color;
@@ -200,7 +204,7 @@ export const SoberDetail = ({
               <div className="flex flex-col gap-3 px-1">
                 <button
                   type="button"
-                  onClick={() => setRecordView({ mode: 'new', type: 'RESTART' })}
+                  onClick={() => setRecordForm({ record: { type: 'RESTART' }, day: null })}
                   className="min-h-12 rounded-full border border-black/10 text-theme-surface"
                   style={{ backgroundColor: accent }}
                 >
@@ -208,7 +212,7 @@ export const SoberDetail = ({
                 </button>
                 <button
                   type="button"
-                  onClick={() => setRecordView({ mode: 'list' })}
+                  onClick={() => setRecordListOpen(true)}
                   className="min-h-12 rounded-full border border-theme-text-secondary/10 bg-theme-surface-muted"
                 >
                   기록 모아보기
@@ -263,7 +267,7 @@ export const SoberDetail = ({
                           available
                             ? () => {
                               calendar.showDate(day.dateKey);
-                              setRecordView({ mode: 'day', date: day.dateKey });
+                              setRecordDay(day.dateKey);
                             }
                             : undefined
                         }
@@ -344,7 +348,9 @@ export const SoberDetail = ({
           </div>
         </BottomSheetBody>
       </BottomSheet>
-      {recordView && <ActivityRecords scope="sober" parentId={item.id} name={item.name} initialStartedAt={item.initialStartedAt} view={recordView} achievements={summary.achievements} onClose={() => setRecordView(null)} />}
+      {isRecordListOpen && <ActivityRecordListModal scope="sober" parentId={item.id} name={item.name} day={null} onOpenForm={(record, day) => setRecordForm({ record, day })} onClose={() => setRecordListOpen(false)} />}
+      {recordDay && <ActivityRecordListModal scope="sober" parentId={item.id} name={item.name} day={recordDay} achievements={summary.achievements} onOpenForm={(record, day) => setRecordForm({ record, day })} onClose={() => setRecordDay(null)} />}
+      {recordForm && <ActivityRecordFormModal scope="sober" parentId={item.id} initialStartedAt={item.initialStartedAt} {...recordForm} onClose={() => setRecordForm(null)} />}
     </>
   );
 };

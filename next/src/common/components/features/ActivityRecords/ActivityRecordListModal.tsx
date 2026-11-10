@@ -2,67 +2,57 @@
 import { ContentTopButton, ContentTopButtons } from '@/common/components/ui/ContentTopButton';
 
 
-import { BottomSheetHeading } from '@/common/components/ui/BottomSheet/BottomSheetHeading';
-import { useRef, useState } from 'react';
-import { useInfiniteQuery, useQuery, useQueryClient } from '@tanstack/react-query';
-import { format, addDays } from 'date-fns';
-import { authAction } from '@/common/auth/authAction';
 import {
-  getActivityRecords,
-  getActivityDay,
-  saveActivityRecord,
   deleteActivityRecord,
+  getActivityDay,
+  getActivityRecords,
   type ActivityRecord,
   type RecordCursor,
   type RecordScope,
 } from '@/common/actions/records';
-import { BottomSheet, type BottomSheetHandle } from '@/common/components/ui/BottomSheet/BottomSheet';
-import { BottomSheetTitle } from '@/common/components/ui/BottomSheet/BottomSheetTitle';
+import { authAction } from '@/common/auth/authAction';
+import { BottomSheet } from '@/common/components/ui/BottomSheet/BottomSheet';
 import { BottomSheetBody } from '@/common/components/ui/BottomSheet/BottomSheetBody';
+import { BottomSheetHeading } from '@/common/components/ui/BottomSheet/BottomSheetHeading';
 import { BottomSheetPicker } from '@/common/components/ui/BottomSheet/BottomSheetPicker';
-import { AddIcon, MoreIcon, SortIcon } from '@/common/constants/appIcons';
-import { PiClockCounterClockwise } from 'react-icons/pi';
+import { BottomSheetTitle } from '@/common/components/ui/BottomSheet/BottomSheetTitle';
 import SortPicker from '@/common/components/ui/SortPicker';
-import ActivityRecordForm from './ActivityRecordForm';
-import { uploadImagesAndCollectIds } from '@/common/components/ui/ImageAttachments/uploadImagesAndCollectIds';
+import { AddIcon, MoreIcon, SortIcon } from '@/common/constants/appIcons';
+import { useInfiniteQuery, useQuery, useQueryClient } from '@tanstack/react-query';
+import { addDays, format } from 'date-fns';
+import { useRef, useState } from 'react';
+import { PiClockCounterClockwise } from 'react-icons/pi';
 import { DiaryDetailGallery } from '../DiaryDetail/DiaryDetailGallery';
 
-export type RecordView =
-  { mode: 'list' } | { mode: 'day'; date: string } | { mode: 'new'; type: 'MEMO' | 'RESTART' };
-export default function ActivityRecords({
+export default function ActivityRecordListModal({
   scope,
   parentId,
   name,
-  initialStartedAt,
-  view,
+  day,
+  onOpenForm,
   onClose,
   achievements = [],
 }: {
   scope: RecordScope;
   parentId: number;
   name: string;
-  initialStartedAt: Date | string;
-  view: RecordView;
+  day: string | null;
+  onOpenForm: (record: Partial<ActivityRecord>, day: string | null) => void;
   achievements?: Array<{ achievedAt: string | number; days: number }>;
   onClose: () => void;
 }) {
   const client = useQueryClient();
-  const formSheetRef = useRef<BottomSheetHandle>(null);
   const [sort, setSort] = useState<'ASC' | 'DESC'>('DESC');
   const [sorting, setSorting] = useState(false);
-  const [editing, setEditing] = useState<Partial<ActivityRecord> | null>(
-    view.mode === 'new' ? { type: view.type } : null,
-  );
   const [menu, setMenu] = useState<ActivityRecord | null>(null);
   const [deleting, setDeleting] = useState<ActivityRecord | null>(null);
   const [busy, setBusy] = useState(false);
   const lock = useRef(false);
   const [error, setError] = useState('');
-  const day = view.mode === 'day' ? view.date : null;
   const start = day ? new Date(`${day}T00:00:00`) : new Date();
   const list = useInfiniteQuery({
     queryKey: [scope, 'activity-records', parentId, sort],
-    enabled: view.mode === 'list',
+    enabled: !day,
     initialPageParam: null as RecordCursor | null,
     queryFn: ({ pageParam }) =>
       authAction(() => getActivityRecords(scope, parentId, sort, pageParam)),
@@ -94,53 +84,7 @@ export default function ActivityRecords({
       setBusy(false);
     }
   };
-  const add = () => setEditing({ type: scope === 'sober' ? 'RESTART' : 'MEMO' });
-  if (editing) {
-    const now = new Date();
-    let initial = editing.recordedAt
-      ? new Date(editing.recordedAt)
-      : day
-        ? new Date(`${day}T${format(now, 'HH:mm')}`)
-        : now;
-    if (!editing.recordedAt && +initial < +new Date(initialStartedAt))
-      initial = new Date(initialStartedAt);
-    return (
-      <>
-        <ActivityRecordForm
-          sheetRef={formSheetRef}
-          key={`${editing.id ?? 'new'}:${editing.type}`}
-          initialStartedAt={initialStartedAt}
-          scope={scope}
-          parentId={parentId}
-          recordType={editing.type ?? 'MEMO'}
-          errorMessage={error}
-          editing={!!editing.id}
-          initialValue={format(initial, "yyyy-MM-dd'T'HH:mm")}
-          initialMemo={editing.memo ?? ''}
-          initialImages={editing.images ?? []}
-          saving={busy}
-          onClose={() => (view.mode === 'new' ? onClose() : setEditing(null))}
-          onSave={(value, memo, images, type) =>
-            run(
-              async () => {
-                const { imageContentIds } = await uploadImagesAndCollectIds(images);
-                return authAction(() =>
-                  saveActivityRecord(scope, parentId, {
-                    id: editing.id,
-                    type,
-                    recordedAt: new Date(value).toISOString(),
-                    memo,
-                    imageContentIds,
-                  }),
-                );
-              },
-              () => formSheetRef.current?.close(),
-            )
-          }
-        />
-      </>
-    );
-  }
+  const add = () => onOpenForm({ type: scope === 'sober' ? 'RESTART' : 'MEMO' }, day);
   return (
     <>
       <BottomSheet ariaLabel={`${name} 기록`} onClose={onClose} dismissible={!busy}>
@@ -161,9 +105,7 @@ export default function ActivityRecords({
               </ContentTopButton></ContentTopButtons>
             ) : (
               records.length > 0 && (
-                <ContentTopButtons><ContentTopButton
-                  onClick={() => setSorting(true)}
-                >
+                <ContentTopButtons><ContentTopButton onClick={() => setSorting(true)}>
                   <SortIcon />
                   {sort === 'DESC' ? '최신순' : '과거순'}
                 </ContentTopButton></ContentTopButtons>
@@ -203,7 +145,7 @@ export default function ActivityRecords({
                   {!day &&
                     (index === 0 ||
                       format(new Date(records[index - 1].recordedAt), 'yyyy-MM-dd') !==
-                        format(new Date(record.recordedAt), 'yyyy-MM-dd')) && (
+                      format(new Date(record.recordedAt), 'yyyy-MM-dd')) && (
                       <h3 className={`font-semibold ${index ? 'pt-6' : ''}`}>
                         {format(new Date(record.recordedAt), 'yyyy년 M월 d일')}
                       </h3>
@@ -280,26 +222,26 @@ export default function ActivityRecords({
           }
         >
           <div className="flex flex-col gap-3 pb-6">
-              <>
-                <button
-                  className="min-h-16 rounded-2xl border border-theme-border/50 p-4 text-left"
-                  onClick={() => {
-                    setEditing(menu);
-                    setMenu(null);
-                  }}
-                >
-                  기록 수정하기
-                </button>
-                <button
-                  className="min-h-16 rounded-2xl border border-theme-border/50 p-4 text-left text-theme-danger"
-                  onClick={() => {
-                    setDeleting(menu);
-                    setMenu(null);
-                  }}
-                >
-                  기록 삭제하기
-                </button>
-              </>
+            <>
+              <button
+                className="min-h-16 rounded-2xl border border-theme-border/50 p-4 text-left"
+                onClick={() => {
+                  onOpenForm(menu, day);
+                  setMenu(null);
+                }}
+              >
+                기록 수정하기
+              </button>
+              <button
+                className="min-h-16 rounded-2xl border border-theme-border/50 p-4 text-left text-theme-danger"
+                onClick={() => {
+                  setDeleting(menu);
+                  setMenu(null);
+                }}
+              >
+                기록 삭제하기
+              </button>
+            </>
           </div>
         </BottomSheetPicker>
       )}
