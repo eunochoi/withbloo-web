@@ -1,5 +1,7 @@
 'use client';
 
+
+import { BottomSheetHeading } from '@/common/components/ui/BottomSheet/BottomSheetHeading';
 import type { DiaryData } from '@/common/types/diary';
 import DiaryHabitMonthCalendar from './DiaryHabitMonthCalendar';
 import DayInfo from './DayInfo';
@@ -72,13 +74,13 @@ const CalendarPageContent = ({
             labelledBy="calendar-day-title"
             onClose={() => setIsOpen(false)}
            header={<header className="flex min-h-12 items-center justify-center gap-4">
-                <h2 id="calendar-day-title" className="text-lg font-semibold">
+                <BottomSheetHeading id="calendar-day-title">
                   {selectedDate === today
                     ? '오늘'
                     : format(parseLocalDate(selectedDate), 'M월 d일 EEEE', {
                         locale: ko,
                       })}
-                </h2>
+                </BottomSheetHeading>
               </header>}>
             <div className="mx-auto pb-[calc(2rem+env(safe-area-inset-bottom))]">
 

@@ -1,3 +1,4 @@
+import { BottomSheetHeading } from '@/common/components/ui/BottomSheet/BottomSheetHeading';
 import { BottomSheetPicker } from '@/common/components/ui/BottomSheet/BottomSheetPicker';
 import EmotionImage from '@/common/components/ui/EmotionImage';
 import AppDotTabs from '@/common/components/ui/AppDotTabs';
@@ -64,12 +65,9 @@ const DiaryFormEmotionPicker = ({
 
   return (
     <BottomSheetPicker labelledBy="diary-emotion-picker-title" onClose={onClose} header={<div className="relative flex min-h-11 items-center justify-center">
-          <h2
-            id="diary-emotion-picker-title"
-            className="text-center text-lg font-semibold text-theme-text-primary"
-          >
+          <BottomSheetHeading id="diary-emotion-picker-title">
             오늘의 감정을 골라주세요
-          </h2>
+          </BottomSheetHeading>
         <button
           type="button"
           disabled={!isPresent || !EMOTIONS.some((item) => item.id === draftEmotion)}

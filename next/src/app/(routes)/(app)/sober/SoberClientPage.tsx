@@ -1,5 +1,9 @@
 "use client";
 
+import { ContentBottomButton } from '@/common/components/ui/ContentBottomButton';
+
+
+import { BottomSheetHeading } from '@/common/components/ui/BottomSheet/BottomSheetHeading';
 import { BottomSheetPickerHeader } from "@/common/components/ui/BottomSheet/BottomSheetPickerHeader";
 
 import { authAction } from "@/common/auth/authAction";
@@ -281,23 +285,10 @@ function SoberFilterPicker({
         onClose={() => {
           if (!periodOpen) onClose();
         }}
-       header={<BottomSheetPickerHeader
-            headerLeft={
-              <button
-                type="button"
-                onClick={() => {
-                  setImportant(false);
-                  setDays(0);
-                }}
-                className="min-h-11 text-lg font-normal text-theme-text-secondary/70"
-              >
-                초기화
-              </button>
-            }
-          >
-            <h2 id="sober-filter-title" className="text-lg font-semibold">
+       header={<BottomSheetPickerHeader>
+            <BottomSheetHeading id="sober-filter-title">
               거리두기 필터
-            </h2>
+            </BottomSheetHeading>
             <button
               type="button"
               onClick={() => onApply(important, days)}
@@ -307,6 +298,7 @@ function SoberFilterPicker({
             </button>
           </BottomSheetPickerHeader>}>
         <div className="flex flex-col gap-5 px-2 pb-6 pt-2">
+
 
 
           <label className="flex items-center justify-between gap-3 text-base font-semibold">
@@ -334,6 +326,16 @@ function SoberFilterPicker({
             />
           </section>
           <InfoNotice>현재 기록이 선택한 기간 이상인 항목만 보여요.</InfoNotice>
+        <ContentBottomButton
+                type="button"
+                onClick={() => {
+                  setImportant(false);
+                  setDays(0);
+                }}
+
+              >
+                초기화
+              </ContentBottomButton>
         </div>
       </BottomSheetPicker>
 
@@ -342,12 +344,9 @@ function SoberFilterPicker({
           <BottomSheetPicker
             labelledBy="sober-period-title"
             onClose={() => setPeriodOpen(false)}
-           header={<h2
-                id="sober-period-title"
-                className="text-center text-lg font-semibold"
-              >
+           header={<BottomSheetHeading id="sober-period-title">
                 최소 유지 기간
-              </h2>}>
+              </BottomSheetHeading>}>
             <div className="flex flex-col gap-3 pb-6">
 
               {periods.map((entry) => (

@@ -1,5 +1,9 @@
 "use client";
 
+import { ContentBottomButton } from '@/common/components/ui/ContentBottomButton';
+
+
+import { BottomSheetHeading } from '@/common/components/ui/BottomSheet/BottomSheetHeading';
 import { BottomSheetPickerHeader } from "@/common/components/ui/BottomSheet/BottomSheetPickerHeader";
 
 import { FilterPickerRow } from "@/common/components/ui/FilterPickerRow";
@@ -45,27 +49,10 @@ const DiaryFilterPicker = ({
     enabled: yearOpen,
   });
   return (
-    <BottomSheetPicker labelledBy="diary-filter-title" onClose={onClose} header={<BottomSheetPickerHeader
-          headerLeft={
-            <button
-              type="button"
-              onClick={() => {
-                setSelectedYear(null);
-                setSelectedSeasons([]);
-                setSelectedGroups([]);
-              }}
-              className="min-h-11 text-lg font-normal text-theme-text-secondary/70"
-            >
-              초기화
-            </button>
-          }
-        >
-          <h2
-            id="diary-filter-title"
-            className="text-center text-xl font-semibold"
-          >
+    <BottomSheetPicker labelledBy="diary-filter-title" onClose={onClose} header={<BottomSheetPickerHeader>
+          <BottomSheetHeading id="diary-filter-title">
             일기 필터
-          </h2>
+          </BottomSheetHeading>
           <button
             type="button"
             onClick={() =>
@@ -77,6 +64,7 @@ const DiaryFilterPicker = ({
           </button>
         </BottomSheetPickerHeader>}>
       <div className="flex flex-col gap-5 px-2 pb-6 pt-2">
+
 
 
         <section className="flex flex-col gap-3">
@@ -169,18 +157,26 @@ const DiaryFilterPicker = ({
           </div>
         </section>
         <InfoNotice>여러 개 선택할 수 있어요. 다시 누르면 해제돼요.</InfoNotice>
+        <ContentBottomButton
+              type="button"
+              onClick={() => {
+                setSelectedYear(null);
+                setSelectedSeasons([]);
+                setSelectedGroups([]);
+              }}
+
+            >
+              초기화
+            </ContentBottomButton>
       </div>
       <AnimatePresence>
         {yearOpen && (
           <BottomSheetPicker
             labelledBy="diary-year-title"
             onClose={() => setYearOpen(false)}
-           header={<h2
-                id="diary-year-title"
-                className="text-center text-xl font-semibold"
-              >
+           header={<BottomSheetHeading id="diary-year-title">
                 연도 선택
-              </h2>}>
+              </BottomSheetHeading>}>
             <div className="flex flex-col gap-3 pb-6">
 
               {[null, ...(yearsQuery.data ?? [])].map((value) => (

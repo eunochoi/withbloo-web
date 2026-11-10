@@ -1,5 +1,7 @@
 'use client';
 
+import { ContentBottomButton } from '@/common/components/ui/ContentBottomButton';
+
 import { sortHabits } from '@/common/functions/sortHabits';
 
 import { authAction } from '@/common/auth/authAction';
@@ -82,26 +84,7 @@ export const HabitSortModal = ({ onClose, sortValue, priorityFirst, customHabitO
           <BottomSheetTitle
             title="습관 정렬"
             onBack={() => setIsDialogMounted(false)}
-            headerLeft={
-              <button
-                type="button"
-                aria-label="선택 초기화"
-                disabled={draftSort === 'CUSTOM' && !tempHabits}
-                onClick={() => {
-                  if (draftSort === 'CUSTOM') {
-                    setTempHabits(defaultHabits);
-                    setResetToDefault(true);
-                  } else {
-                    setDraftSort('DESC');
-                    setStandardSort('DESC');
-                    setPriority(false);
-                  }
-                }}
-                className="min-h-11 text-lg font-normal text-theme-text-secondary/70 disabled:opacity-40"
-              >
-                초기화
-              </button>
-            }
+
             headerButton={
               <BottomSheetSubmitButton
                 disabled={!isStorageReady || (draftSort === 'CUSTOM' && (!tempHabits || !customHabits))}
@@ -114,6 +97,7 @@ export const HabitSortModal = ({ onClose, sortValue, priorityFirst, customHabitO
           />
           <BottomSheetBody showScrollFade>
             <div className="flex min-w-0 w-full flex-col pb-6">
+
               <section className="flex min-w-0 flex-col gap-5 pb-8">
                 <label className="flex cursor-pointer items-center gap-2 text-lg font-semibold">
                   <input type="radio" name="habit-sort-mode" value="standard" checked={draftSort !== 'CUSTOM'} onChange={() => setDraftSort(standardSort)} className="h-5 w-5 shrink-0 appearance-none rounded-full border border-theme-accent bg-theme-surface checked:bg-theme-accent checked:shadow-[inset_0_0_0_3px_rgb(var(--theme-surface))] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-theme-accent" />
@@ -150,6 +134,24 @@ export const HabitSortModal = ({ onClose, sortValue, priorityFirst, customHabitO
                   <InfoNotice>직접 정한 순서로 보여드려요.</InfoNotice>
                 </fieldset>
               </section>
+        <ContentBottomButton
+                type="button"
+                aria-label="선택 초기화"
+                disabled={draftSort === 'CUSTOM' && !tempHabits}
+                onClick={() => {
+                  if (draftSort === 'CUSTOM') {
+                    setTempHabits(defaultHabits);
+                    setResetToDefault(true);
+                  } else {
+                    setDraftSort('DESC');
+                    setStandardSort('DESC');
+                    setPriority(false);
+                  }
+                }}
+
+              >
+                초기화
+              </ContentBottomButton>
             </div>
           </BottomSheetBody>
         </BottomSheet>

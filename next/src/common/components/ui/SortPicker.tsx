@@ -1,5 +1,9 @@
 "use client";
 
+import { ContentBottomButton } from '@/common/components/ui/ContentBottomButton';
+
+
+import { BottomSheetHeading } from '@/common/components/ui/BottomSheet/BottomSheetHeading';
 import { BottomSheetPickerHeader } from "@/common/components/ui/BottomSheet/BottomSheetPickerHeader";
 
 import { useState } from "react";
@@ -38,27 +42,10 @@ const SortPicker = <T extends string>({
   const [records, setRecords] = useState(recordSort);
   const [priority, setPriority] = useState(priorityFirst ?? false);
   return (
-    <BottomSheetPicker labelledBy="sort-picker-title" onClose={onClose} header={<BottomSheetPickerHeader
-          headerLeft={
-            <button
-              type="button"
-              onClick={() => {
-                setSelected(options[0].value);
-                setPriority(false);
-                setRecords(recordSort ? "DESC" : undefined);
-              }}
-              className="min-h-11 text-lg font-normal text-theme-text-secondary/70"
-            >
-              초기화
-            </button>
-          }
-        >
-          <h2
-            id="sort-picker-title"
-            className="text-center text-xl font-semibold"
-          >
+    <BottomSheetPicker labelledBy="sort-picker-title" onClose={onClose} header={<BottomSheetPickerHeader>
+          <BottomSheetHeading id="sort-picker-title">
             {title}
-          </h2>
+          </BottomSheetHeading>
           <button
             type="button"
             onClick={() =>
@@ -74,6 +61,7 @@ const SortPicker = <T extends string>({
           </button>
         </BottomSheetPickerHeader>}>
       <div className={`flex flex-col pb-6 ${showCriteriaSort ? 'gap-5' : 'gap-7'}`}>
+
 
         {priorityFirst !== undefined && (
           <label className="flex items-center justify-between gap-3 text-lg font-semibold">
@@ -149,6 +137,17 @@ const SortPicker = <T extends string>({
             </InfoNotice>
           )}
         </div>
+        <ContentBottomButton
+              type="button"
+              onClick={() => {
+                setSelected(options[0].value);
+                setPriority(false);
+                setRecords(recordSort ? "DESC" : undefined);
+              }}
+
+            >
+              초기화
+            </ContentBottomButton>
       </div>
     </BottomSheetPicker>
   );

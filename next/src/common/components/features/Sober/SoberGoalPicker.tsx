@@ -1,5 +1,7 @@
 'use client';
 
+
+import { BottomSheetHeading } from '@/common/components/ui/BottomSheet/BottomSheetHeading';
 import { useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { BottomSheetPicker } from '@/common/components/ui/BottomSheet/BottomSheetPicker';
@@ -46,12 +48,9 @@ export default function SoberGoalPicker({
         onClose={() => {
           if (!editor) onClose();
         }}
-       header={<h2
-            id="sober-goal-title"
-            className="text-center text-lg font-semibold"
-          >
+       header={<BottomSheetHeading id="sober-goal-title">
             얼마 동안 거리를 두고 싶나요?
-          </h2>}>
+          </BottomSheetHeading>}>
         <div className="flex flex-col gap-6 pb-6">
 
           <div className="flex flex-col gap-3">
@@ -135,12 +134,9 @@ export default function SoberGoalPicker({
             labelledBy="sober-goal-editor"
             onClose={() => setEditor(null)}
            header={<div className="relative flex min-h-11 items-center justify-center px-12">
-              <h2
-                id="sober-goal-editor"
-                className="text-center text-lg font-semibold"
-              >
+              <BottomSheetHeading id="sober-goal-editor">
                 {editor.kind === 'PERIOD' ? '목표 기간 선택' : '목표 일수 입력'}
-              </h2>
+              </BottomSheetHeading>
               <button
                 type="button"
                 disabled={!valid}

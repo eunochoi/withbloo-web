@@ -1,5 +1,7 @@
 'use client';
 
+import { BottomSheetHeading } from './BottomSheetHeading';
+
 import { AnimatePresence } from 'framer-motion';
 import { useId, useRef, useState } from 'react';
 import { showNotice } from '@/common/components/ui/Notice/notice';
@@ -28,7 +30,7 @@ export const ConfirmDialog = ({ isOpen, title, confirmLabel, confirmDescription,
       if (confirmed.current) { confirmed.current = false; onConfirmed?.(); }
     }}>
       {isOpen && (
-        <BottomSheetPicker labelledBy={`${id}-title`} onClose={close} header={<h2 id={`${id}-title`} className="text-center text-lg font-semibold tracking-tight text-theme-text-primary">{title}</h2>}>
+        <BottomSheetPicker labelledBy={`${id}-title`} onClose={close} header={<BottomSheetHeading id={`${id}-title`}>{title}</BottomSheetHeading>}>
           <div className="flex w-full flex-col gap-6 pb-[max(1rem,env(safe-area-inset-bottom))]">
 
             <div className="flex flex-col gap-3">

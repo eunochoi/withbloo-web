@@ -1,11 +1,12 @@
 'use client';
 
 
+
+import { BottomSheetHeading } from '@/common/components/ui/BottomSheet/BottomSheetHeading';
 import { BottomSheetPicker } from "@/common/components/ui/BottomSheet/BottomSheetPicker";
 import {
   PICKER_BODY_CLASS,
   PICKER_CONTENT_CLASS,
-  PICKER_TITLE_CLASS
 } from '@/common/components/ui/BottomSheet/pickerConstants';
 import { cn } from "@/common/utils/cn";
 import { useState } from "react";
@@ -31,7 +32,7 @@ const HomePageYearPicker = ({ onClose, years, isPending, isError, onRetry, selec
 
   return (
     <BottomSheetPicker labelledBy="home-year-picker-title" describedBy="home-year-picker-description" onClose={onClose} header={<div className="relative flex min-h-11 items-center justify-center px-12">
-          <h2 id="home-year-picker-title" className={PICKER_TITLE_CLASS}>어느 해의 기록을 볼까요?</h2>
+          <BottomSheetHeading id="home-year-picker-title">어느 해의 기록을 볼까요?</BottomSheetHeading>
           {!isPending && !isError && <button onClick={onSubmit} type="button" className="absolute right-0 min-h-11 text-xl font-normal text-theme-accent">적용</button>}
         </div>}>
       <div className={PICKER_CONTENT_CLASS}>

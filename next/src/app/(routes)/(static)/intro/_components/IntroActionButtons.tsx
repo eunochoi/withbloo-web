@@ -1,5 +1,7 @@
 'use client';
 
+
+import { BottomSheetHeading } from '@/common/components/ui/BottomSheet/BottomSheetHeading';
 import { BottomSheetPicker } from '@/common/components/ui/BottomSheet/BottomSheetPicker';
 import { ChevronRightIcon } from '@/common/constants/appIcons';
 import { cn } from '@/common/utils/cn';
@@ -55,9 +57,9 @@ const IntroActionButtons = ({ className }: IntroActionButtonsProps) => {
       </div >
       <AnimatePresence>
         {isOpen && (
-          <BottomSheetPicker labelledBy={titleId} onClose={() => setIsOpen(false)} header={<h2 id={titleId} className="text-center text-lg font-semibold tracking-tight text-theme-text-primary">
+          <BottomSheetPicker labelledBy={titleId} onClose={() => setIsOpen(false)} header={<BottomSheetHeading id={titleId}>
                 웹 서비스 이용하기
-              </h2>}>
+              </BottomSheetHeading>}>
             <div className="flex w-full flex-col gap-6 pb-[max(1rem,env(safe-area-inset-bottom))]">
 
               <div className="flex flex-col gap-3">
@@ -89,7 +91,7 @@ const IntroActionButtons = ({ className }: IntroActionButtonsProps) => {
           </BottomSheetPicker>
         )}
         {isAppOpen && (
-          <BottomSheetPicker labelledBy={appTitleId} onClose={() => setIsAppOpen(false)} header={<h2 id={appTitleId} className="text-center text-lg font-semibold tracking-tight text-theme-text-primary">앱 서비스 이용하기</h2>}>
+          <BottomSheetPicker labelledBy={appTitleId} onClose={() => setIsAppOpen(false)} header={<BottomSheetHeading id={appTitleId}>앱 서비스 이용하기</BottomSheetHeading>}>
             <div className="flex w-full flex-col gap-3 pb-[max(1rem,env(safe-area-inset-bottom))]">
               <a href={PLAY_STORE_URL} className={optionClass}>
                 <MdOutlineAndroid className="shrink-0 text-2xl text-theme-accent" aria-hidden="true" />

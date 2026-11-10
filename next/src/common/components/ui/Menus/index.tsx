@@ -1,3 +1,4 @@
+import { BottomSheetHeading } from '@/common/components/ui/BottomSheet/BottomSheetHeading';
 import {
   ChevronRightIcon,
   DeleteIcon,
@@ -90,12 +91,9 @@ const Menus = ({
       >
         {isOpen && (
           <BottomSheetPicker labelledBy={`${id}-title`} onClose={onClose} header={<div className="flex flex-col items-center gap-2">
-                <h2
-                  id={`${id}-title`}
-                  className="w-full min-w-0 text-center text-lg font-semibold tracking-tight text-theme-text-primary"
-                >
+                <BottomSheetHeading id={`${id}-title`} className="w-full min-w-0">
                   {kind === 'diary' ? title : <ScrollableName name={title} />}
-                </h2>
+                </BottomSheetHeading>
               </div>}>
             <div className="flex w-full flex-col gap-6 pb-[max(1rem,env(safe-area-inset-bottom))]">
 

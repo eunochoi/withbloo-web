@@ -1,5 +1,9 @@
 "use client";
 
+import { ContentBottomButton } from '@/common/components/ui/ContentBottomButton';
+
+
+import { BottomSheetHeading } from '@/common/components/ui/BottomSheet/BottomSheetHeading';
 import { BottomSheetPickerHeader } from "@/common/components/ui/BottomSheet/BottomSheetPickerHeader";
 
 import { BottomSheetPicker } from "@/common/components/ui/BottomSheet/BottomSheetPicker";
@@ -21,26 +25,10 @@ const HabitFilterPicker = ({
   const [completed, setCompleted] = useState(completedOnly);
   const [selected, setSelected] = useState(priorities);
   return (
-    <BottomSheetPicker labelledBy="habit-filter-title" onClose={onClose} header={<BottomSheetPickerHeader
-          headerLeft={
-            <button
-              type="button"
-              onClick={() => {
-                setCompleted(false);
-                setSelected([]);
-              }}
-              className="min-h-11 text-lg font-normal text-theme-text-secondary/70"
-            >
-              초기화
-            </button>
-          }
-        >
-          <h2
-            id="habit-filter-title"
-            className="text-center text-xl font-semibold"
-          >
+    <BottomSheetPicker labelledBy="habit-filter-title" onClose={onClose} header={<BottomSheetPickerHeader>
+          <BottomSheetHeading id="habit-filter-title">
             습관 필터
-          </h2>
+          </BottomSheetHeading>
           <button
             type="button"
             onClick={() => onApply(completed, selected)}
@@ -50,6 +38,7 @@ const HabitFilterPicker = ({
           </button>
         </BottomSheetPickerHeader>}>
       <div className="flex flex-col gap-5 px-2 pb-6 pt-2">
+
 
 
         <label className="flex items-center justify-between gap-3 text-base font-semibold">
@@ -109,6 +98,16 @@ const HabitFilterPicker = ({
           </div>
         </section>
         <InfoNotice>중요도는 여러 개 선택할 수 있어요.</InfoNotice>
+        <ContentBottomButton
+              type="button"
+              onClick={() => {
+                setCompleted(false);
+                setSelected([]);
+              }}
+
+            >
+              초기화
+            </ContentBottomButton>
       </div>
     </BottomSheetPicker>
   );
