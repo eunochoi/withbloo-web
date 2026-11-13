@@ -1,7 +1,7 @@
+import AppDotTabs from '@/common/components/ui/AppDotTabs';
 import { BottomSheetHeading } from '@/common/components/ui/BottomSheet/BottomSheetHeading';
 import { BottomSheetPicker } from '@/common/components/ui/BottomSheet/BottomSheetPicker';
 import EmotionImage from '@/common/components/ui/EmotionImage';
-import AppDotTabs from '@/common/components/ui/AppDotTabs';
 import PickerInfoCard from '@/common/components/ui/PickerInfoCard';
 import { EMOTIONS } from '@/common/constants/emotions';
 import { useIsPresent } from 'framer-motion';
@@ -65,18 +65,18 @@ const DiaryFormEmotionPicker = ({
 
   return (
     <BottomSheetPicker labelledBy="diary-emotion-picker-title" onClose={onClose} header={<div className="relative flex min-h-11 items-center justify-center">
-          <BottomSheetHeading id="diary-emotion-picker-title">
-            오늘의 감정을 골라주세요
-          </BottomSheetHeading>
-        <button
-          type="button"
-          disabled={!isPresent || !EMOTIONS.some((item) => item.id === draftEmotion)}
-          onClick={() => onConfirm(draftEmotion)}
-          className="absolute right-0 min-h-11 text-lg font-normal text-theme-accent disabled:opacity-40"
-        >
-          완료
-        </button>
-        </div>}>
+      <BottomSheetHeading id="diary-emotion-picker-title">
+        감정 선택
+      </BottomSheetHeading>
+      <button
+        type="button"
+        disabled={!isPresent || !EMOTIONS.some((item) => item.id === draftEmotion)}
+        onClick={() => onConfirm(draftEmotion)}
+        className="absolute right-0 min-h-11 text-lg font-normal text-theme-accent disabled:opacity-40"
+      >
+        완료
+      </button>
+    </div>}>
       <fieldset
         disabled={!isPresent}
         className="m-0 flex w-full min-w-0 flex-col gap-4 border-0 pb-[max(24px,env(safe-area-inset-bottom))]"
