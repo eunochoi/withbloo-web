@@ -21,6 +21,8 @@
   --theme-text-tertiary: 158 158 158;
   --theme-text-disabled: 190 190 190;
   --theme-text-on-accent: 255 255 255;
+  --theme-switch-track: 225 225 225;
+  --theme-switch-thumb: 255 255 255;
   --theme-border: 225 225 225;
   --theme-border-muted: 240 240 240;
   --theme-skeleton: 242 242 242;
@@ -101,6 +103,8 @@ html[data-theme-mode='밝게'] {
   --theme-text-secondary: 117 117 117;
   --theme-text-tertiary: 158 158 158;
   --theme-text-disabled: 190 190 190;
+  --theme-switch-track: 225 225 225;
+  --theme-switch-thumb: 255 255 255;
   --theme-border: 225 225 225;
   --theme-border-muted: 240 240 240;
   --theme-skeleton: 242 242 242;
@@ -122,6 +126,8 @@ html[data-theme-mode='어둡게'] {
   --theme-text-secondary: 250 250 250;
   --theme-text-tertiary: 170 170 170;
   --theme-text-disabled: 110 110 110;
+  --theme-switch-track: 170 170 170;
+  --theme-switch-thumb: 38 38 38;
   --theme-border: 80 80 80;
   --theme-border-muted: 60 60 60;
   --theme-skeleton: 84 84 84;

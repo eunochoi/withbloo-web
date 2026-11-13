@@ -107,7 +107,7 @@ export const HabitSortModal = ({ onClose, sortValue, priorityFirst, customHabitO
                   <label className="flex items-center justify-between gap-3 text-base font-semibold">
                     중요한 항목 먼저
                     <input type="checkbox" role="switch" checked={priority} onChange={(event) => setPriority(event.target.checked)} className="peer sr-only" />
-                    <span aria-hidden="true" className="relative h-7 w-12 shrink-0 rounded-full bg-theme-border transition-colors after:absolute after:left-1 after:top-1 after:h-5 after:w-5 after:rounded-full after:bg-theme-surface after:transition-transform peer-checked:bg-theme-accent peer-checked:after:translate-x-5" />
+                    <span aria-hidden="true" className="relative h-7 w-12 shrink-0 rounded-full bg-[rgb(var(--theme-switch-track))] transition-colors after:absolute after:left-1 after:top-1 after:h-5 after:w-5 after:rounded-full after:bg-[rgb(var(--theme-switch-thumb))] after:transition-transform peer-checked:bg-theme-accent peer-checked:after:translate-x-5" />
                   </label>
                   <section className="flex flex-col gap-3">
                     <h3 className="text-base font-semibold">생성일 정렬</h3>
