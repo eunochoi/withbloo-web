@@ -60,7 +60,7 @@ const SortPicker = <T extends string>({
             적용
           </button>
         </BottomSheetPickerHeader>}>
-      <div className={`flex flex-col pb-6 ${showCriteriaSort ? 'gap-5' : 'gap-7'}`}>
+      <div className={`flex flex-col pb-6 ${showCriteriaSort ? 'gap-8' : 'gap-7'}`}>
 
 
         {priorityFirst !== undefined && (

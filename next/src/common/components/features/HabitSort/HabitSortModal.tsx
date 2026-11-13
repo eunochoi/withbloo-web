@@ -98,12 +98,12 @@ export const HabitSortModal = ({ onClose, sortValue, priorityFirst, customHabitO
           <BottomSheetBody showScrollFade>
             <div className="flex min-w-0 w-full flex-col pb-6">
 
-              <section className="flex min-w-0 flex-col gap-5 pb-8">
+              <section className="flex min-w-0 flex-col gap-8 pb-8">
                 <label className="flex cursor-pointer items-center gap-2 text-lg font-semibold">
                   <input type="radio" name="habit-sort-mode" value="standard" checked={draftSort !== 'CUSTOM'} onChange={() => setDraftSort(standardSort)} className="h-5 w-5 shrink-0 appearance-none rounded-full border border-theme-accent bg-theme-surface checked:bg-theme-accent checked:shadow-[inset_0_0_0_3px_rgb(var(--theme-surface))] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-theme-accent" />
                   기준별 정렬
                 </label>
-                <fieldset disabled={draftSort === 'CUSTOM'} className={`p-2 flex min-w-0 flex-col gap-5 transition-opacity ${draftSort === 'CUSTOM' ? 'opacity-40' : ''}`}>
+                <fieldset disabled={draftSort === 'CUSTOM'} className={`p-2 flex min-w-0 flex-col gap-8 transition-opacity ${draftSort === 'CUSTOM' ? 'opacity-40' : ''}`}>
                   <label className="flex items-center justify-between gap-3 text-base font-semibold">
                     중요한 항목 먼저
                     <input type="checkbox" role="switch" checked={priority} onChange={(event) => setPriority(event.target.checked)} className="peer sr-only" />
@@ -122,12 +122,12 @@ export const HabitSortModal = ({ onClose, sortValue, priorityFirst, customHabitO
                   <InfoNotice>{priority ? '중요한 항목부터, ' : ''}생성일 순으로 정렬해요.</InfoNotice>
                 </fieldset>
               </section>
-              <section className="flex min-w-0 flex-col gap-5 border-t border-theme-border/30 pt-8">
+              <section className="flex min-w-0 flex-col gap-8 border-t border-theme-border/30 pt-8">
                 <label className="flex cursor-pointer items-center gap-2 text-lg font-semibold">
                   <input type="radio" name="habit-sort-mode" value="user" checked={draftSort === 'CUSTOM'} onChange={() => setDraftSort('CUSTOM')} className="h-5 w-5 shrink-0 appearance-none rounded-full border border-theme-accent bg-theme-surface checked:bg-theme-accent checked:shadow-[inset_0_0_0_3px_rgb(var(--theme-surface))] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-theme-accent" />
                   자유 정렬
                 </label>
-                <fieldset disabled={draftSort !== 'CUSTOM'} className={`p-2 flex min-w-0 flex-col gap-5 transition-opacity ${draftSort !== 'CUSTOM' ? 'opacity-40' : ''}`}>
+                <fieldset disabled={draftSort !== 'CUSTOM'} className={`p-2 flex min-w-0 flex-col gap-8 transition-opacity ${draftSort !== 'CUSTOM' ? 'opacity-40' : ''}`}>
                   {draftSort === 'CUSTOM' && !customHabits && isPending && <p role="status" className="py-4 text-center text-sm text-theme-text-secondary">습관을 불러오는 중이에요.</p>}
                   {draftSort === 'CUSTOM' && !customHabits && isError && <div className="py-4 text-center text-sm text-theme-text-secondary">습관을 불러오지 못했어요. <button type="button" onClick={() => void refetch()} className="text-theme-accent">다시 시도</button></div>}
                   {tempHabits && <HabitManualSortList tempHabits={tempHabits} onOrderChange={setTempHabits} disabled={draftSort !== 'CUSTOM'} />}

@@ -297,7 +297,7 @@ function SoberFilterPicker({
               적용
             </button>
           </BottomSheetPickerHeader>}>
-        <div className="flex flex-col gap-5 px-2 pb-6 pt-2">
+        <div className="flex flex-col gap-8 px-2 pb-6 pt-2">
 
 
 
