@@ -51,7 +51,7 @@ const EmotionStats = ({ year, emotionCounts, halfYearEmotionCounts }: Props) => 
           ))}
         </div>
       </div>
-      <div className="-mx-6 w-auto flex gap-3 overflow-x-auto overscroll-x-contain px-7 pb-2 tablet:-mx-12 tablet:px-[calc(3rem+0.25rem)] desktop:-mx-[81px] desktop:px-[calc(81px+0.25rem)]">
+      <div className="-mx-6 w-auto flex gap-3 overflow-x-auto overscroll-x-contain px-7 pb-2 tablet:-mx-12 tablet:px-[calc(3rem+0.25rem)] desktop:-mx-18 desktop:px-[calc(theme(spacing.18)+0.25rem)]">
         {sortedEmotions.map((emotion) => (
           <div key={emotion.id} className="flex w-[40%] shrink-0 flex-col items-center gap-1 rounded-theme border p-3" style={{ backgroundColor: `${emotion.color}26`, borderColor: `${emotion.color}40` }}>
             <EmotionImage emotion={emotion} alt="" width={64} height={64} className="h-16 w-16" />

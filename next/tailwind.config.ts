@@ -64,6 +64,9 @@ const config: Config = {
       fontSize: {
         app: "var(--app-font-size)",
       },
+      spacing: {
+        18: "4.5rem",
+      },
       borderRadius: {
         theme: "16px",
       },
