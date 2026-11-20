@@ -78,7 +78,7 @@ const AppPageLayout = ({ header, children, scrollRef, toolbar, fixedDesktop = fa
             )}
           </div>
         )}
-        <main className={cn('flex flex-1 flex-col pb-[calc(var(--mobileNav)+env(safe-area-inset-bottom)+1rem)] tablet:pb-4 desktop:pb-24', hasToolbar ? 'pt-4' : 'tablet:pt-4 desktop:pt-6', fixedDesktop && 'tablet:pb-8 desktop:min-h-0 desktop:pb-4')}>
+        <main className={cn('flex flex-1 flex-col pb-[calc(var(--mobileNav)+env(safe-area-inset-bottom)+1rem)]', hasToolbar ? 'pt-4' : 'tablet:pt-4 desktop:pt-6', fixedDesktop ? 'tablet:pb-4 desktop:min-h-0' : 'tablet:pb-24')}>
           <AppPageContainer className={fixedDesktop ? "flex flex-1 flex-col desktop:min-h-0" : undefined}>
             <EnterMotion className={fixedDesktop ? "flex-1 desktop:min-h-0" : undefined}>{children}</EnterMotion>
           </AppPageContainer>
