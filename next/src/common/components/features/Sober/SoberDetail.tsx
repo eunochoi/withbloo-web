@@ -98,9 +98,9 @@ export const SoberDetail = ({
             />
           }
         />
-        <BottomSheetBody showScrollFade>
-          <div className="flex flex-col gap-8 pb-8">
-            <div className="flex flex-col gap-8">
+        <BottomSheetBody showScrollFade contentClassName="tablet:py-10 desktop:py-12">
+          <div className="flex flex-col gap-8 pb-8 tablet:gap-12 desktop:gap-14">
+            <div className="flex flex-col gap-8 tablet:gap-10 desktop:gap-12">
               <div className="flex flex-col items-center gap-3">
                 <SoberIcon
                   name={item.iconKey}
@@ -172,7 +172,7 @@ export const SoberDetail = ({
                   {item.description}
                 </p>
               )}
-              <div className="flex w-[90%] flex-col gap-3 self-center">
+              <div className="flex w-[90%] flex-col gap-3 self-center tablet:gap-4">
                 <div className="flex flex-wrap justify-between gap-2 text-sm">
                   <span className="text-theme-text-secondary">
                     목표 {formatSoberGoal(summary.goalDays)}
@@ -201,7 +201,7 @@ export const SoberDetail = ({
                   />
                 </div>
               </div>
-              <div className="flex flex-col gap-3 px-1">
+              <div className="flex flex-col gap-3 px-1 tablet:gap-4">
                 <button
                   type="button"
                   onClick={() => setRecordForm({ record: { type: 'RESTART' }, day: null })}
@@ -300,7 +300,7 @@ export const SoberDetail = ({
                   .map((record, index) => (
                     <div
                       key={`${record.start}-${index}`}
-                      className="flex items-center gap-4 py-3"
+                      className="flex items-center gap-4 py-3 tablet:py-4"
                     >
                       <span
                         className="w-7 shrink-0 font-semibold"

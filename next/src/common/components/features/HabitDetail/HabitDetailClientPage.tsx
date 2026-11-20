@@ -93,9 +93,9 @@ const HabitDetailClientPage = ({ habitId, today }: Props) => {
                 </>
               )}
             />
-            <BottomSheetBody showScrollFade>
-              <div className="flex w-full flex-col gap-8 pb-6 tablet:pb-7">
-                <div className="flex flex-col gap-8">
+            <BottomSheetBody showScrollFade contentClassName="tablet:py-10 desktop:py-12">
+              <div className="flex w-full flex-col gap-8 pb-6 tablet:gap-12 desktop:gap-14 tablet:pb-7">
+                <div className="flex flex-col gap-8 tablet:gap-10 desktop:gap-12">
                   <HabitInfoHeader habitData={habitDataById} />
                   {habitDataById && <HabitInfoCarousel free={habitDataById.priority === 0} today={today}
                     latestDate={habitDataById.latestRecordedDate} month={monthQuery.isError ? undefined : monthQuery.data?.summary}
@@ -104,7 +104,7 @@ const HabitDetailClientPage = ({ habitId, today }: Props) => {
                     <p className="w-[90%] min-w-0 self-center whitespace-pre-wrap [overflow-wrap:anywhere] text-center text-base leading-relaxed text-theme-text-secondary">{habitDataById.description}</p>
                   )}
                   {habitDataById && habitDataById.priority > 0 && (
-                    <div className="flex w-[90%] flex-col gap-3 self-center">
+                    <div className="flex w-[90%] flex-col gap-3 self-center tablet:gap-4">
                       <div className="flex justify-between gap-2 text-sm text-theme-text-secondary"><span>이번 달 실천도</span><span>{monthRate === null ? '—' : `${monthRate.toFixed(1)}%`}</span></div>
                       {monthRate === null ? <div className="h-5 rounded-full bg-theme-border/80" /> : (
                         <div role="progressbar" aria-label="이번 달 실천도" aria-valuemin={0} aria-valuemax={100} aria-valuenow={monthRate} className="h-5 overflow-hidden rounded-full bg-theme-border/80">
@@ -113,7 +113,7 @@ const HabitDetailClientPage = ({ habitId, today }: Props) => {
                       )}
                     </div>
                   )}
-                  {habitDataById && <div className="flex flex-col gap-3 px-1">
+                  {habitDataById && <div className="flex flex-col gap-3 px-1 tablet:gap-4">
                     <button type="button" onClick={() => setRecordForm({ record: { type: 'MEMO' }, day: null })} className="min-h-12 rounded-full border border-black/10 text-theme-surface" style={{ backgroundColor: accent.color }}>기록 추가</button>
                     <button type="button" onClick={() => setRecordListOpen(true)} className="min-h-12 rounded-full border border-theme-text-secondary/10 bg-theme-surface-muted">기록 모아보기</button>
                   </div>}
@@ -138,7 +138,7 @@ const HabitDetailClientPage = ({ habitId, today }: Props) => {
                   accent={accent}
                   today={today}
                   setDisplayDate={setChartDate} />}
-                {habitDataById && <div className="space-y-2 px-1">
+                {habitDataById && <div className="space-y-2 px-1 tablet:space-y-3">
                   <InfoNotice>{format(new Date(habitDataById.initialStartedAt), 'yy년 M월 d일 HH:mm')} 시작</InfoNotice>
                   {habitDataById.priority === 0 && <InfoNotice>습관 시작일을 반영한 월간 경과 일수 ÷ 기록 횟수예요.</InfoNotice>}
                   {habitDataById.priority > 0 && <><InfoNotice>실천 가능일은 선택 기간 내 시작일~오늘이에요.</InfoNotice><InfoNotice>실천율 = 실천 횟수 ÷ 실천 가능일 × 100</InfoNotice></>}
