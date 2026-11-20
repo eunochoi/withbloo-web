@@ -36,6 +36,8 @@
   --app-font-size: 14px;
   --app-font-family: 'TmoneyRoundWind';
 
+  --app-content-max-width-tablet: 550px;
+  --app-content-max-width-desktop: 1000px;
   --sidebarWidth: 270px;
   --pageHeader: 72px;
   --panel-header-height: 56px;
