@@ -38,6 +38,8 @@
 
   --app-content-max-width-tablet: 550px;
   --app-content-max-width-desktop: 1000px;
+  --bottom-sheet-max-width: 550px;
+  --bottom-sheet-max-width-desktop: 650px;
   --sidebarWidth: 270px;
   --pageHeader: 72px;
   --panel-header-height: 56px;
