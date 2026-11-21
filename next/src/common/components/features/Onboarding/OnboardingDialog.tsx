@@ -1,6 +1,7 @@
 'use client';
 
 import { BottomSheet } from '@/common/components/ui/BottomSheet/BottomSheet';
+import { PANEL_HORIZONTAL_PADDING_CLASS } from '@/common/components/ui/BottomSheet/panelConstants';
 import { BottomSheetTitle } from '@/common/components/ui/BottomSheet/BottomSheetTitle';
 import { ScrollContainer } from '@/common/components/ui/ScrollContainer';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
@@ -69,7 +70,7 @@ export function OnboardingDialog({
       <ScrollContainer
         ref={scrollRef}
         className="min-h-0 flex-1"
-        contentClassName="flex flex-col"
+        contentClassName={`flex flex-col ${PANEL_HORIZONTAL_PADDING_CLASS}`}
         showScrollFade
         scrollFadeClassName="h-8"
       >
@@ -89,7 +90,7 @@ export function OnboardingDialog({
           </motion.div>
         </AnimatePresence>
       </ScrollContainer>
-      <footer style={{ lineHeight: 'normal' }} className="shrink-0 px-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-4">
+      <footer style={{ lineHeight: 'normal' }} className={`shrink-0 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-4 ${PANEL_HORIZONTAL_PADDING_CLASS}`}>
         <div className="mx-auto w-full max-w-lg">
           {error && (
             <p role="alert" className="mb-3 text-[11px] text-theme-text-secondary">

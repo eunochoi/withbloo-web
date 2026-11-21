@@ -64,7 +64,7 @@ const DiaryFormEmotionPicker = ({
   const category = categories[categoryIndex];
 
   return (
-    <BottomSheetPicker labelledBy="diary-emotion-picker-title" onClose={onClose} header={<div className="relative flex min-h-11 items-center justify-center">
+    <BottomSheetPicker fixedHeight labelledBy="diary-emotion-picker-title" onClose={onClose} header={<div className="relative flex min-h-11 items-center justify-center">
       <BottomSheetHeading id="diary-emotion-picker-title">
         감정 선택
       </BottomSheetHeading>
@@ -79,7 +79,7 @@ const DiaryFormEmotionPicker = ({
     </div>}>
       <fieldset
         disabled={!isPresent}
-        className="m-0 flex w-full min-w-0 flex-col gap-4 border-0 pb-[max(24px,env(safe-area-inset-bottom))]"
+        className="m-0 flex w-full min-h-0 min-w-0 flex-1 flex-col gap-4 overflow-y-auto overscroll-contain border-0 pb-[max(24px,env(safe-area-inset-bottom))]"
       >
 
         <AppDotTabs

@@ -63,7 +63,7 @@ const DiaryDatePicker = ({
     query.isFetching;
 
   return (
-    <BottomSheetPicker labelledBy="diary-date-title" onClose={onClose} header={<BottomSheetPickerHeader>
+    <BottomSheetPicker fixedHeight labelledBy="diary-date-title" onClose={onClose} header={<BottomSheetPickerHeader>
           <BottomSheetHeading id="diary-date-title">
             날짜 선택
           </BottomSheetHeading>
@@ -76,7 +76,7 @@ const DiaryDatePicker = ({
             완료
           </button>
         </BottomSheetPickerHeader>}>
-      <div className="flex flex-col gap-6 pb-6">
+      <div className="flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto overscroll-contain pb-6">
 
 
         <DateSelectionForm date={draft}>

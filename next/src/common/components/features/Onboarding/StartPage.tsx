@@ -7,7 +7,7 @@ import standingCat from'/public/img/cats/cat-blue-standing.png';
 
 export function StartPage() {
   return (
-    <div style={{ lineHeight:'normal' }} className="w-full flex-1 px-6 py-6 flex flex-col justify-evenly items-center gap-4">
+    <div style={{ lineHeight:'normal' }} className="w-full flex-1 py-6 flex flex-col justify-evenly items-center gap-4">
       <span className="text-[24px] font-semibold">이제, 시작해볼까요?</span>
       <div className="w-full h-auto flex flex-col justify-center items-center gap-2">
         <span className="text-[15px] text-theme-text-secondary">

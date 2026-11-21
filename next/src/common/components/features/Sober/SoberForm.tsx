@@ -298,6 +298,7 @@ export const SoberForm = ({
                   value={category}
                   onChange={setCategory}
                   scrollToSelected
+                  fullBleed
                   accessibilityLabel="아이콘 분류"
                 />
                 <PickerInfoCard>

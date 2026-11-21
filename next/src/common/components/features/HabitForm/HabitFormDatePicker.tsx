@@ -53,6 +53,7 @@ const HabitFormDatePicker = ({
   };
   return (
     <HabitFormPicker
+      fixedHeight
       id="habit-date-picker-title"
       title="시간 선택"
       onClose={onClose}

@@ -17,6 +17,7 @@ interface AppDotTabsProps<T extends string | number> {
   value: T;
   onChange: (value: T) => void;
   scrollToSelected?: boolean;
+  fullBleed?: boolean;
   accessibilityLabel?: string;
 }
 
@@ -25,6 +26,7 @@ const AppDotTabs = <T extends string | number>({
   value,
   onChange,
   scrollToSelected = false,
+  fullBleed = false,
   accessibilityLabel,
 }: AppDotTabsProps<T>) => {
   const container = useRef<HTMLDivElement>(null);
@@ -37,7 +39,7 @@ const AppDotTabs = <T extends string | number>({
     parent.scrollTo({ left, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
   }, [value, scrollToSelected]);
   return (
-    <div ref={container} role="tablist" aria-label={accessibilityLabel} className={cn("flex items-center gap-3", scrollToSelected && "overflow-x-auto overscroll-x-contain")}>
+    <div ref={container} role="tablist" aria-label={accessibilityLabel} className={cn("flex items-center gap-3", scrollToSelected && "overflow-x-auto overscroll-x-contain", fullBleed && "-mx-[5.555556%] px-[5.555556%] tablet:-mx-12 tablet:px-12 desktop:-mx-18 desktop:px-18")}>
       {options.map((option) => (
         <button
           key={option.value}

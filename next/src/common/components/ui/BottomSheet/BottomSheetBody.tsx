@@ -3,7 +3,7 @@
 import { ScrollContainer } from "@/common/components/ui/ScrollContainer";
 import { cn } from "@/common/utils/cn";
 import { forwardRef, ReactNode } from "react";
-import { PANEL_CONTENT_HORIZONTAL_PADDING_CLASS } from './panelConstants';
+import { PANEL_HORIZONTAL_PADDING_CLASS } from './panelConstants';
 
 interface BottomSheetBodyProps {
   children: ReactNode;
@@ -20,7 +20,7 @@ export const BottomSheetBody = forwardRef<HTMLDivElement, BottomSheetBodyProps>(
     <ScrollContainer
       ref={ref}
       className="flex min-h-0 flex-1"
-      contentClassName={cn(PANEL_CONTENT_HORIZONTAL_PADDING_CLASS, 'py-8', contentClassName)}
+      contentClassName={cn(PANEL_HORIZONTAL_PADDING_CLASS, 'py-8', contentClassName)}
       showScrollFade={showScrollFade}
 
     >

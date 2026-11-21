@@ -20,7 +20,7 @@ export function OnboardingFrame({
     <section
       style={{ lineHeight: 'normal' }}
       aria-labelledby={titleId}
-      className="mx-auto flex w-full max-w-lg flex-1 flex-col gap-12 break-keep px-6 py-6 text-[13px] text-theme-text-primary"
+      className="mx-auto flex w-full max-w-lg flex-1 flex-col gap-12 break-keep py-6 text-[13px] text-theme-text-primary"
     >
       <header className="flex shrink-0 flex-col gap-2 text-center">
         <h2

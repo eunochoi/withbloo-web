@@ -33,7 +33,7 @@ export function WelcomePage() {
     <section
       style={{ lineHeight: 'normal' }}
       aria-labelledby="onboarding-welcome-title"
-      className="mx-auto flex w-full max-w-lg flex-1 flex-col justify-evenly gap-6 break-keep px-6 py-6 text-[13px] text-theme-text-primary"
+      className="mx-auto flex w-full max-w-lg flex-1 flex-col justify-evenly gap-6 break-keep py-6 text-[13px] text-theme-text-primary"
     >
       <header className="flex shrink-0 flex-col gap-1 text-center">
         <h2

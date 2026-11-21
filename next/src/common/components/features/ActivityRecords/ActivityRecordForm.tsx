@@ -184,13 +184,13 @@ export default function ActivityRecordForm({
         </fieldset>
       </BottomSheetBody>
       {pickerOpen && (
-        <BottomSheetPicker labelledBy="record-date-title" onClose={closePicker} header={
+        <BottomSheetPicker fixedHeight labelledBy="record-date-title" onClose={closePicker} header={
           <BottomSheetPickerHeader>
             <BottomSheetHeading id="record-date-title">시간 선택</BottomSheetHeading>
             <button type="button" onClick={() => { if (validateTime()) setPickerOpen(false); }} className="absolute right-0 min-h-11 text-lg text-theme-accent">완료</button>
           </BottomSheetPickerHeader>
         }>
-          <div className="flex flex-col gap-6 pb-6">
+          <div className="flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto overscroll-contain pb-6">
             <DateSelectionForm date={date} hour={hour} minute={minute} onTimeChange={(value) => { setHour(value.hour); setMinute(value.minute); setError(''); }}>
             <DateSelectionCalendar calendar={calendar} selected={date} today={today} onSelect={(date) => { setDate(date); setError(''); }} marker={(date, selected) => habitMonth.data?.daysByDate[date] && habit.data ? { icon: <HabitIcon iconKey={habit.data.iconKey} iconColor={habit.data.iconColor} colorOverride={selected ? 'rgb(var(--theme-text-on-accent))' : undefined} className="h-6 w-6" />, label: '완료 기록 있음' } : sober?.restarts.some((item) => format(new Date(item.restartedAt), 'yyyy-MM-dd') === date) ? { icon: <SoberIcon name={sober.iconKey} color={sober.iconColor} colorOverride={selected ? 'rgb(var(--theme-text-on-accent))' : undefined} className="h-6 w-6" />, label: '다시 시작 기록 있음' } : undefined} />
             </DateSelectionForm>

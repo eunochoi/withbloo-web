@@ -48,6 +48,7 @@ const HabitFormIconPicker = ({
             options={HABIT_ICON_CATEGORIES.map((item) => ({ value: item.id, label: item.label }))}
             value={categoryId}
             scrollToSelected
+            fullBleed
             accessibilityLabel="아이콘 분류"
             onChange={(id) => {
               setCategoryId(id);

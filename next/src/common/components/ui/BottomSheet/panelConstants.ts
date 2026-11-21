@@ -1,2 +1,1 @@
-export const PANEL_HORIZONTAL_PADDING_CLASS = "px-5 tablet:px-12 desktop:px-18";
-export const PANEL_CONTENT_HORIZONTAL_PADDING_CLASS = "px-6 tablet:px-12 desktop:px-18";
+export const PANEL_HORIZONTAL_PADDING_CLASS = "px-[5%] tablet:px-12 desktop:px-18";
