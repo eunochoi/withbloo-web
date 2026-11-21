@@ -1,6 +1,6 @@
 'use client';
 
-import { useId, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import {
   PiDownloadSimpleFill,
@@ -11,6 +11,7 @@ import {
 import { authAction } from '@/common/auth/authAction';
 import { AUTH_ERROR_CODE } from '@/common/auth/types';
 import { BottomSheet } from '@/common/components/ui/BottomSheet/BottomSheet';
+import { BottomSheetTitle } from '@/common/components/ui/BottomSheet/BottomSheetTitle';
 import InfoNotice from '@/common/components/ui/InfoNotice';
 import { showNotice } from '@/common/components/ui/Notice/notice';
 
@@ -33,7 +34,6 @@ export function BackupDialog({
   onClose: () => void;
   onBusyChange: (busy: boolean) => void;
 }) {
-  const id = useId();
   const [step, setStep] = useState<'destination' | 'password'>('destination');
   const [destination, setDestination] = useState<'device' | 'share'>('device');
   const [password, setPassword] = useState('');
@@ -198,12 +198,7 @@ export function BackupDialog({
         preserveHandle
         height="auto"
       >
-        <h2
-          id={`${id}-title`}
-          className="shrink-0 px-[5%] py-1 text-center text-lg font-semibold tracking-tight text-theme-text-primary"
-        >
-          {title}
-        </h2>
+        <BottomSheetTitle title={title} />
         <div className="min-h-0 overflow-y-auto overscroll-contain px-[5%] py-8 pb-[calc(2rem+env(safe-area-inset-bottom))]">
           {step === 'destination' ? (
             <div className="flex flex-col gap-3">

@@ -67,17 +67,34 @@ test('manual list uses the enclosing modal scroll area', () => {
   assert.equal(find(tree, (node) => node.type === 'HabitManualSortItem').props.habit, habits[0]);
 });
 
-test('busy panels keep a disabled handle while intentionally locked panels may hide it', () => {
+test('the header close button shares the handle lifecycle and dismissal guards', () => {
+  let close;
   const load = sourceLoader({
-    react: { forwardRef: (render) => render, useEffect: () => {}, useImperativeHandle: () => {}, useLayoutEffect: () => {}, useRef: () => ({ current: null }), useState: (value) => [value, () => {}] },
+    react: { createContext: require('react').createContext, useContext: () => close, forwardRef: (render) => render, useEffect: () => {}, useImperativeHandle: () => {}, useLayoutEffect: () => {}, useRef: (current) => ({ current }), useState: (value) => [value, () => {}] },
     'framer-motion': { AnimatePresence: 'AnimatePresence', motion: { div: 'motion.div' }, usePresence: () => [true], useReducedMotion: () => false },
     './useSheetDismiss': { useSheetDismiss: () => ({ get: () => 0 }) },
     './DialogBackdrop': { DialogBackdrop: 'DialogBackdrop' },
     './SheetHandle': { SheetHandle: 'SheetHandle' },
   });
+  const { BottomSheetCloseButton, BottomSheetCloseContext } = load('common/components/ui/BottomSheet/BottomSheetCloseButton.tsx');
   const { BottomSheet } = load('common/components/ui/BottomSheet/BottomSheet.tsx');
   const busy = BottomSheet({ ariaLabel: '저장', onClose() {}, dismissible: false, preserveHandle: true });
   assert.equal(find(busy, (node) => node.type === 'SheetHandle').props.disabled, true);
+  close = find(busy, (node) => node.type === BottomSheetCloseContext.Provider).props.value;
+  assert.equal(BottomSheetCloseButton({}).props.disabled, true);
   const locked = BottomSheet({ ariaLabel: '안내', onClose() {}, dismissible: false });
   assert.equal(find(locked, (node) => node.type === 'SheetHandle'), undefined);
+  close = find(locked, (node) => node.type === BottomSheetCloseContext.Provider).props.value;
+  assert.equal(BottomSheetCloseButton({}), null);
+
+  let dismissed = 0;
+  const open = BottomSheet({ ariaLabel: '설정', onClose: () => dismissed++ });
+  close = find(open, (node) => node.type === BottomSheetCloseContext.Provider).props.value;
+  const button = BottomSheetCloseButton({});
+  assert.equal(button.props['aria-label'], '닫기');
+  assert.equal(button.props.onClick, find(open, (node) => node.type === 'SheetHandle').props.onClose);
+  button.props.onClick();
+  assert.equal(dismissed, 0);
+  find(open, (node) => node.type === 'AnimatePresence').props.onExitComplete();
+  assert.equal(dismissed, 1);
 });

@@ -73,7 +73,7 @@ const CalendarPageContent = ({
           <BottomSheetPicker
             labelledBy="calendar-day-title"
             onClose={() => setIsOpen(false)}
-           header={<header className="flex min-h-12 items-center justify-center gap-4">
+           header={<header className="flex min-h-12 items-center justify-center gap-4 px-11">
                 <BottomSheetHeading id="calendar-day-title">
                   {selectedDate === today
                     ? '오늘'

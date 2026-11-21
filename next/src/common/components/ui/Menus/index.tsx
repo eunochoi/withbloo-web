@@ -90,7 +90,7 @@ const Menus = ({
         }}
       >
         {isOpen && (
-          <BottomSheetPicker labelledBy={`${id}-title`} onClose={onClose} header={<div className="flex flex-col items-center gap-2">
+          <BottomSheetPicker labelledBy={`${id}-title`} onClose={onClose} header={<div className="flex flex-col items-center gap-2 px-11">
                 <BottomSheetHeading id={`${id}-title`} className="w-full min-w-0">
                   {kind === 'diary' ? title : <ScrollableName name={title} />}
                 </BottomSheetHeading>

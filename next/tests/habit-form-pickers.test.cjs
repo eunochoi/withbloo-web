@@ -6,6 +6,7 @@ function pickerHarness(name, props, folder = 'HabitForm') {
   const state = [];
   let cursor = 0;
   const load = sourceLoader({ '@/common/components/ui/ScrollContainer': { ScrollContainer: 'div' }, '@/common/components/ui/PickerGridItem': { __esModule: true, default: 'button' }, '@/common/components/ui/PickerInfoCard': { __esModule: true, default: 'div' }, react: {
+    createContext: require('react').createContext,
     forwardRef: (render) => render,
     useState: (initial) => {
       const index = cursor++;

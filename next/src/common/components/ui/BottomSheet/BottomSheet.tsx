@@ -3,6 +3,7 @@
 import { AnimatePresence, motion, usePresence, useReducedMotion } from 'framer-motion';
 import { forwardRef, type ReactNode, useEffect, useImperativeHandle, useLayoutEffect, useRef, useState } from 'react';
 import { DIALOG_ROOT_CLASS } from './constants';
+import { BottomSheetCloseContext } from './BottomSheetCloseButton';
 import { DialogBackdrop } from './DialogBackdrop';
 import { SheetHandle } from './SheetHandle';
 import { useSheetDismiss } from './useSheetDismiss';
@@ -87,7 +88,11 @@ export const BottomSheet = forwardRef<BottomSheetHandle, BottomSheetProps>(funct
         animate={{ opacity: 1, y: 0, ...(animateHeight ? { height: height === 'auto' ? 'auto' : 'var(--sheet-max-height)' } : {}) }}
         exit={{ opacity: 0, y: y.get() > 0 && !reduceMotion ? '100%' : offset }} transition={transition}>
         {(dismissible || preserveHandle) && <SheetHandle onClose={requestClose} color={handleColor} disabled={!dismissible} />}
-        {children}
+        <BottomSheetCloseContext.Provider
+          value={dismissible || preserveHandle ? { onClose: requestClose, disabled: !dismissible } : null}
+        >
+          {children}
+        </BottomSheetCloseContext.Provider>
       </motion.div>}
       </AnimatePresence>
     </dialog>
