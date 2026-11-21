@@ -128,14 +128,14 @@ export default function SoberClientPage() {
               onClick={() => setPicker("sort")}
               aria-label="거리두기 정렬"
             >
-              <SortIcon size={18} />
+              <SortIcon size={20} />
               {sortLabel}
             </ToolbarButton>
             <ToolbarButton
               onClick={() => setPicker("filter")}
               aria-label="거리두기 필터"
             >
-              <FilterIcon size={18} />
+              <FilterIcon size={20} />
               {filterLabel}
             </ToolbarButton>
             <div className="ml-auto">
@@ -150,7 +150,7 @@ export default function SoberClientPage() {
                 disabled={!items}
                 aria-label="거리두기 추가"
               >
-                <AddIcon size={20} />
+                <AddIcon size={22} />
               </ToolbarButton>
             </div>
           </Toolbar>

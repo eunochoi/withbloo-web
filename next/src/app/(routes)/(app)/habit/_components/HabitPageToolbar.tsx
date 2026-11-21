@@ -32,10 +32,10 @@ const HabitPageToolbar = ({ onToggle, onOpenFilter, completedOnly, priorities, o
   const filterDescription = `${completedOnly ? '오늘 완료' : '완료 상태 전체'}, 중요도 ${getSelectionSummary(priorities.map((priority) => priority === 0 ? '자유 기록' : '★'.repeat(priority)), 4)}`;
   return (
     <Toolbar>
-      <ToolbarSelectionButton onClick={onToggle} icon={<SortIcon size={18} aria-hidden="true" />} parts={getToolbarSortParts(sortValue, priorityFirst)} accessibilityLabel={`습관 정렬, ${sortDescription}`} />
-      <ToolbarSelectionButton onClick={onOpenFilter} icon={<FilterIcon size={18} aria-hidden="true" />} parts={filterParts.length ? filterParts : ['필터']} accessibilityLabel={`습관 필터, ${filterDescription}`} />
+      <ToolbarSelectionButton onClick={onToggle} icon={<SortIcon size={20} aria-hidden="true" />} parts={getToolbarSortParts(sortValue, priorityFirst)} accessibilityLabel={`습관 정렬, ${sortDescription}`} />
+      <ToolbarSelectionButton onClick={onOpenFilter} icon={<FilterIcon size={20} aria-hidden="true" />} parts={filterParts.length ? filterParts : ['필터']} accessibilityLabel={`습관 필터, ${filterDescription}`} />
       <div className="ml-auto shrink-0">
-        <ToolbarButton aria-label="습관 추가" onClick={onAddHabit} title="습관 추가" disabled={disabledAdd}><AddIcon size={18} aria-hidden="true" /></ToolbarButton>
+        <ToolbarButton aria-label="습관 추가" onClick={onAddHabit} title="습관 추가" disabled={disabledAdd}><AddIcon size={20} aria-hidden="true" /></ToolbarButton>
       </div>
     </Toolbar>
   );

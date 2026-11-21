@@ -22,9 +22,9 @@ interface Props {
 
 const DiaryPageToolbar = ({ onSort, onFilter, onAdd, sortValue, filterLabel, filterDescription, disabled = false }: Props) => (
   <Toolbar>
-    <ToolbarSelectionButton onClick={onSort} disabled={disabled} icon={<SortIcon size={18} aria-hidden="true" />} parts={getToolbarSortParts(sortValue)} accessibilityLabel={`일기 정렬, 날짜 ${sortValue === 'DESC' ? '최신순' : '과거순'}`} />
-    <ToolbarSelectionButton onClick={onFilter} disabled={disabled} icon={<FilterIcon size={18} aria-hidden="true" />} parts={filterLabel.split(' · ')} accessibilityLabel={`일기 필터, ${filterDescription}`} />
-    <div className="ml-auto shrink-0"><ToolbarButton onClick={onAdd} disabled={disabled} aria-label="일기 추가"><AddIcon size={20} aria-hidden="true" /></ToolbarButton></div>
+    <ToolbarSelectionButton onClick={onSort} disabled={disabled} icon={<SortIcon size={20} aria-hidden="true" />} parts={getToolbarSortParts(sortValue)} accessibilityLabel={`일기 정렬, 날짜 ${sortValue === 'DESC' ? '최신순' : '과거순'}`} />
+    <ToolbarSelectionButton onClick={onFilter} disabled={disabled} icon={<FilterIcon size={20} aria-hidden="true" />} parts={filterLabel.split(' · ')} accessibilityLabel={`일기 필터, ${filterDescription}`} />
+    <div className="ml-auto shrink-0"><ToolbarButton onClick={onAdd} disabled={disabled} aria-label="일기 추가"><AddIcon size={22} aria-hidden="true" /></ToolbarButton></div>
   </Toolbar>
 );
 
