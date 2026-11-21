@@ -1,7 +1,5 @@
 'use client';
 
-import Image from 'next/image';
-
 import { BG_TRANSITION_CLASS } from '@/common/constants/transitions';
 import { useNavItems } from '@/common/hooks/useNavItems';
 import { cn } from '@/common/utils/cn';
@@ -13,14 +11,7 @@ const SideBar = () => {
   return (
     <aside className={cn("flex h-full w-full flex-col overflow-y-auto border-r border-theme-border/75 px-5 py-8", current === 'home' ? "bg-theme-surface" : "bg-theme-bg", BG_TRANSITION_CLASS)}>
       <button type="button" onClick={() => navigate('/home')} aria-label="위블 홈" className="mb-10 w-full rounded-lg desktop:ml-3 desktop:w-auto desktop:self-start">
-        <Image
-          src="/img/brand/wordmark-stacked.png"
-          alt=""
-          width={256}
-          height={237}
-          sizes="5.5rem"
-          className="h-auto w-full desktop:hidden"
-        />
+        <Wordmark stacked className="desktop:hidden" />
         <span className="hidden desktop:block">
           <Wordmark className="text-[32px]" />
         </span>
