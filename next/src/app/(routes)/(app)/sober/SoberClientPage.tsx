@@ -1,5 +1,6 @@
 "use client";
 
+import { SheetSectionHeading } from '@/common/components/ui/BottomSheet/SheetSectionHeading';
 import { ContentBottomButton } from '@/common/components/ui/ContentBottomButton';
 
 
@@ -297,35 +298,37 @@ function SoberFilterPicker({
               적용
             </button>
           </BottomSheetPickerHeader>}>
-        <div className="flex flex-col gap-8 px-2 pb-6 pt-2">
-
-
-
-          <label className="flex items-center justify-between gap-3 text-base font-semibold">
-            중요한 항목만 보기
-            <input
-              type="checkbox"
-              role="switch"
-              checked={important}
-              onChange={(event) => setImportant(event.target.checked)}
-              className="peer sr-only"
-            />
-            <span
-              aria-hidden="true"
-              className="relative h-7 w-12 shrink-0 rounded-full bg-[rgb(var(--theme-switch-track))] after:absolute after:left-1 after:top-1 after:h-5 after:w-5 after:rounded-full after:bg-[rgb(var(--theme-switch-thumb))] after:transition-transform peer-checked:bg-theme-accent peer-checked:after:translate-x-5"
-            />
-          </label>
-          <section className="space-y-3">
-            <h3 className="text-base font-semibold">최소 유지 기간</h3>
-            <FilterPickerRow
-              label={
-                periods.find((entry) => entry.days === days)?.label ?? "전체"
-              }
-              accessibilityLabel="최소 유지 기간 선택"
-              onClick={() => setPeriodOpen(true)}
-            />
-          </section>
-          <InfoNotice>현재 기록이 선택한 기간 이상인 항목만 보여요.</InfoNotice>
+        <div className="flex flex-col gap-8 pb-6">
+          <div className="flex flex-col gap-10">
+            <SheetSectionHeading icon={FilterIcon} title="필터 조건" />
+            <div className="flex flex-col gap-6 pl-7">
+              <label className="flex items-center justify-between gap-3 text-base font-semibold text-theme-text-secondary">
+                중요한 항목만 보기
+                <input
+                  type="checkbox"
+                  role="switch"
+                  checked={important}
+                  onChange={(event) => setImportant(event.target.checked)}
+                  className="peer sr-only"
+                />
+                <span
+                  aria-hidden="true"
+                  className="relative h-7 w-12 shrink-0 rounded-full bg-[rgb(var(--theme-switch-track))] after:absolute after:left-1 after:top-1 after:h-5 after:w-5 after:rounded-full after:bg-[rgb(var(--theme-switch-thumb))] after:transition-transform peer-checked:bg-theme-accent peer-checked:after:translate-x-5"
+                />
+              </label>
+              <section className="space-y-3">
+                <h3 className="text-base font-semibold text-theme-text-secondary">최소 유지 기간</h3>
+                <FilterPickerRow
+                  label={
+                    periods.find((entry) => entry.days === days)?.label ?? "전체"
+                  }
+                  accessibilityLabel="최소 유지 기간 선택"
+                  onClick={() => setPeriodOpen(true)}
+                />
+                <InfoNotice>현재 기록이 선택한 기간 이상인 항목만 보여요.</InfoNotice>
+              </section>
+            </div>
+          </div>
         <ContentBottomButton
                 type="button"
                 onClick={() => {

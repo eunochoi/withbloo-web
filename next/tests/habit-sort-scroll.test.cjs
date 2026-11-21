@@ -44,7 +44,10 @@ test('both sort sections share the modal scroll area and disable the inactive se
     assert.equal(list.props.tempHabits.length, count);
     assert.equal(list.props.disabled, false);
     assert.ok(find(body, (node) => node.type === 'fieldset' && /opacity-40/.test(node.props.className) && node.props.disabled));
-    assert.ok(find(body, (node) => node.type === 'input' && node.props.type === 'radio' && node.props.name === 'habit-sort-mode' && node.props.checked));
+    const heading = find(body, (node) => node.props?.title === '자유 정렬' && node.props.toggle);
+    const toggle = find(heading.type(heading.props), (node) => node.type === 'input' && node.props.role === 'switch');
+    assert.equal(toggle.props.checked, true);
+    assert.ok(find(body, (node) => node.type === 'input' && node.props.type === 'checkbox' && !node.props.role));
     assert.equal(find(tree, (node) => node.type === 'AppDotTabs'), undefined);
   }
 });
@@ -66,8 +69,8 @@ test('manual list uses the enclosing modal scroll area', () => {
 
 test('busy panels keep a disabled handle while intentionally locked panels may hide it', () => {
   const load = sourceLoader({
-    react: { useLayoutEffect: () => {}, useRef: () => ({ current: null }) },
-    'framer-motion': { motion: { div: 'motion.div' }, useIsPresent: () => true, useReducedMotion: () => false },
+    react: { forwardRef: (render) => render, useEffect: () => {}, useImperativeHandle: () => {}, useLayoutEffect: () => {}, useRef: () => ({ current: null }), useState: (value) => [value, () => {}] },
+    'framer-motion': { AnimatePresence: 'AnimatePresence', motion: { div: 'motion.div' }, usePresence: () => [true], useReducedMotion: () => false },
     './useSheetDismiss': { useSheetDismiss: () => ({ get: () => 0 }) },
     './DialogBackdrop': { DialogBackdrop: 'DialogBackdrop' },
     './SheetHandle': { SheetHandle: 'SheetHandle' },

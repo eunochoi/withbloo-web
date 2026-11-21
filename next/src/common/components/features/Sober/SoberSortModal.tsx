@@ -12,6 +12,8 @@ import { BottomSheet } from '@/common/components/ui/BottomSheet/BottomSheet';
 import { BottomSheetBody } from '@/common/components/ui/BottomSheet/BottomSheetBody';
 import { BottomSheetTitle } from '@/common/components/ui/BottomSheet/BottomSheetTitle';
 import { BottomSheetSubmitButton } from '@/common/components/ui/BottomSheet/BottomSheetSubmitButton';
+import { SheetSectionHeading } from '@/common/components/ui/BottomSheet/SheetSectionHeading';
+import { CheckIcon, SortIcon } from '@/common/constants/appIcons';
 import InfoNotice from '@/common/components/ui/InfoNotice';
 import ScrollableName from '@/common/components/ui/ScrollableName';
 import { DragIcon, StarIcon } from '@/common/constants/appIcons';
@@ -20,7 +22,6 @@ import { SoberIcon } from './SoberIcon';
 import type { SoberWithRestarts } from './types';
 
 type Sort = 'ASC' | 'DESC' | 'CUSTOM';
-const radioClass = 'h-5 w-5 shrink-0 appearance-none rounded-full border border-theme-accent bg-theme-surface checked:bg-theme-accent checked:shadow-[inset_0_0_0_3px_rgb(var(--theme-surface))] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-theme-accent';
 
 function SoberSortItem({ item }: { item: SoberWithRestarts }) {
   const { setNodeRef, setActivatorNodeRef, attributes, listeners, transform, transition, isDragging } = useSortable({ id: item.id });
@@ -61,23 +62,32 @@ export function SoberSortModal({ items, isError, onRetry, sort, recordSort, prio
   );
   return <AnimatePresence onExitComplete={onClose}>{mounted && <BottomSheet ariaLabel="거리두기 정렬 설정" onClose={() => setMounted(false)}>
     <BottomSheetTitle title="거리두기 정렬" onBack={() => setMounted(false)}  headerButton={<BottomSheetSubmitButton type="button" disabled={draftSort === 'CUSTOM' && !order} onClick={() => { onApply(draftSort, draftSort === 'CUSTOM' ? false : priority, records, draftSort === 'CUSTOM' ? (isDefault ? [] : ids) : customOrder); setMounted(false); }}>적용</BottomSheetSubmitButton>} />
-    <BottomSheetBody showScrollFade><div className="flex min-w-0 w-full flex-col pb-6">
+    <BottomSheetBody showScrollFade><div className="flex w-full min-w-0 flex-col gap-12 pb-6">
 
-      <section className="flex min-w-0 flex-col gap-8 pb-8">
-        <label className="flex cursor-pointer items-center gap-2 text-lg font-semibold"><input type="radio" name="sober-sort-mode" checked={draftSort !== 'CUSTOM'} onChange={() => setSort(standardSort)} className={radioClass} />기준별 정렬</label>
-        <fieldset disabled={draftSort === 'CUSTOM'} className={`flex min-w-0 flex-col gap-8 p-2 ${draftSort === 'CUSTOM' ? 'opacity-40' : ''}`}>
-          <label className="flex items-center justify-between gap-3 text-base font-semibold">중요한 항목 먼저<input type="checkbox" role="switch" checked={priority} onChange={(event) => setPriority(event.target.checked)} className="peer sr-only" /><span aria-hidden="true" className="relative h-7 w-12 shrink-0 rounded-full bg-[rgb(var(--theme-switch-track))] transition-colors after:absolute after:left-1 after:top-1 after:h-5 after:w-5 after:rounded-full after:bg-[rgb(var(--theme-switch-thumb))] after:transition-transform peer-checked:bg-theme-accent peer-checked:after:translate-x-5" /></label>
-          <section className="flex flex-col gap-3"><h3 className="text-base font-semibold">기록 정렬</h3>{options(records, setRecords, ['긴 기록순', '짧은 기록순'])}</section>
-          <section className="flex flex-col gap-3"><h3 className="text-base font-semibold">생성일 정렬</h3>{options(standardSort, (value) => { setStandardSort(value); setSort(value); }, ['최신순', '과거순'])}</section>
+      <section className="flex min-w-0 flex-col gap-10">
+        <SheetSectionHeading icon={SortIcon} title="기준별 정렬" toggle={{ checked: draftSort !== 'CUSTOM', onChange: (checked) => setSort(checked ? standardSort : 'CUSTOM') }} />
+        <fieldset disabled={draftSort === 'CUSTOM'} className={`flex min-w-0 flex-col gap-6 pl-7 ${draftSort === 'CUSTOM' ? 'opacity-40' : ''}`}>
+          <label className="flex min-h-7 cursor-pointer items-center justify-between gap-3 text-base font-semibold text-theme-text-secondary">
+            중요한 항목 먼저
+            <input type="checkbox" checked={priority} onChange={(event) => setPriority(event.currentTarget.checked)} className="peer sr-only" />
+            <span
+              aria-hidden="true"
+              className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-md border text-theme-text-on-accent transition-colors motion-reduce:transition-none peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-theme-accent ${priority ? 'border-theme-accent/75 bg-theme-accent/75' : 'border-theme-accent/60 bg-theme-surface'}`}
+            >
+              {priority && <CheckIcon className="h-3.5 w-3.5" />}
+            </span>
+          </label>
+          <section className="flex flex-col gap-3"><h3 className="text-base font-semibold text-theme-text-secondary">기록 정렬</h3>{options(records, setRecords, ['긴 기록순', '짧은 기록순'])}</section>
+          <section className="flex flex-col gap-3"><h3 className="text-base font-semibold text-theme-text-secondary">생성일 정렬</h3>{options(standardSort, (value) => { setStandardSort(value); setSort(value); }, ['최신순', '과거순'])}</section>
           <InfoNotice>{priority ? '중요도, ' : ''}현재 기록, 생성일 순으로 정렬해요.</InfoNotice>
         </fieldset>
       </section>
-      <section className="flex min-w-0 flex-col gap-8 border-t border-theme-border/30 pt-8">
-        <label className="flex cursor-pointer items-center gap-2 text-lg font-semibold"><input type="radio" name="sober-sort-mode" checked={draftSort === 'CUSTOM'} onChange={() => setSort('CUSTOM')} className={radioClass} />자유 정렬</label>
-        <fieldset disabled={draftSort !== 'CUSTOM'} className={`flex min-w-0 flex-col gap-8 p-2 ${draftSort !== 'CUSTOM' ? 'opacity-40' : ''}`}>
+      <section className="flex min-w-0 flex-col gap-10">
+        <SheetSectionHeading icon={DragIcon} title="자유 정렬" toggle={{ checked: draftSort === 'CUSTOM', onChange: (checked) => setSort(checked ? 'CUSTOM' : standardSort) }} />
+        <fieldset disabled={draftSort !== 'CUSTOM'} className={`flex min-w-0 flex-col gap-6 pl-7 ${draftSort !== 'CUSTOM' ? 'opacity-40' : ''}`}>
           {draftSort === 'CUSTOM' && !items && (isError ? <div className="py-4 text-center text-sm text-theme-text-secondary">거리두기를 불러오지 못했어요. <button type="button" onClick={onRetry} className="text-theme-accent">다시 시도</button></div> : <p role="status" className="py-4 text-center text-sm text-theme-text-secondary">거리두기를 불러오는 중이에요.</p>)}
           {order && <div className="w-full min-w-0 rounded-xl bg-theme-bg" inert={draftSort !== 'CUSTOM'}><DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd} modifiers={[restrictToParentElement, restrictToVerticalAxis]}><SortableContext items={ids} strategy={verticalListSortingStrategy}>{order.map((item) => <SoberSortItem key={item.id} item={item} />)}</SortableContext></DndContext></div>}
-          <InfoNotice>직접 정한 순서로 보여드려요.</InfoNotice>
+          {(order?.length ?? 0) > 1 && <InfoNotice>위아래로 끌어 거리두기 순서를 변경하세요.</InfoNotice>}
         </fieldset>
       </section>
         <ContentBottomButton type="button" aria-label="선택 초기화" disabled={draftSort === 'CUSTOM' && !items} onClick={() => { if (draftSort === 'CUSTOM') { setOrder(defaults); setReset(true); } else { setSort('DESC'); setStandardSort('DESC'); setRecords('DESC'); setPriority(false); } }}>초기화</ContentBottomButton>

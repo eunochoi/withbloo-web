@@ -14,6 +14,8 @@ import { BottomSheet } from '@/common/components/ui/BottomSheet/BottomSheet';
 import { BottomSheetBody } from '@/common/components/ui/BottomSheet/BottomSheetBody';
 import { BottomSheetTitle } from '@/common/components/ui/BottomSheet/BottomSheetTitle';
 import { BottomSheetSubmitButton } from '@/common/components/ui/BottomSheet/BottomSheetSubmitButton';
+import { SheetSectionHeading } from '@/common/components/ui/BottomSheet/SheetSectionHeading';
+import { CheckIcon, SortIcon, DragIcon } from '@/common/constants/appIcons';
 import InfoNotice from '@/common/components/ui/InfoNotice';
 import { showNotice } from '@/common/components/ui/Notice/notice';
 import type { HabitSort } from '@/common/types/sort';
@@ -96,21 +98,23 @@ export const HabitSortModal = ({ onClose, sortValue, priorityFirst, customHabitO
             }
           />
           <BottomSheetBody showScrollFade>
-            <div className="flex min-w-0 w-full flex-col pb-6">
+            <div className="flex w-full min-w-0 flex-col gap-12 pb-6">
 
-              <section className="flex min-w-0 flex-col gap-8 pb-8">
-                <label className="flex cursor-pointer items-center gap-2 text-lg font-semibold">
-                  <input type="radio" name="habit-sort-mode" value="standard" checked={draftSort !== 'CUSTOM'} onChange={() => setDraftSort(standardSort)} className="h-5 w-5 shrink-0 appearance-none rounded-full border border-theme-accent bg-theme-surface checked:bg-theme-accent checked:shadow-[inset_0_0_0_3px_rgb(var(--theme-surface))] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-theme-accent" />
-                  기준별 정렬
-                </label>
-                <fieldset disabled={draftSort === 'CUSTOM'} className={`p-2 flex min-w-0 flex-col gap-8 transition-opacity ${draftSort === 'CUSTOM' ? 'opacity-40' : ''}`}>
-                  <label className="flex items-center justify-between gap-3 text-base font-semibold">
+              <section className="flex min-w-0 flex-col gap-10">
+                <SheetSectionHeading icon={SortIcon} title="기준별 정렬" toggle={{ checked: draftSort !== 'CUSTOM', onChange: (checked) => setDraftSort(checked ? standardSort : 'CUSTOM') }} />
+                <fieldset disabled={draftSort === 'CUSTOM'} className={`flex min-w-0 flex-col gap-6 pl-7 transition-opacity ${draftSort === 'CUSTOM' ? 'opacity-40' : ''}`}>
+                  <label className="flex min-h-7 cursor-pointer items-center justify-between gap-3 text-base font-semibold text-theme-text-secondary">
                     중요한 항목 먼저
-                    <input type="checkbox" role="switch" checked={priority} onChange={(event) => setPriority(event.target.checked)} className="peer sr-only" />
-                    <span aria-hidden="true" className="relative h-7 w-12 shrink-0 rounded-full bg-[rgb(var(--theme-switch-track))] transition-colors after:absolute after:left-1 after:top-1 after:h-5 after:w-5 after:rounded-full after:bg-[rgb(var(--theme-switch-thumb))] after:transition-transform peer-checked:bg-theme-accent peer-checked:after:translate-x-5" />
+                    <input type="checkbox" checked={priority} onChange={(event) => setPriority(event.currentTarget.checked)} className="peer sr-only" />
+                    <span
+                      aria-hidden="true"
+                      className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-md border text-theme-text-on-accent transition-colors motion-reduce:transition-none peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-theme-accent ${priority ? 'border-theme-accent/75 bg-theme-accent/75' : 'border-theme-accent/60 bg-theme-surface'}`}
+                    >
+                      {priority && <CheckIcon className="h-3.5 w-3.5" />}
+                    </span>
                   </label>
                   <section className="flex flex-col gap-3">
-                    <h3 className="text-base font-semibold">생성일 정렬</h3>
+                    <h3 className="text-base font-semibold text-theme-text-secondary">생성일 정렬</h3>
                     <div className="flex gap-3">
                       {(['DESC', 'ASC'] as const).map((value) => (
                         <button key={value} type="button" aria-pressed={standardSort === value} onClick={() => { setStandardSort(value); setDraftSort(value); }} className={`min-h-12 flex-1 rounded-xl border px-1 py-3 ${standardSort === value ? 'border-theme-accent bg-theme-accent/10 text-theme-accent-deep' : 'border-theme-border/70'}`}>
@@ -122,16 +126,13 @@ export const HabitSortModal = ({ onClose, sortValue, priorityFirst, customHabitO
                   <InfoNotice>{priority ? '중요한 항목부터, ' : ''}생성일 순으로 정렬해요.</InfoNotice>
                 </fieldset>
               </section>
-              <section className="flex min-w-0 flex-col gap-8 border-t border-theme-border/30 pt-8">
-                <label className="flex cursor-pointer items-center gap-2 text-lg font-semibold">
-                  <input type="radio" name="habit-sort-mode" value="user" checked={draftSort === 'CUSTOM'} onChange={() => setDraftSort('CUSTOM')} className="h-5 w-5 shrink-0 appearance-none rounded-full border border-theme-accent bg-theme-surface checked:bg-theme-accent checked:shadow-[inset_0_0_0_3px_rgb(var(--theme-surface))] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-theme-accent" />
-                  자유 정렬
-                </label>
-                <fieldset disabled={draftSort !== 'CUSTOM'} className={`p-2 flex min-w-0 flex-col gap-8 transition-opacity ${draftSort !== 'CUSTOM' ? 'opacity-40' : ''}`}>
+              <section className="flex min-w-0 flex-col gap-10">
+                <SheetSectionHeading icon={DragIcon} title="자유 정렬" toggle={{ checked: draftSort === 'CUSTOM', onChange: (checked) => setDraftSort(checked ? 'CUSTOM' : standardSort) }} />
+                <fieldset disabled={draftSort !== 'CUSTOM'} className={`flex min-w-0 flex-col gap-6 pl-7 transition-opacity ${draftSort !== 'CUSTOM' ? 'opacity-40' : ''}`}>
                   {draftSort === 'CUSTOM' && !customHabits && isPending && <p role="status" className="py-4 text-center text-sm text-theme-text-secondary">습관을 불러오는 중이에요.</p>}
                   {draftSort === 'CUSTOM' && !customHabits && isError && <div className="py-4 text-center text-sm text-theme-text-secondary">습관을 불러오지 못했어요. <button type="button" onClick={() => void refetch()} className="text-theme-accent">다시 시도</button></div>}
                   {tempHabits && <HabitManualSortList tempHabits={tempHabits} onOrderChange={setTempHabits} disabled={draftSort !== 'CUSTOM'} />}
-                  <InfoNotice>직접 정한 순서로 보여드려요.</InfoNotice>
+                  {(tempHabits?.length ?? 0) > 1 && <InfoNotice>위아래로 끌어 습관 순서를 변경하세요.</InfoNotice>}
                 </fieldset>
               </section>
         <ContentBottomButton

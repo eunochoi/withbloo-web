@@ -30,7 +30,10 @@ test('custom mode applies dragged order without changing it before apply', () =>
   const items = [1, 2, 3].map((id) => ({ ...base, id, name: String(id) }));
   const props = { items, isError: false, onRetry() {}, sort: 'DESC', recordSort: 'DESC', priorityFirst: false, customOrder: [], now: Date.now(), onClose() {}, onApply: (...args) => applied.push(args) };
   const render = () => { cursor = 0; return SoberSortModal(props); };
-  find(render(), (node) => node.type === 'input' && node.props.type === 'radio' && node.props.checked === false).props.onChange();
+  const toggle = (title) => find(render(), (node) => node.props?.title === title && node.props.toggle).props.toggle;
+  toggle('자유 정렬').onChange(true);
+  assert.equal(toggle('기준별 정렬').checked, false);
+  assert.equal(toggle('자유 정렬').checked, true);
   let tree = render();
   find(tree, (node) => node.type === 'DndContext').props.onDragEnd({ active: { id: 1 }, over: { id: 3 } });
   assert.equal(applied.length, 0);
