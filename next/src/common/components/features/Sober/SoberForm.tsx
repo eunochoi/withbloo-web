@@ -23,7 +23,8 @@ import {
   type HabitIconColorKey,
 } from '@/common/constants/habitIconColors';
 import { SOBER_ICONS, SOBER_ICON_CATEGORIES } from '@/common/constants/sober';
-import { formatSoberGoal } from '@/common/functions/sober';
+import { SOBER_GOALS, formatSoberGoal } from '@/common/functions/sober';
+import { AchievementIcon, CheckIcon, EditIcon, GoalIcon } from '@/common/constants/appIcons';
 import { useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { AnimatePresence } from 'framer-motion';
@@ -56,6 +57,7 @@ export const SoberForm = ({
     item?.goalMode === 'MANUAL' ? 'MANUAL' : 'AUTO',
   );
   const [goal, setGoal] = useState(item?.goalDays ?? 7);
+  const GoalPreview = mode === 'AUTO' ? AchievementIcon : SOBER_GOALS.some((days) => days === goal) ? GoalIcon : EditIcon;
   const [priority, setPriority] = useState(item?.isPriority ?? false);
   const [draftIcon, setDraftIcon] = useState(iconKey);
   const [category, setCategory] = useState<string>('basic');
@@ -178,19 +180,20 @@ export const SoberForm = ({
                 </p>
               </div>
             </section>
-            <label className="flex min-h-12 items-center justify-between gap-3 text-lg font-semibold">
+            <label className="flex min-h-12 cursor-pointer items-center justify-between gap-3 text-lg font-semibold">
               중요 항목
               <input
                 type="checkbox"
-                role="switch"
                 checked={priority}
                 onChange={(event) => setPriority(event.target.checked)}
                 className="peer sr-only"
               />
               <span
                 aria-hidden="true"
-                className="relative h-7 w-12 shrink-0 rounded-full bg-[rgb(var(--theme-switch-track))] after:absolute after:left-1 after:top-1 after:h-5 after:w-5 after:rounded-full after:bg-[rgb(var(--theme-switch-thumb))] after:transition-transform peer-checked:bg-theme-accent peer-checked:after:translate-x-5"
-              />
+                className={`mr-2 flex h-5 w-5 shrink-0 items-center justify-center rounded-md border text-theme-text-on-accent transition-colors motion-reduce:transition-none peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-theme-accent ${priority ? 'border-theme-accent/75 bg-theme-accent/75' : 'border-theme-accent/60 bg-theme-surface'}`}
+              >
+                {priority && <CheckIcon className="h-3.5 w-3.5" />}
+              </span>
             </label>
             <section className="space-y-3">
               <h3 className="text-lg font-semibold">아이콘</h3>
@@ -202,7 +205,9 @@ export const SoberForm = ({
                   setPicker('icon');
                 }}
                 leading={
-                  <SoberIcon name={iconKey} color={color} className="h-7 w-7" />
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center">
+                    <SoberIcon name={iconKey} color={color} className="h-6 w-6" />
+                  </span>
                 }
               />
             </section>
@@ -217,10 +222,12 @@ export const SoberForm = ({
                 }
                 onClick={() => setPicker('color')}
                 leading={
-                  <span
-                    className="h-6 w-6 rounded-full border border-black/10"
-                    style={{ backgroundColor: resolveHabitIconColor(color) }}
-                  />
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center">
+                    <span
+                      className="h-6 w-6 rounded-full border border-black/10"
+                      style={{ backgroundColor: resolveHabitIconColor(color) }}
+                    />
+                  </span>
                 }
               />
             </section>
@@ -230,6 +237,11 @@ export const SoberForm = ({
                 accessibilityLabel="목표 선택"
                 label={mode === 'AUTO' ? '자동 목표' : formatSoberGoal(goal)}
                 onClick={() => setPicker('goal')}
+                leading={
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center">
+                    <GoalPreview className="h-6 w-6 text-theme-accent" aria-hidden="true" />
+                  </span>
+                }
               />
             </section>
             <section className="space-y-3">
@@ -275,7 +287,7 @@ export const SoberForm = ({
             onClose={() => setPicker(null)}
             onApply={(value, days) => {
               setMode(value);
-              setGoal(days);
+              if (days !== null) setGoal(days);
               setPicker(null);
             }}
           />

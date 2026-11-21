@@ -1,201 +1,92 @@
 'use client';
 
-
-import { BottomSheetHeading } from '@/common/components/ui/BottomSheet/BottomSheetHeading';
 import { useState } from 'react';
-import { AnimatePresence } from 'framer-motion';
+import { BottomSheetHeading } from '@/common/components/ui/BottomSheet/BottomSheetHeading';
 import { BottomSheetPicker } from '@/common/components/ui/BottomSheet/BottomSheetPicker';
+import { SheetSectionHeading } from '@/common/components/ui/BottomSheet/SheetSectionHeading';
+import InfoNotice from '@/common/components/ui/InfoNotice';
+import { AchievementIcon, EditIcon, GoalIcon } from '@/common/constants/appIcons';
 import { SOBER_GOALS, formatSoberGoal } from '@/common/functions/sober';
-import {
-  ChevronRightIcon,
-  EditIcon,
-  AchievementIcon,
-  GoalIcon,
-} from '@/common/constants/appIcons';
 
-export default function SoberGoalPicker({
-  mode,
-  days,
-  onApply,
-  onClose,
-}: {
+const sections = [
+  { id: 'AUTO', icon: AchievementIcon, title: '자동 목표', hint: '목표를 달성하면 다음 기간으로 넘어가요.' },
+  { id: 'PERIOD', icon: GoalIcon, title: '기간 설정', hint: '아래 기간 중 하나를 골라요.' },
+  { id: 'CUSTOM', icon: EditIcon, title: '직접 입력', hint: '목표를 며칠로 할지 입력해요.' },
+] as const;
+
+export default function SoberGoalPicker({ mode, days, onApply, onClose }: {
   mode: 'AUTO' | 'MANUAL';
   days: number;
-  onApply: (mode: 'AUTO' | 'MANUAL', days: number) => void;
+  onApply: (mode: 'AUTO' | 'MANUAL', days: number | null) => void;
   onClose: () => void;
 }) {
+  const savedPeriod = SOBER_GOALS.find((value) => value === days);
   const [selection, setSelection] = useState<'AUTO' | 'PERIOD' | 'CUSTOM'>(
-    mode === 'AUTO'
-      ? 'AUTO'
-      : SOBER_GOALS.some((value) => value === days)
-        ? 'PERIOD'
-        : 'CUSTOM',
+    mode === 'AUTO' ? 'AUTO' : savedPeriod ? 'PERIOD' : 'CUSTOM',
   );
-  const [draft, setDraft] = useState(String(days || 7));
-  const [editor, setEditor] = useState<{
-    kind: 'PERIOD' | 'CUSTOM';
-    value: string;
-  } | null>(null);
-  const valid =
-    editor !== null &&
-    /^\d+$/.test(editor.value) &&
-    Number(editor.value) >= 1 &&
-    Number(editor.value) <= 36500;
+  const [period, setPeriod] = useState(savedPeriod ?? 7);
+  const [customDays, setCustomDays] = useState(String(days || 7));
+  const count = Number(customDays);
+  const valid = /^\d+$/.test(customDays) && count >= 1 && count <= 36500;
+  const canApply = selection !== 'CUSTOM' || valid;
+
   return (
-    <>
-      <BottomSheetPicker
-        labelledBy="sober-goal-title"
-        onClose={() => {
-          if (!editor) onClose();
-        }}
-       header={<BottomSheetHeading id="sober-goal-title">
-            얼마 동안 거리를 두고 싶나요?
-          </BottomSheetHeading>}>
-        <div className="flex flex-col gap-6 pb-6">
-
-          <div className="flex flex-col gap-3">
-            {(
-              [
-                {
-                  key: 'AUTO',
-                  icon: AchievementIcon,
-                  title: '자동 목표',
-                  hint: '거리를 두는 시간이 늘어나면 다음 목표가 자동으로 설정돼요.',
-                  note: `* ${SOBER_GOALS.map(formatSoberGoal).join(' → ')}`,
-                },
-                {
-                  key: 'PERIOD',
-                  icon: GoalIcon,
-                  title: '기간 선택',
-                  hint: '거리를 두고 싶은 기간을 선택해요.',
-                  note:
-                    selection === 'PERIOD'
-                      ? `선택한 목표: ${formatSoberGoal(Number(draft))}`
-                      : '',
-                },
-                {
-                  key: 'CUSTOM',
-                  icon: EditIcon,
-                  title: '직접 입력',
-                  hint: '거리를 두고 싶은 기간을 일 단위로 입력해요.',
-                  note: selection === 'CUSTOM' ? `선택한 목표: ${draft}일` : '',
-                },
-              ] as const
-            ).map(({ key, icon: Icon, title, hint, note }) => (
-              <button
-                key={key}
-                type="button"
-                aria-pressed={selection === key}
-                onClick={() =>
-                  key === 'AUTO'
-                    ? setSelection(key)
-                    : setEditor({
-                        kind: key,
-                        value:
-                          key === 'PERIOD' &&
-                          !SOBER_GOALS.some((day) => day === Number(draft))
-                            ? '7'
-                            : draft,
-                      })
-                }
-                className={`flex min-h-16 items-center gap-4 rounded-2xl border p-4 text-left ${selection === key ? 'border-theme-accent bg-theme-accent/10' : 'border-theme-border'}`}
-              >
-                <Icon className="shrink-0 text-2xl text-theme-accent" />
-                <span className="flex min-w-0 flex-1 flex-col gap-1">
-                  <span className="font-semibold">{title}</span>
-                  <span className="text-sm text-theme-text-secondary">
-                    {hint}
-                  </span>
-                  {note && (
-                    <span className="text-xs text-theme-text-secondary">
-                      {note}
-                    </span>
-                  )}
-                </span>
-                <ChevronRightIcon className="shrink-0 text-xl text-theme-text-secondary" />
-              </button>
-            ))}
-          </div>
-          <button
-            type="button"
-            disabled={editor !== null}
-            onClick={() =>
-              onApply(selection === 'AUTO' ? 'AUTO' : 'MANUAL', Number(draft))
-            }
-            className="min-h-12 rounded-full bg-theme-accent text-theme-text-on-accent disabled:opacity-40"
-          >
-            이 목표로 설정하기
-          </button>
-        </div>
-      </BottomSheetPicker>
-      <AnimatePresence>
-        {editor && (
-          <BottomSheetPicker
-            labelledBy="sober-goal-editor"
-            onClose={() => setEditor(null)}
-           header={<div className="relative flex min-h-11 items-center justify-center px-12">
-              <BottomSheetHeading id="sober-goal-editor">
-                {editor.kind === 'PERIOD' ? '목표 기간 선택' : '목표 일수 입력'}
-              </BottomSheetHeading>
-              <button
-                type="button"
-                disabled={!valid}
-                onClick={() => {
-                  if (!valid) return;
-                  setSelection(editor.kind);
-                  setDraft(String(Number(editor.value)));
-                  setEditor(null);
-                }}
-                className="absolute right-0 min-h-11 text-lg font-normal text-theme-accent disabled:opacity-40"
-              >
-                완료
-              </button>
-              </div>}>
-            <div className="flex flex-col gap-6 pb-6">
-
-              {editor.kind === 'PERIOD' ? (
-                <div className="grid grid-cols-3 gap-1.5">
-                  {SOBER_GOALS.map((day) => (
-                    <button
-                      key={day}
-                      type="button"
-                      aria-pressed={Number(editor.value) === day}
-                      onClick={() =>
-                        setEditor({ ...editor, value: String(day) })
-                      }
-                      className={`min-h-12 rounded-xl border text-sm ${Number(editor.value) === day ? 'border-theme-accent bg-theme-accent/10 text-theme-accent-deep' : 'border-theme-border'}`}
-                    >
-                      {formatSoberGoal(day)}
-                    </button>
-                  ))}
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  <label className="flex items-center gap-3">
-                    <input
-                      aria-label="직접 목표 일수"
-                      inputMode="numeric"
-                      maxLength={5}
-                      value={editor.value}
-                      onChange={(event) =>
-                        setEditor({ ...editor, value: event.target.value })
-                      }
-                      className="h-12 min-w-0 flex-1 rounded-2xl border border-theme-border bg-transparent px-4"
-                    />
-                    일
-                  </label>
-                  {!valid && (
-                    <p role="alert" className="text-sm text-theme-danger">
-                      1~36500일로 입력해주세요.
-                    </p>
-                  )}
-                </div>
-              )}
-
-            </div>
-          </BottomSheetPicker>
-        )}
-      </AnimatePresence>
-    </>
+    <BottomSheetPicker labelledBy="sober-goal-title" onClose={onClose} fixedHeight header={
+      <header className="relative flex min-h-14 items-center justify-center px-12">
+        <BottomSheetHeading id="sober-goal-title">목표 설정</BottomSheetHeading>
+        <button type="button" disabled={!canApply}
+          className="absolute right-0 min-h-11 text-lg font-normal text-theme-accent disabled:opacity-40"
+          onClick={() => {
+            if (!canApply) return;
+            if (selection === 'AUTO') onApply('AUTO', null);
+            else onApply('MANUAL', selection === 'PERIOD' ? period : count);
+          }}>
+          적용
+        </button>
+      </header>
+    }>
+      <div role="group" aria-labelledby="sober-goal-title"
+        className="flex min-h-0 flex-1 flex-col gap-12 overflow-y-auto overscroll-contain pb-6">
+        {sections.map(({ id, icon, title, hint }) => {
+          const active = selection === id;
+          return (
+            <section key={id} className="flex flex-col gap-4">
+              <SheetSectionHeading icon={icon} title={title}
+                toggle={{ checked: active, onChange: (checked) => setSelection(checked ? id : id === 'AUTO' ? 'PERIOD' : 'AUTO') }} />
+              <fieldset disabled={!active} className={`flex min-w-0 flex-col gap-3 pl-7 ${active ? '' : 'opacity-40'}`}>
+                <p className="text-sm leading-5 text-theme-text-secondary">{hint}</p>
+                {id === 'AUTO' && <InfoNotice>{SOBER_GOALS.map(formatSoberGoal).join(' → ')}</InfoNotice>}
+                {id === 'PERIOD' && (
+                  <div className="grid grid-cols-3 gap-2">
+                    {SOBER_GOALS.map((day) => (
+                      <button key={day} type="button" aria-pressed={period === day} onClick={() => setPeriod(day)}
+                        className={`min-h-12 rounded-xl border px-1 text-sm ${period === day ? 'border-theme-accent bg-theme-accent/10 text-theme-accent-deep' : 'border-theme-border/70'}`}>
+                        {formatSoberGoal(day)}
+                      </button>
+                    ))}
+                  </div>
+                )}
+                {id === 'CUSTOM' && (
+                  <>
+                    <label className={`flex h-12 items-center gap-2 rounded-2xl border px-4 ${active && !valid ? 'border-theme-danger' : 'border-theme-border'}`}>
+                      <input aria-label="직접 목표 일수" aria-invalid={active && !valid}
+                        inputMode="numeric" maxLength={5} value={customDays}
+                        onChange={(event) => setCustomDays(event.target.value)}
+                        className="h-full min-w-0 flex-1 bg-transparent" />
+                      <span className="text-sm text-theme-text-secondary">일</span>
+                    </label>
+                    {active && !valid && (
+                      <p role="alert" className="text-sm text-theme-danger">
+                        {count > 36500 ? '목표 기간이 너무 길어요. 더 짧게 입력해 주세요.' : '일수를 양의 정수로 입력해 주세요.'}
+                      </p>
+                    )}
+                  </>
+                )}
+              </fieldset>
+            </section>
+          );
+        })}
+      </div>
+    </BottomSheetPicker>
   );
 }
