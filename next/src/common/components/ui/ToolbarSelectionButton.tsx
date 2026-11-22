@@ -7,7 +7,7 @@ const ToolbarSelectionButton = ({ icon, parts, accessibilityLabel, onClick, disa
 }) => {
   const [first, ...remaining] = parts;
   return (
-    <ToolbarButton onClick={onClick} disabled={disabled} aria-label={accessibilityLabel}>
+    <ToolbarButton variant="list" onClick={onClick} disabled={disabled} aria-label={accessibilityLabel}>
       <span className="flex min-w-0 items-center">
         <span className="flex shrink-0 items-center gap-1.5 whitespace-nowrap">{icon}<span>{first}</span></span>
         {remaining.length > 0 && <span className="min-w-0 truncate">{remaining.map((part, index) => <Fragment key={index}> · {part}</Fragment>)}</span>}

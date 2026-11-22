@@ -125,21 +125,24 @@ export default function SoberClientPage() {
         toolbar={
           <Toolbar>
             <ToolbarButton
+              variant="list"
               onClick={() => setPicker("sort")}
               aria-label="거리두기 정렬"
             >
-              <SortIcon size={20} />
+              <SortIcon size={18} />
               {sortLabel}
             </ToolbarButton>
             <ToolbarButton
+              variant="list"
               onClick={() => setPicker("filter")}
               aria-label="거리두기 필터"
             >
-              <FilterIcon size={20} />
+              <FilterIcon size={18} />
               {filterLabel}
             </ToolbarButton>
             <div className="ml-auto">
               <ToolbarButton
+                variant="list"
                 onClick={() => {
                   if (items && items.length >= 10) {
                     showNotice("거리두기는 최대 10개까지 만들 수 있어요.");
@@ -150,7 +153,7 @@ export default function SoberClientPage() {
                 disabled={!items}
                 aria-label="거리두기 추가"
               >
-                <AddIcon size={22} />
+                <AddIcon size={20} />
               </ToolbarButton>
             </div>
           </Toolbar>
