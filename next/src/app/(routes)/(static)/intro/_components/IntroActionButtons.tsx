@@ -71,13 +71,14 @@ const IntroActionButtons = ({ className }: IntroActionButtonsProps) => {
                   </span>
                   <ChevronRightIcon className="shrink-0 text-xl text-theme-text-tertiary" aria-hidden="true" />
                 </Link>
-                <button type="button" disabled className={cn(optionClass, 'cursor-not-allowed opacity-60')}>
+                <a href="/downloads/withbloo-web.apk" download className={optionClass}>
                   <MdOutlineAndroid className="shrink-0 text-2xl text-theme-accent" aria-hidden="true" />
                   <span className="flex min-w-0 flex-1 flex-col gap-1">
                     <span className="text-base font-semibold text-theme-text-primary">APK 설치</span>
-                    <span className="text-sm leading-5 tracking-tight text-theme-text-secondary">안드로이드 설치 파일을 준비하고 있어요.</span>
+                    <span className="text-sm leading-5 tracking-tight text-theme-text-secondary">안드로이드에 위블 웹 앱을 설치해요.</span>
                   </span>
-                </button>
+                  <ChevronRightIcon className="shrink-0 text-xl text-theme-text-tertiary" aria-hidden="true" />
+                </a>
                 <button type="button" onClick={() => { setIsOpen(false); void installPwa(); }} className={optionClass}>
                   <MdInstallMobile className="shrink-0 text-2xl text-theme-accent" aria-hidden="true" />
                   <span className="flex min-w-0 flex-1 flex-col gap-1">
