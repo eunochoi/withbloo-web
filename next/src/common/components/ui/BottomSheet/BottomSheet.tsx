@@ -83,7 +83,7 @@ export const BottomSheet = forwardRef<BottomSheetHandle, BottomSheetProps>(funct
         {open && <DialogBackdrop key="backdrop" transition={transition} onClick={() => { if (dismissible && isPresent) requestClose(); }} />}
       {open && <motion.div key="sheet" ref={contentRef} layout={!picker && !animateHeight && height === 'auto' && !reduceMotion}
         style={{ y }}
-        className={`absolute inset-x-0 bottom-0 tablet:bottom-[40px] mx-auto flex ${height === 'auto' ? 'h-auto' : 'h-[var(--sheet-max-height)]'} max-h-[var(--sheet-max-height)] w-full max-w-[var(--bottom-sheet-max-width)] desktop:max-w-[var(--bottom-sheet-max-width-desktop)] flex-col overflow-hidden rounded-t-[2rem] tablet:rounded-[2rem] border border-theme-border bg-theme-surface pt-2 shadow-theme-modal [--picker-offset:50px] [--sheet-max-height:calc(100dvh-40px)] tablet:[--sheet-max-height:calc(100dvh-80px)]`}
+        className={`absolute inset-x-0 bottom-0 tablet:bottom-[30px] mx-auto flex ${height === 'auto' ? 'h-auto' : 'h-[var(--sheet-max-height)]'} max-h-[var(--sheet-max-height)] w-full max-w-[var(--bottom-sheet-max-width)] desktop:max-w-[var(--bottom-sheet-max-width-desktop)] flex-col overflow-hidden rounded-t-[2rem] tablet:rounded-[2rem] border border-theme-border bg-theme-surface pt-2 shadow-theme-modal [--picker-offset:50px] [--sheet-max-height:100dvh] tablet:[--sheet-max-height:calc(100dvh-60px)]`}
         initial={{ opacity: 0, y: offset }}
         animate={{ opacity: 1, y: 0, ...(animateHeight ? { height: height === 'auto' ? 'auto' : 'var(--sheet-max-height)' } : {}) }}
         exit={{ opacity: 0, y: y.get() > 0 && !reduceMotion ? '100%' : offset }} transition={transition}>
