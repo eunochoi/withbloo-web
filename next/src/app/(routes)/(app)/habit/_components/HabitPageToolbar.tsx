@@ -35,7 +35,7 @@ const HabitPageToolbar = ({ onToggle, onOpenFilter, completedOnly, priorities, o
       <ToolbarSelectionButton onClick={onToggle} icon={<SortIcon size={18} aria-hidden="true" />} parts={getToolbarSortParts(sortValue, priorityFirst)} accessibilityLabel={`습관 정렬, ${sortDescription}`} />
       <ToolbarSelectionButton onClick={onOpenFilter} icon={<FilterIcon size={18} aria-hidden="true" />} parts={filterParts.length ? filterParts : ['필터']} accessibilityLabel={`습관 필터, ${filterDescription}`} />
       <div className="ml-auto shrink-0">
-        <ToolbarButton variant="list" aria-label="습관 추가" onClick={onAddHabit} title="습관 추가" disabled={disabledAdd}><AddIcon size={18} aria-hidden="true" /></ToolbarButton>
+        <ToolbarButton variant="listIcon" aria-label="습관 추가" onClick={onAddHabit} title="습관 추가" disabled={disabledAdd}><AddIcon size={18} aria-hidden="true" /></ToolbarButton>
       </div>
     </Toolbar>
   );

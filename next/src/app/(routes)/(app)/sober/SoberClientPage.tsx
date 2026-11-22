@@ -142,7 +142,7 @@ export default function SoberClientPage() {
             </ToolbarButton>
             <div className="ml-auto">
               <ToolbarButton
-                variant="list"
+                variant="listIcon"
                 onClick={() => {
                   if (items && items.length >= 10) {
                     showNotice("거리두기는 최대 10개까지 만들 수 있어요.");

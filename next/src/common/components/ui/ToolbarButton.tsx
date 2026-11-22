@@ -3,7 +3,8 @@ import { cn } from '@/common/utils/cn';
 
 const buttonSizes = {
   default: 'min-h-10 min-w-0 text-base',
-  list: 'min-h-10 min-w-0 text-sm',
+  list: 'min-h-[44px] min-w-0 text-sm',
+  listIcon: 'min-h-[44px] min-w-[44px] text-sm',
 };
 
 interface Props {
