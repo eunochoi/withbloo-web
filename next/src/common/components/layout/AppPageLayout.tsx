@@ -71,9 +71,9 @@ const AppPageLayout = ({ header, children, scrollRef, toolbar, fixedDesktop = fa
           <div className={cn('shrink-0', hasToolbar && 'sticky top-[calc(-1*var(--page-top-height,0px))] z-[91]')}>
             {hasHeader && <div ref={headerRef} className="flow-root">{header}</div>}
             {hasToolbar && (
-              <div ref={toolbarRef} data-component="pageToolbar" className="relative bg-theme-surface py-2">
+              <div ref={toolbarRef} data-component="pageToolbar" className="relative bg-theme-surface pb-1 pt-2">
                 <AppPageContainer>{toolbar}</AppPageContainer>
-                <ScrollEdgeFade edge="top" visible={isToolbarPinned} className="absolute inset-x-0 top-full h-8" />
+                <ScrollEdgeFade edge="top" visible={isToolbarPinned} className="absolute inset-x-0 top-full -mt-px h-8" />
               </div>
             )}
           </div>

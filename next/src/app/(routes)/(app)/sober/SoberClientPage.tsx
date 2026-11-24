@@ -11,6 +11,7 @@ import { authAction } from "@/common/auth/authAction";
 import { FilterPickerRow } from "@/common/components/ui/FilterPickerRow";
 import SoberCard from "@/common/components/features/Sober/SoberCard";
 import AppPageLayout from "@/common/components/layout/AppPageLayout";
+import { APP_LIST_COLUMNS } from "@/common/components/layout/AppPageContainer";
 import AppPageTitle from "@/common/components/layout/AppPageTitle";
 import { BottomSheetPicker } from "@/common/components/ui/BottomSheet/BottomSheetPicker";
 import EmptyStateCard from "@/common/components/ui/EmptyStateCard";
@@ -123,7 +124,7 @@ export default function SoberClientPage() {
       <AppPageLayout
         header={<AppPageTitle title="거리두기" hashtags="#절제 #디톡스" />}
         toolbar={
-          <Toolbar>
+          <Toolbar alignToList>
             <ToolbarButton
               variant="list"
               onClick={() => setPicker("sort")}
@@ -140,7 +141,7 @@ export default function SoberClientPage() {
               <FilterIcon size={18} />
               {filterLabel}
             </ToolbarButton>
-            <div className="ml-auto">
+            <div className="-mr-3 ml-auto shrink-0">
               <ToolbarButton
                 variant="listIcon"
                 onClick={() => {
@@ -159,7 +160,7 @@ export default function SoberClientPage() {
           </Toolbar>
         }
       >
-        <section className="grid w-full gap-6 desktop:grid-cols-[minmax(0,11fr)_minmax(0,9fr)] desktop:items-start desktop:gap-x-8">
+        <section className={`grid w-full gap-6 desktop:items-start ${APP_LIST_COLUMNS}`}>
           <div className="min-w-0">
             {isPending ? (
               <p

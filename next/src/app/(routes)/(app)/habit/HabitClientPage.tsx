@@ -70,6 +70,8 @@ const HabitClientPage = ({ todayString }: { todayString: string }) => {
   });
 
   const totalHabitCount = habits?.length ? habits?.length : 0;
+  const showProgress = Boolean(habits?.some((habit) => habit.priority > 0)) &&
+    !(priorities.length === 1 && priorities[0] === 0);
 
   const filteredHabits = habits?.filter(
     (habit) =>
@@ -93,6 +95,7 @@ const HabitClientPage = ({ todayString }: { todayString: string }) => {
         scrollRef={pageRef}
         toolbar={
           <HabitPageToolbar
+            alignToList={showProgress || (habits === undefined && !isHabitsError)}
             onToggle={() => setSortOpen(true)}
             onOpenFilter={() => setFilterOpen(true)}
             completedOnly={completedOnly}
@@ -124,10 +127,7 @@ const HabitClientPage = ({ todayString }: { todayString: string }) => {
             habits={filteredHabits}
             todayString={activeDate}
             totalHabitCount={totalHabitCount}
-            showProgress={
-              Boolean(habits?.some((habit) => habit.priority > 0)) &&
-              !(priorities.length === 1 && priorities[0] === 0)
-            }
+            showProgress={showProgress}
             onAddHabit={onAddHabit}
           />
         )}

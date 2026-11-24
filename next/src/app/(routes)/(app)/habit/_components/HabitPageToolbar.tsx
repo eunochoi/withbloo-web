@@ -12,6 +12,7 @@ import type { HabitSort } from '@/common/types/sort';
 
 
 interface Props {
+  alignToList?: boolean;
   onToggle: () => void;
   onOpenFilter: () => void;
   completedOnly: boolean;
@@ -22,7 +23,7 @@ interface Props {
   disabledAdd?: boolean;
 }
 
-const HabitPageToolbar = ({ onToggle, onOpenFilter, completedOnly, priorities, onAddHabit, sortValue, priorityFirst, disabledAdd = false }: Props) => {
+const HabitPageToolbar = ({ alignToList, onToggle, onOpenFilter, completedOnly, priorities, onAddHabit, sortValue, priorityFirst, disabledAdd = false }: Props) => {
   const filterParts = [
     ...(completedOnly ? ['완료'] : []),
     ...(priorities.length > 0 && priorities.length < 4 ? priorities.map((priority) => priority === 0 ? '자유' : <span key={priority} className="text-theme-accent">{'★'.repeat(priority)}</span>) : []),
@@ -31,10 +32,10 @@ const HabitPageToolbar = ({ onToggle, onOpenFilter, completedOnly, priorities, o
   const sortDescription = sortValue === 'CUSTOM' ? '자유' : `${showPriority ? '중요한 항목 먼저 · ' : ''}생성일 ${sortValue === 'DESC' ? '최신순' : '과거순'}`;
   const filterDescription = `${completedOnly ? '오늘 완료' : '완료 상태 전체'}, 중요도 ${getSelectionSummary(priorities.map((priority) => priority === 0 ? '자유 기록' : '★'.repeat(priority)), 4)}`;
   return (
-    <Toolbar>
+    <Toolbar alignToList={alignToList}>
       <ToolbarSelectionButton onClick={onToggle} icon={<SortIcon size={18} aria-hidden="true" />} parts={getToolbarSortParts(sortValue, priorityFirst)} accessibilityLabel={`습관 정렬, ${sortDescription}`} />
       <ToolbarSelectionButton onClick={onOpenFilter} icon={<FilterIcon size={18} aria-hidden="true" />} parts={filterParts.length ? filterParts : ['필터']} accessibilityLabel={`습관 필터, ${filterDescription}`} />
-      <div className="ml-auto shrink-0">
+      <div className="-mr-3 ml-auto shrink-0 desktop:-mr-1">
         <ToolbarButton variant="listIcon" aria-label="습관 추가" onClick={onAddHabit} title="습관 추가" disabled={disabledAdd}><AddIcon size={18} aria-hidden="true" /></ToolbarButton>
       </div>
     </Toolbar>

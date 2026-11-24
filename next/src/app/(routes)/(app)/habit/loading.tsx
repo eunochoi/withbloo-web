@@ -14,6 +14,7 @@ const HabitLoading = () => {
       header={<AppPageTitle title="습관 관리" hashtags="#실천 #성장" />}
       toolbar={
         <HabitPageToolbar
+          alignToList
           onToggle={() => {}}
           onOpenFilter={() => {}}
           completedOnly={false}

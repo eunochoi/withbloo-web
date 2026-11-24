@@ -4,6 +4,7 @@ import { AddIcon } from '@/common/constants/appIcons';
 
 import type { HabitPageData } from '@/common/actions/habit/types';
 import EmptyStateCard from '@/common/components/ui/EmptyStateCard';
+import { APP_LIST_COLUMNS } from '@/common/components/layout/AppPageContainer';
 import { MAX_HABIT_COUNT } from '@/common/constants/habit';
 import { cn } from '@/common/utils/cn';
 
@@ -33,7 +34,7 @@ const HabitPageContent = ({
     : [];
   const itemCount = entries.length;
   return (
-    <section className="w-full desktop:grid desktop:grid-cols-[minmax(0,11fr)_minmax(0,9fr)] desktop:items-start desktop:gap-x-8">
+    <section className={`w-full desktop:items-start ${APP_LIST_COLUMNS}`}>
       {showProgress && (
         <aside className="hidden min-w-0 desktop:sticky desktop:top-[max(112px,calc(var(--page-toolbar-height,0px)+24px))] desktop:col-start-2 desktop:row-start-1 desktop:block desktop:self-start desktop:border-l desktop:border-theme-border/60 desktop:pl-8">
           <HabitFlow today={todayString} />
