@@ -2,15 +2,18 @@ import Carousel from '@/common/components/ui/Carousel';
 import type { DiaryImage } from '@/common/types/diary';
 import Image from 'next/image';
 import Link from 'next/link';
+import type { ReactNode } from 'react';
 
-export default function FeedCardPhotos({ images, href, label, priority = false }: {
+export default function FeedCardPhotos({ images, href, label, priority = false, firstSlide }: {
   images: DiaryImage[];
   href: string;
   label: string;
   priority?: boolean;
+  firstSlide?: ReactNode;
 }) {
   return (
     <Carousel className="aspect-[4/3] rounded-lg">
+      {firstSlide}
       {images.map((image, index) => (
         <Link
           key={image.id}

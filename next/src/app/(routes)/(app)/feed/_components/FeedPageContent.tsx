@@ -4,6 +4,7 @@ import EmptyStateCard from '@/common/components/ui/EmptyStateCard';
 import type { ActivityRecord } from '@/common/actions/records';
 import ActivityRecordActions from '@/common/components/features/ActivityRecords/ActivityRecordActions';
 import ActivityRecordFormModal from '@/common/components/features/ActivityRecords/ActivityRecordFormModal';
+import RestartRecordPreview from '@/common/components/features/ActivityRecords/RestartRecordPreview';
 import { APP_LIST_COLUMNS } from '@/common/components/layout/AppPageContainer';
 import { FEED_KIND_LABELS, type FeedActivity, type FeedItem } from '@/common/types/feed';
 import { parseLocalDate } from '@/common/utils/date/parseLocalDate';
@@ -91,7 +92,8 @@ function FeedActivityCard({ item, onOpenMenu }: { item: FeedActivity; onOpenMenu
   const href = `/${item.kind}/${item.parentId}`;
   const date = format(parseLocalDate(item.date), 'yy년 M월 d일', { locale: ko });
   const hasImages = item.images.length > 0;
-  const text = item.memo?.trim() ? item.memo : item.isRestart && !hasImages ? `${item.name} 다시 시작` : '';
+  const text = item.memo?.trim() ? item.memo : '';
+  const showRestartPreview = item.kind === 'sober' && item.isRestart;
 
   return (
     <article className="box-border flex w-full shrink-0 flex-col gap-4 py-6 first:pt-0">
@@ -126,9 +128,16 @@ function FeedActivityCard({ item, onOpenMenu }: { item: FeedActivity; onOpenMenu
           <MoreIcon aria-hidden="true" />
         </button>
       </div>
-      {(hasImages || text) && (
+      {(hasImages || text || showRestartPreview) && (
         <div className="flex h-auto w-full min-w-0 flex-col gap-3 p-2">
-          {hasImages && <FeedCardPhotos images={item.images} href={href} label={item.name} />}
+          {(hasImages || showRestartPreview) && (
+            <FeedCardPhotos
+              images={item.images}
+              href={href}
+              label={item.name}
+              firstSlide={showRestartPreview ? <RestartRecordPreview iconColor={item.iconColor} href={href} /> : undefined}
+            />
+          )}
           {text && (
             <Link
               href={href}
