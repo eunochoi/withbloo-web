@@ -26,12 +26,15 @@ import {
   SOBER_DAY_MS,
   sortSobers,
 } from "@/common/functions/sober";
+import { useStoredFilters } from "@/common/hooks/useStoredFilters";
 import { soberQueries } from "@/common/queries/soberQueries";
 import { useQuery } from "@tanstack/react-query";
 import { AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import SoberDurationChart from "./_components/SoberDurationChart";
+
+const DEFAULT_SOBER_FILTERS = { priority: false, minDays: 0 };
 
 export default function SoberClientPage() {
   const {
@@ -47,10 +50,11 @@ export default function SoberClientPage() {
   const [sort, setSort] = useState<"DESC" | "ASC" | "CUSTOM">("DESC");
   const [recordSort, setRecordSort] = useState<"DESC" | "ASC">("DESC");
   const [customOrder, setCustomOrder] = useState<number[]>([]);
-  const [priority, setPriority] = useState(false);
+  const { value: filters, setStoredValue: setFilters, isStorageReady: filtersReady } =
+    useStoredFilters("sober", DEFAULT_SOBER_FILTERS);
+  const { priority, minDays } = filters;
   const [priorityFirst, setPriorityFirst] = useState(false);
   const [preferencesReady, setPreferencesReady] = useState(false);
-  const [minDays, setMinDays] = useState(0);
 
   useEffect(() => {
     try {
@@ -136,6 +140,7 @@ export default function SoberClientPage() {
             <ToolbarButton
               variant="list"
               onClick={() => setPicker("filter")}
+              disabled={!filtersReady}
               aria-label="거리두기 필터"
             >
               <FilterIcon size={18} />
@@ -162,7 +167,7 @@ export default function SoberClientPage() {
       >
         <section className={`grid w-full gap-6 desktop:items-start ${APP_LIST_COLUMNS}`}>
           <div className="min-w-0">
-            {isPending ? (
+            {!filtersReady || isPending ? (
               <p
                 role="status"
                 className="py-20 text-center text-theme-text-secondary"
@@ -214,7 +219,7 @@ export default function SoberClientPage() {
               </button>
             )}
           </div>
-          {!isPending && !isError && (
+          {filtersReady && !isPending && !isError && (
             <SoberDurationChart items={filtered} now={now} />
           )}
         </section>
@@ -247,8 +252,7 @@ export default function SoberClientPage() {
             minDays={minDays}
             onClose={() => setPicker(null)}
             onApply={(important, days) => {
-              setPriority(important);
-              setMinDays(days);
+              setFilters({ priority: important, minDays: days });
               setPicker(null);
             }}
           />

@@ -15,6 +15,7 @@ import { authAction } from '@/common/auth/authAction';
 import AppPageLayout from '@/common/components/layout/AppPageLayout';
 import { MAX_HABIT_COUNT } from '@/common/constants/habit';
 import { getTodayString } from '@/common/functions/getTodayString';
+import { useStoredFilters } from '@/common/hooks/useStoredFilters';
 import { usePrefetchPage } from '@/common/hooks/usePrefetchPage';
 import { habitQueries } from '@/common/queries/habitQueries';
 import { useQuery } from '@tanstack/react-query';
@@ -23,14 +24,17 @@ import { showNotice } from '@/common/components/ui/Notice/notice';
 import { useEffect, useRef, useState } from 'react';
 import { useHabitSortPreferences } from './_hooks/useHabitSortPreferences';
 
+const DEFAULT_HABIT_FILTERS = { completedOnly: false, priorities: [] as number[] };
+
 const HabitClientPage = ({ todayString }: { todayString: string }) => {
   usePrefetchPage();
   const [activeDate, setActiveDate] = useState(todayString);
   const router = useRouter();
   const [isSortOpen, setSortOpen] = useState(false);
   const [isFilterOpen, setFilterOpen] = useState(false);
-  const [completedOnly, setCompletedOnly] = useState(false);
-  const [priorities, setPriorities] = useState<number[]>([]);
+  const { value: filters, setStoredValue: setFilters, isStorageReady: filtersReady } =
+    useStoredFilters('habit', DEFAULT_HABIT_FILTERS);
+  const { completedOnly, priorities } = filters;
   const pageRef = useRef<HTMLDivElement | null>(null);
   const {
     sortValue,
@@ -95,7 +99,7 @@ const HabitClientPage = ({ todayString }: { todayString: string }) => {
         scrollRef={pageRef}
         toolbar={
           <HabitPageToolbar
-            alignToList={showProgress || (habits === undefined && !isHabitsError)}
+            alignToList={!filtersReady || showProgress || (habits === undefined && !isHabitsError)}
             onToggle={() => setSortOpen(true)}
             onOpenFilter={() => setFilterOpen(true)}
             completedOnly={completedOnly}
@@ -104,10 +108,11 @@ const HabitClientPage = ({ todayString }: { todayString: string }) => {
             sortValue={sortValue}
             priorityFirst={priorityFirst}
             disabledAdd={!habits}
+            disabledFilter={!filtersReady}
           />
         }
       >
-        {habits === undefined && !isHabitsError ? (
+        {!filtersReady || (habits === undefined && !isHabitsError) ? (
           <HabitPageSkeleton />
         ) : habits === undefined ? (
           <div className="flex min-h-64 w-full flex-col items-center justify-center gap-3 text-center text-theme-text-secondary">
@@ -142,8 +147,7 @@ const HabitClientPage = ({ todayString }: { todayString: string }) => {
             priorities={priorities}
             onClose={() => setFilterOpen(false)}
             onApply={(completed, selected) => {
-              setCompletedOnly(completed);
-              setPriorities(selected);
+              setFilters({ completedOnly: completed, priorities: selected });
               setFilterOpen(false);
             }}
           />

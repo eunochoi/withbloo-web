@@ -24,17 +24,17 @@ export function useLocalStorage<T>(
     return readStorageValue(key);
   });
 
-  const [isStorageReady, setIsStorageReady] = useState(() => Boolean(key));
+  const [loadedKey, setLoadedKey] = useState(() => typeof window === 'undefined' ? null : key);
 
   useEffect(() => {
     if (!key || typeof window === 'undefined') {
       setValue(initialValueRef.current);
-      setIsStorageReady(false);
+      setLoadedKey(null);
       return;
     }
 
     setValue(readStorageValue(key));
-    setIsStorageReady(true);
+    setLoadedKey(key);
   }, [key, readStorageValue]);
 
   const setStoredValue = useCallback((nextValue: T | ((prevValue: T) => T)) => {
@@ -54,5 +54,5 @@ export function useLocalStorage<T>(
     });
   }, [key]);
 
-  return { value, setStoredValue, isStorageReady };
+  return { value, setStoredValue, isStorageReady: Boolean(key) && loadedKey === key };
 }

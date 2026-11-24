@@ -5,7 +5,6 @@ import HomePageContent from "./_components/HomePageContent";
 import HomePageSkeleton from "./_components/HomePageSkeleton";
 
 import { useQuery } from "@tanstack/react-query";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
 
 import { authAction } from "@/common/auth/authAction";
@@ -13,6 +12,7 @@ import { BottomSheet } from "@/common/components/ui/BottomSheet/BottomSheet";
 import { BottomSheetBody } from "@/common/components/ui/BottomSheet/BottomSheetBody";
 import { BottomSheetTitle } from "@/common/components/ui/BottomSheet/BottomSheetTitle";
 import { usePrefetchPage } from "@/common/hooks/usePrefetchPage";
+import { useStoredFilters } from "@/common/hooks/useStoredFilters";
 import { statsQueries } from "@/common/queries/statsQueries";
 import { AnimatePresence } from 'framer-motion';
 import HomePage from './_components/HomePage';
@@ -22,21 +22,12 @@ const HomeClientPage = ({ initialDate }: { initialDate: string }) => {
   usePrefetchPage();
   const [isAnalysisOpen, setAnalysisOpen] = useState(false);
   const currentYear = Number(initialDate.slice(0, 4));
-  const pathname = usePathname();
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const queryYear = Number(searchParams.get('year'));
-  const selectedYear = Number.isInteger(queryYear) && queryYear >= 1900 && queryYear <= 2100 ? queryYear : currentYear;
+  const { value: selectedYear, setStoredValue: setSelectedYear, isStorageReady } =
+    useStoredFilters('home-analysis', currentYear);
   const [isYearPickerOpen, setIsYearPickerOpen] = useState(false);
 
   const handleApplyYear = (year: number) => {
-    const params = new URLSearchParams(searchParams);
-
-    if (year === currentYear) params.delete('year');
-    else params.set('year', year.toString());
-
-    const query = params.toString();
-    router.replace(query ? `${pathname}?${query}` : pathname);
+    setSelectedYear(year);
     setIsYearPickerOpen(false);
   };
 
@@ -46,13 +37,16 @@ const HomeClientPage = ({ initialDate }: { initialDate: string }) => {
 
   const { data: diaryStats, isError: isDiaryStatsError, refetch: refetchDiaryStats } = useQuery({
     ...statsQueries.diary(selectedYear, authAction),
+    enabled: isStorageReady && isAnalysisOpen,
   });
 
   const { data: habitStats, isError: isHabitStatsError, refetch: refetchHabitStats } = useQuery({
     ...statsQueries.habit(selectedYear, authAction),
+    enabled: isStorageReady && isAnalysisOpen,
   });
-  const isStatsPending = diaryStats === undefined || habitStats === undefined;
-  const isStatsError = (isDiaryStatsError && diaryStats === undefined) || (isHabitStatsError && habitStats === undefined);
+  const isStatsPending = !isStorageReady || diaryStats === undefined || habitStats === undefined;
+  const isStatsError = isStorageReady &&
+    ((isDiaryStatsError && diaryStats === undefined) || (isHabitStatsError && habitStats === undefined));
 
   const years = useMemo(() => {
     if (!availableYears || availableYears.length === 0) {

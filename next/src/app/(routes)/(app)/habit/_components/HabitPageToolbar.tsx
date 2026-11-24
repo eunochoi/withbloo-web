@@ -21,9 +21,10 @@ interface Props {
   sortValue: HabitSort;
   priorityFirst: boolean;
   disabledAdd?: boolean;
+  disabledFilter?: boolean;
 }
 
-const HabitPageToolbar = ({ alignToList, onToggle, onOpenFilter, completedOnly, priorities, onAddHabit, sortValue, priorityFirst, disabledAdd = false }: Props) => {
+const HabitPageToolbar = ({ alignToList, onToggle, onOpenFilter, completedOnly, priorities, onAddHabit, sortValue, priorityFirst, disabledAdd = false, disabledFilter }: Props) => {
   const filterParts = [
     ...(completedOnly ? ['완료'] : []),
     ...(priorities.length > 0 && priorities.length < 4 ? priorities.map((priority) => priority === 0 ? '자유' : <span key={priority} className="text-theme-accent">{'★'.repeat(priority)}</span>) : []),
@@ -34,7 +35,7 @@ const HabitPageToolbar = ({ alignToList, onToggle, onOpenFilter, completedOnly, 
   return (
     <Toolbar alignToList={alignToList}>
       <ToolbarSelectionButton onClick={onToggle} icon={<SortIcon size={18} aria-hidden="true" />} parts={getToolbarSortParts(sortValue, priorityFirst)} accessibilityLabel={`습관 정렬, ${sortDescription}`} />
-      <ToolbarSelectionButton onClick={onOpenFilter} icon={<FilterIcon size={18} aria-hidden="true" />} parts={filterParts.length ? filterParts : ['필터']} accessibilityLabel={`습관 필터, ${filterDescription}`} />
+      <ToolbarSelectionButton onClick={onOpenFilter} disabled={disabledFilter} icon={<FilterIcon size={18} aria-hidden="true" />} parts={filterParts.length ? filterParts : ['필터']} accessibilityLabel={`습관 필터, ${filterDescription}`} />
       <div className="-mr-3 ml-auto shrink-0 desktop:-mr-1">
         <ToolbarButton variant="listIcon" aria-label="습관 추가" onClick={onAddHabit} title="습관 추가" disabled={disabledAdd}><AddIcon size={18} aria-hidden="true" /></ToolbarButton>
       </div>
