@@ -12,8 +12,8 @@ const LoginClientPage = () => {
 
   useEffect(() => {
     router.prefetch('/home');
-    router.prefetch('/calendar');
     router.prefetch('/diary');
+    router.prefetch('/feed');
     router.prefetch('/habit');
     router.prefetch('/setting');
   }, [router]);

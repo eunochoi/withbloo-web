@@ -1,6 +1,7 @@
 import { MoreIcon } from '@/common/constants/appIcons';
 import DiaryMenus from '@/common/components/ui/Diary/DiaryMenus';
 import EmotionImage from '@/common/components/ui/EmotionImage';
+import ScrollableName from '@/common/components/ui/ScrollableName';
 import { EMOTIONS } from '@/common/constants/emotions';
 import type { DiaryData } from '@/common/types/diary';
 import { parseLocalDate } from '@/common/utils/date/parseLocalDate';
@@ -41,15 +42,15 @@ const DiaryCardHeader = ({ diaryData }: Props) => {
         {emotion && (
           <EmotionImage emotion={emotion} alt="" className="h-12 w-12 shrink-0 object-contain" />
         )}
-        <div className=" flex min-w-0 flex-col gap-0.5">
-          <time dateTime={diaryData.date} className="flex flex-wrap gap-x-1 text-base font-semibold text-theme-text-primary">
+        <div className="flex min-w-0 flex-col gap-0.5">
+          <span className="flex min-w-0 items-baseline gap-1 text-base font-semibold text-theme-text-primary">
+            <span className="shrink-0 whitespace-nowrap">{emotion ? '일기 ·' : '일기'}</span>
+            {emotion && <ScrollableName name={emotion.nameKr} />}
+          </span>
+          <time dateTime={diaryData.date} className="flex flex-wrap gap-x-2 text-sm text-theme-text-tertiary">
             <span className="whitespace-nowrap">{formattedDate}</span>
+            <span>{week}</span>
           </time>
-          <div className='flex gap-1 text-sm text-theme-text-tertiary'>
-            <time>{week}</time>
-            {emotion && <span>·</span>}
-            {emotion && <span>{emotion.nameKr}</span>}
-          </div>
         </div>
       </Link>
       <button

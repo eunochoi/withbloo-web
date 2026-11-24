@@ -25,6 +25,7 @@ import {
 import { SOBER_ICONS, SOBER_ICON_CATEGORIES } from '@/common/constants/sober';
 import { SOBER_GOALS, formatSoberGoal } from '@/common/functions/sober';
 import { AchievementIcon, CheckIcon, EditIcon, GoalIcon } from '@/common/constants/appIcons';
+import { FEED_QUERY_KEY } from '@/common/constants/diary';
 import { useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { AnimatePresence } from 'framer-motion';
@@ -115,7 +116,10 @@ export const SoberForm = ({
           goalDays: mode === 'MANUAL' ? goal : null,
         }),
       );
-      await query.invalidateQueries({ queryKey: ['sober'] });
+      await Promise.all([
+        query.invalidateQueries({ queryKey: ['sober'] }),
+        query.invalidateQueries({ queryKey: FEED_QUERY_KEY }),
+      ]);
       showNotice(item ? '거리두기를 수정했어요' : '거리두기를 추가했어요');
       onClose();
     } catch (error) {

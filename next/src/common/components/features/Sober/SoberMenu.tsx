@@ -6,6 +6,7 @@ import { authAction } from '@/common/auth/authAction';
 import { deleteSober } from '@/common/actions/sober';
 import { MoreIcon } from '@/common/constants/appIcons';
 import Menus from '@/common/components/ui/Menus';
+import { FEED_QUERY_KEY } from '@/common/constants/diary';
 
 export default function SoberMenu({ id, name, onDetail, onEdit, onDeleted }: {
   id: number; name: string; onDetail?: () => void; onEdit: () => void; onDeleted?: () => void;
@@ -18,7 +19,10 @@ export default function SoberMenu({ id, name, onDetail, onEdit, onDeleted }: {
     setPending(true);
     try {
       await authAction(() => deleteSober(id));
-      await query.invalidateQueries({ queryKey: ['sober'] });
+      await Promise.all([
+        query.invalidateQueries({ queryKey: ['sober'] }),
+        query.invalidateQueries({ queryKey: FEED_QUERY_KEY }),
+      ]);
     } catch (error) { throw error; } finally { setPending(false); }
   };
   return <>

@@ -167,7 +167,7 @@ const IntroClientPage = () => {
         ]}
       >
         <div className="overflow-hidden rounded-[20px] bg-theme-accent-light">
-          <Image src={introImage3} alt="월간 기록과 감정 통계" sizes="(min-width: 1024px) 520px, 90vw" className="h-auto w-full" />
+          <Image src={introImage3} alt="일기 달력과 감정 통계" sizes="(min-width: 1024px) 520px, 90vw" className="h-auto w-full" />
         </div>
       </IntroSection>
       <section className={cn(introSectionClass, 'border-t border-theme-border/50')}>

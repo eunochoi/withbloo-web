@@ -16,10 +16,11 @@ interface ConfirmDialogProps {
   danger?: boolean;
   onClose: () => void;
   onConfirm: () => Promise<unknown> | void;
+  onDismissed?: () => void;
   onConfirmed?: () => void;
 }
 
-export const ConfirmDialog = ({ isOpen, title, confirmLabel, confirmDescription, danger = false, onClose, onConfirm, onConfirmed }: ConfirmDialogProps) => {
+export const ConfirmDialog = ({ isOpen, title, confirmLabel, confirmDescription, danger = false, onClose, onConfirm, onConfirmed, onDismissed }: ConfirmDialogProps) => {
   const id = useId();
   const [busy, setBusy] = useState(false);
   const pending = useRef(false);
@@ -28,6 +29,7 @@ export const ConfirmDialog = ({ isOpen, title, confirmLabel, confirmDescription,
   return (
     <AnimatePresence onExitComplete={() => {
       if (confirmed.current) { confirmed.current = false; onConfirmed?.(); }
+      onDismissed?.();
     }}>
       {isOpen && (
         <BottomSheetPicker labelledBy={`${id}-title`} onClose={close} header={<BottomSheetHeading id={`${id}-title`}>{title}</BottomSheetHeading>}>

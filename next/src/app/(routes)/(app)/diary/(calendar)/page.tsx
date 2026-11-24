@@ -9,7 +9,7 @@ import { getTodayStringInUserTimezone } from '@/common/utils/date/userTimezone';
 import CalendarClientPage from './CalendarClientPage';
 
 export const metadata: Metadata = {
-  title: '월간 기록',
+  title: '일기 달력',
   description: '달력에서 날짜별 감정과 일기, 습관 기록을 확인해요.',
 };
 

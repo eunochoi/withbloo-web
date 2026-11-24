@@ -4,6 +4,9 @@ import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js';
 
 const nextConfig = {
   swcMinify: true,
+  async redirects() {
+    return [{ source: '/calendar', destination: '/diary', permanent: false }];
+  },
   experimental: {
     serverComponentsExternalPackages: ['sql.js'],
     serverActions: {

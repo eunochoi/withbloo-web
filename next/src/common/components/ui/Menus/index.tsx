@@ -16,7 +16,9 @@ interface Props {
   isOpen: boolean;
   onClose: () => void;
   title: string;
-  kind: 'diary' | 'habit' | 'sober';
+  kind: 'diary' | 'habit' | 'sober' | 'record';
+  onDismissed?: () => void;
+  deleteDescription?: string;
   onDetail?: () => void;
   onEdit: () => void;
   onDelete: () => Promise<unknown> | void;
@@ -28,6 +30,8 @@ const Menus = ({
   onClose,
   title,
   kind,
+  onDismissed,
+  deleteDescription,
   onDetail,
   onEdit,
   onDelete,
@@ -37,7 +41,7 @@ const Menus = ({
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
   const pendingAction = useRef<'detail' | 'edit' | 'confirm' | null>(null);
   const label =
-    kind === 'diary' ? '일기' : kind === 'sober' ? '거리두기' : '습관';
+    kind === 'record' ? '기록' : kind === 'diary' ? '일기' : kind === 'sober' ? '거리두기' : '습관';
   const actions = [
     ...(onDetail
       ? [
@@ -59,7 +63,7 @@ const Menus = ({
       icon: EditIcon,
       title: kind === 'sober' ? '수정하기' : `${label} 수정하기`,
       description:
-        kind === 'diary'
+        (kind === 'diary' || kind === 'record')
           ? '내용과 사진을 수정해요.'
           : kind === 'sober'
             ? '이름·목표·아이콘을 바꿔요.'
@@ -70,11 +74,7 @@ const Menus = ({
       icon: DeleteIcon,
       title: kind === 'sober' ? '삭제하기' : `${label} 삭제하기`,
       description:
-        kind === 'diary'
-          ? '일기와 사진을 삭제해요.'
-          : kind === 'sober'
-            ? '항목과 재시작 기록을 삭제해요.'
-            : '습관과 모든 기록을 삭제해요.',
+        { diary: '일기와 사진을 삭제해요.', record: '기록과 사진을 삭제해요.', sober: '항목과 재시작 기록을 삭제해요.', habit: '습관과 모든 기록을 삭제해요.' }[kind],
     },
   ];
 
@@ -84,6 +84,7 @@ const Menus = ({
         onExitComplete={() => {
           const action = pendingAction.current;
           pendingAction.current = null;
+          if (!action) onDismissed?.();
           if (action === 'detail') onDetail?.();
           if (action === 'edit') onEdit();
           if (action === 'confirm') setIsConfirmingDelete(true);
@@ -143,11 +144,12 @@ const Menus = ({
             : '정말 삭제하시겠어요?'
         }
         confirmLabel="삭제하기"
-        confirmDescription={kind === 'diary' ? '일기와 사진이 삭제되며 되돌릴 수 없어요.' : kind === 'sober' ? '거리두기와 모든 다시 시작 기록이 삭제되며 되돌릴 수 없어요.' : '습관과 모든 기록이 삭제되며 되돌릴 수 없어요.'}
+        confirmDescription={deleteDescription ?? (kind === 'diary' ? '일기와 사진이 삭제되며 되돌릴 수 없어요.' : kind === 'sober' ? '거리두기와 모든 다시 시작 기록이 삭제되며 되돌릴 수 없어요.' : '습관과 모든 기록이 삭제되며 되돌릴 수 없어요.')}
         danger
         onClose={() => setIsConfirmingDelete(false)}
         onConfirm={onDelete}
         onConfirmed={onDeleted}
+        onDismissed={onDismissed}
       />
     </>
   );

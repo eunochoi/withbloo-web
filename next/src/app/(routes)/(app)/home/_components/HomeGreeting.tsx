@@ -7,7 +7,7 @@ const HomeGreeting = () => (
     </span>
     <span className='text-4xl font-bold leading-tight tracking-tight tablet:text-4xl desktop:text-5xl'>나의 기록으로</span>
     <div className="flex flex-wrap gap-2 text-base tablet:text-xl desktop:text-2xl font-semibold text-theme-accent-deep">
-      <Link href="/calendar">#감정기록</Link>
+      <Link href="/diary">#감정기록</Link>
       <Link href="/habit">#습관관리</Link>
       <Link href="/sober">#거리두기</Link>
     </div>

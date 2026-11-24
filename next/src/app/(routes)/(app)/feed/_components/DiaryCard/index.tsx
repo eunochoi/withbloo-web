@@ -2,13 +2,12 @@
 
 import ScrollableName from '@/common/components/ui/ScrollableName';
 
-import Carousel from '@/common/components/ui/Carousel';
 import { DIARY_TEXT_PREVIEW_LINE_COUNT } from '@/common/constants/diary';
 import type { DiaryData } from '@/common/types/diary';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import HabitIcon from '@/common/components/ui/HabitIcon';
 import DiaryCardHeader from './DiaryCardHeader';
+import FeedCardPhotos from '../FeedCardPhotos';
 
 interface Props {
   diaryData: DiaryData;
@@ -18,10 +17,10 @@ interface Props {
 const DiaryCard = ({ diaryData, priorityImage = false }: Props) => {
   const router = useRouter();
   const { Images: images } = diaryData;
-  const hasImages = images.length > 0;
+  const href = `/diary/${diaryData.id}`;
 
   const navigateToZoom = () => {
-    router.push(`/diary/${diaryData.id}`, { scroll: false });
+    router.push(href, { scroll: false });
   };
   const handleHabitClick = (habitId: number) => {
     router.push(`/habit/${habitId}`, { scroll: false });
@@ -32,30 +31,7 @@ const DiaryCard = ({ diaryData, priorityImage = false }: Props) => {
       <DiaryCardHeader diaryData={diaryData} />
       <div className='flex flex-col w-full h-auto p-2 gap-3'>
         <div className="flex flex-col gap-3">
-          {hasImages && (
-            <Carousel className="aspect-[4/3] rounded-lg">
-              {images.map((image, index) => (
-                <button
-                  key={image.id}
-                  type="button"
-                  onClick={navigateToZoom}
-                  aria-label={`${diaryData.date} 일기 사진 ${index + 1} 상세 보기`}
-                  className="h-full w-full"
-                >
-                  <Image
-                    priority={priorityImage && index === 0}
-                    className="h-full w-full object-cover"
-                    src={image.src}
-                    width={800}
-                    height={480}
-                    sizes="(min-width: 1024px) 460px, (min-width: 480px) min(484px, calc(100vw - 88px)), calc(90vw - 16px)"
-                    alt={`일기 사진 ${index + 1}`}
-                    draggable={false}
-                  />
-                </button>
-              ))}
-            </Carousel>
-          )}
+          <FeedCardPhotos images={images} href={href} label={`${diaryData.date} 일기`} priority={priorityImage} />
           <button
             type="button"
             onClick={navigateToZoom}

@@ -35,6 +35,7 @@ function scenario(view) {
     '@/common/constants/appIcons': { AddIcon: 'AddIcon', MoreIcon: 'MoreIcon', SortIcon: 'SortIcon' },
     'react-icons/pi': { PiClockCounterClockwise: 'Clock' },
     '../DiaryDetail/DiaryDetailGallery': { DiaryDetailGallery: 'Gallery' },
+    './ActivityRecordActions': { __esModule: true, default: 'ActivityRecordActions' },
     './ActivityRecordForm': { __esModule: true, default: 'ActivityRecordForm' },
   };
   const Component = loadSource(mocks)('common/components/features/ActivityRecords/ActivityRecordListModal.tsx').default;

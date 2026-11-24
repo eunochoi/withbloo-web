@@ -3,8 +3,8 @@
 import { prisma } from '../../../../lib/prisma';
 import { getAuth } from '@/common/auth/getAuth';
 import { validateAccessibleImageContents } from '@/common/actions/diary/utils';
-import { createImageSignedUrl } from '@/common/actions/image/utils';
 import type { DiaryImage } from '@/common/types/diary';
+import { formatRecordImages } from './images';
 
 export type RecordScope = 'habit' | 'sober';
 export type ActivityRecord = {
@@ -16,7 +16,7 @@ export type ActivityRecord = {
 };
 export type RecordCursor = { id: number; recordedAt: string };
 async function formatRecords(rows: Array<{ id: number; type: 'MEMO' | 'RESTART'; recordedAt: string; memo: string | null; rawImages: Array<{ id: number; imageContentId: string; position: number; imageContent: { storagePath: string } }> }>): Promise<ActivityRecord[]> {
-  return Promise.all(rows.map(async ({ rawImages, ...row }) => ({ ...row, images: await Promise.all(rawImages.map(async (image) => ({ id: String(image.id), imageContentId: image.imageContentId, order: image.position, src: await createImageSignedUrl(image.imageContent.storagePath) }))) })));
+  return Promise.all(rows.map(async ({ rawImages, ...row }) => ({ ...row, images: await formatRecordImages(rawImages) })));
 }
 const validId = (id: number) => Number.isSafeInteger(id) && id > 0;
 const failure = (message: string) => ({ ok: false as const, code: 'RECORD_ERROR', message });

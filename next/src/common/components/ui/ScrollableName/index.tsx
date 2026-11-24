@@ -48,7 +48,7 @@ export default function ScrollableName({ name, className }: { name: string; clas
   }, [name]);
   return (
     <span className={cn('relative block min-w-0 max-w-full', className)} title={name}>
-      <span ref={ref} className="block min-w-0 max-w-full overflow-x-auto whitespace-nowrap [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <span ref={ref} className="block min-w-0 max-w-full overflow-x-auto overflow-y-hidden whitespace-nowrap [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <span>{characters.map((character, index) => <span key={index}>{character}</span>)}</span>
       </span>
       <span ref={markerRef} aria-hidden="true" className="pointer-events-none invisible absolute left-0 top-0">…</span>

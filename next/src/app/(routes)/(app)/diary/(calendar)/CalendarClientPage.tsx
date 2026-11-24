@@ -7,7 +7,6 @@ import CalendarPageSkeleton from'./_components/CalendarPageSkeleton';
 import AppPageTitle from'@/common/components/layout/AppPageTitle';
 
 import { keepPreviousData, useQuery } from'@tanstack/react-query';
-import { format } from'date-fns';
 import { useRouter } from'next/navigation';
 import { useState } from'react';
 
@@ -16,7 +15,6 @@ import { diaryQueries } from'@/common/queries/diaryQueries';
 import { habitQueries } from'@/common/queries/habitQueries';
 import AppPageLayout from'@/common/components/layout/AppPageLayout';
 import { usePrefetchPage } from'@/common/hooks/usePrefetchPage';
-import { parseLocalDate } from'@/common/utils/date/parseLocalDate';
 
 interface Props {
   initialDate: string;
@@ -47,21 +45,6 @@ const CalendarClientPage = ({ initialDate }: Props) => {
   const isInitialPending = [selectedDiaryQuery, todayHabitsQuery, monthQuery].some(
     (query) => query.data === undefined,
   );
-  const openSelectedDiary = () => {
-    if (selectedDiaryQuery.isPending || selectedDiaryQuery.isPlaceholderData)
-      return;
-    if (selectedDiaryQuery.isError) {
-      void selectedDiaryQuery.refetch();
-      return;
-    }
-
-    const diary = selectedDiaryQuery.data;
-    const href = diary
-      ? `/diary/${diary.id}/edit`
-      : `/diary/new?date=${selectedDate}`;
-    router.push(href, { scroll: false });
-  };
-
   const counts = { high: 0, medium: 0, low: 0 };
   for (const [date, day] of Object.entries(
     monthQuery.isPlaceholderData ? {} : (monthQuery.data?.daysByDate ?? {}),
@@ -72,20 +55,15 @@ const CalendarClientPage = ({ initialDate }: Props) => {
     counts[progress < 25 ?'low' : progress < 75 ?'medium' :'high'] += 1;
   }
 
-  const selectedDateLabel =
-    selectedDate === today
-      ?'오늘'
-      : format(parseLocalDate(selectedDate),'M월 d일');
-  const diaryActionLabel = `${selectedDateLabel} ${selectedDiaryQuery.data ?'일기 수정' :'일기 작성'}`;
-
   return (
     <AppPageLayout
       fixedDesktop
-      header={<AppPageTitle title="월간 기록" hashtags="#기록 #발자국" />}
+      header={<AppPageTitle title="일기 달력" hashtags="#기록 #발자국" />}
       toolbar={
         <CalendarSummaryToolbar
           diaryCount={monthQuery.isPlaceholderData ? 0 : (monthQuery.data?.summary.diaryCount ?? 0)}
           counts={counts}
+          onAddDiary={() => router.push('/diary/new', { scroll: false })}
         />
       }
     >

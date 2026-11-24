@@ -5,32 +5,36 @@ import { statsQueries } from '@/common/queries/statsQueries';
 import MonthlyBarChart from '@/common/components/features/HabitDetail/MonthlyBarChart';
 import { YearRecordHeader } from '@/common/components/ui/YearRecordHeader';
 import { useMonthSwipe } from '@/common/components/ui/Calendar/useMonthSwipe';
+import { useStoredFilters } from '@/common/hooks/useStoredFilters';
 import { cn } from '@/common/utils/cn';
 import { useQuery } from '@tanstack/react-query';
 
 interface Props {
   className?: string;
-  year: number;
-  onChangeYear: (year: number) => void;
 }
 
-const DiaryStatsPanel = ({ year, onChangeYear, className }: Props) => {
+const DiaryStatsPanel = ({ className }: Props) => {
+  const currentYear = new Date().getFullYear();
+  const { value: year, setStoredValue: setYear, isStorageReady } = useStoredFilters('feed-stats', currentYear);
   const { data, isPending, isError, refetch } = useQuery({
     ...statsQueries.diary(year, authAction),
+    enabled: isStorageReady,
   });
 
-  const currentYear = new Date().getFullYear();
-  const previous = () => { if (year > 1900) onChangeYear(year - 1); };
-  const next = () => { if (year < currentYear) onChangeYear(year + 1); };
+  const canPrevious = isStorageReady && year > 1900;
+  const canNext = isStorageReady && year < currentYear;
+  const previous = () => { if (canPrevious) setYear(year - 1); };
+  const next = () => { if (canNext) setYear(year + 1); };
   const swipeProps = useMonthSwipe(previous, next);
   return (
     <aside {...swipeProps} className={cn("hidden w-full flex-col gap-3 desktop:flex desktop:sticky desktop:top-[max(112px,calc(var(--page-toolbar-height,0px)+24px))] desktop:self-start", className)}>
+      <h2 className="text-sm font-semibold text-theme-text-secondary">일기 통계</h2>
       <YearRecordHeader
         year={year}
-        canPrevious={year > 1900}
-        canNext={year < currentYear}
+        canPrevious={canPrevious}
+        canNext={canNext}
         onPreviousYear={previous}
-        onCurrentYear={() => onChangeYear(new Date().getFullYear())}
+        onCurrentYear={() => { if (isStorageReady) setYear(currentYear); }}
         onNextYear={next}
       />
       <div className="grid grid-cols-3 divide-x divide-theme-border/50 rounded-theme border border-theme-accent/20 bg-theme-accent-light/50 py-3 text-center">

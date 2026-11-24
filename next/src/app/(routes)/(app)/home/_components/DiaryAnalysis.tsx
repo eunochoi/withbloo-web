@@ -1,6 +1,6 @@
 'use client';
 
-import { CalendarIcon, DescriptionIcon, TrophyIcon } from '@/common/constants/appIcons';
+import { DiaryCalendarIcon, DescriptionIcon, TrophyIcon } from '@/common/constants/appIcons';
 
 import { DiaryStats } from "@/common/actions/stats";
 
@@ -42,7 +42,7 @@ const DiaryAnalysis = ({ stats, year }: Props) => {
           <h3 className={`${dotTabTitleClass} mx-1 flex items-center gap-2`}><span aria-hidden="true" className={dotTabMarkerClass} />기록 요약</h3>
           <div className="mx-1 grid grid-cols-3 divide-x divide-theme-border/50 rounded-theme border border-theme-accent/20 bg-theme-accent-light/50 py-2">
             <div className={statBoxClass}>
-              <CalendarIcon className={statIconClass} aria-hidden="true" />
+              <DiaryCalendarIcon className={statIconClass} aria-hidden="true" />
               <p className="m-0 text-center text-sm text-theme-text-secondary">현재 연속 기록</p>
               <div className="flex items-baseline justify-center gap-1">
                 <span className="flex items-baseline text-2xl font-bold leading-none text-theme-text-primary tablet:text-xl">{currentStreak}</span>

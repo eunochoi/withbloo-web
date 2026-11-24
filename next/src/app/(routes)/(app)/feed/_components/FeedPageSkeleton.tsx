@@ -1,5 +1,5 @@
-const DiaryPageSkeleton = () => (
-  <section className="grid w-full gap-6 pt-4 animate-pulse motion-reduce:animate-none desktop:grid-cols-[minmax(0,11fr)_minmax(0,9fr)] desktop:items-start desktop:gap-x-8" role="status" aria-label="일기 목록 불러오는 중" aria-busy="true">
+const FeedPageSkeleton = () => (
+  <section className="grid w-full gap-6 pt-4 animate-pulse motion-reduce:animate-none desktop:grid-cols-[minmax(0,11fr)_minmax(0,9fr)] desktop:items-start desktop:gap-x-8" role="status" aria-label="기록 모음 불러오는 중" aria-busy="true">
     <div className="min-w-0" aria-hidden="true">
       {[0, 1, 2].map((index) => (
         <div key={index} className={`flex flex-col gap-4 ${index > 0 ?'border-t border-theme-border/50 pt-6' :''} ${index < 2 ?'pb-6' :''}`}>
@@ -30,4 +30,4 @@ const DiaryPageSkeleton = () => (
   </section>
 );
 
-export default DiaryPageSkeleton;
+export default FeedPageSkeleton;

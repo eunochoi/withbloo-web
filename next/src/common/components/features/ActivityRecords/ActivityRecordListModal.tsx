@@ -3,7 +3,6 @@ import { ContentTopButton, ContentTopButtons } from '@/common/components/ui/Cont
 
 
 import {
-  deleteActivityRecord,
   getActivityDay,
   getActivityRecords,
   type ActivityRecord,
@@ -13,16 +12,15 @@ import {
 import { authAction } from '@/common/auth/authAction';
 import { BottomSheet } from '@/common/components/ui/BottomSheet/BottomSheet';
 import { BottomSheetBody } from '@/common/components/ui/BottomSheet/BottomSheetBody';
-import { BottomSheetHeading } from '@/common/components/ui/BottomSheet/BottomSheetHeading';
-import { BottomSheetPicker } from '@/common/components/ui/BottomSheet/BottomSheetPicker';
 import { BottomSheetTitle } from '@/common/components/ui/BottomSheet/BottomSheetTitle';
 import SortPicker from '@/common/components/ui/SortPicker';
 import { AddIcon, MoreIcon, SortIcon } from '@/common/constants/appIcons';
-import { useInfiniteQuery, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { addDays, format } from 'date-fns';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { PiClockCounterClockwise } from 'react-icons/pi';
 import { DiaryDetailGallery } from '../DiaryDetail/DiaryDetailGallery';
+import ActivityRecordActions from './ActivityRecordActions';
 
 export default function ActivityRecordListModal({
   scope,
@@ -41,14 +39,10 @@ export default function ActivityRecordListModal({
   achievements?: Array<{ achievedAt: string | number; days: number }>;
   onClose: () => void;
 }) {
-  const client = useQueryClient();
   const [sort, setSort] = useState<'ASC' | 'DESC'>('DESC');
   const [sorting, setSorting] = useState(false);
   const [menu, setMenu] = useState<ActivityRecord | null>(null);
-  const [deleting, setDeleting] = useState<ActivityRecord | null>(null);
   const [busy, setBusy] = useState(false);
-  const lock = useRef(false);
-  const [error, setError] = useState('');
   const start = day ? new Date(`${day}T00:00:00`) : new Date();
   const list = useInfiniteQuery({
     queryKey: [scope, 'activity-records', parentId, sort],
@@ -68,22 +62,6 @@ export default function ActivityRecordListModal({
   });
   const records = day ? (daily.data ?? []) : (list.data?.pages.flatMap((page) => page.items) ?? []);
   const query = day ? daily : list;
-  const run = async (action: () => Promise<unknown>, done: () => void) => {
-    if (lock.current) return;
-    lock.current = true;
-    setBusy(true);
-    setError('');
-    try {
-      await action();
-      await client.invalidateQueries({ queryKey: [scope] });
-      done();
-    } catch (failure) {
-      setError(failure instanceof Error ? failure.message : '저장하지 못했어요.');
-    } finally {
-      lock.current = false;
-      setBusy(false);
-    }
-  };
   const add = () => onOpenForm({ type: scope === 'sober' ? 'RESTART' : 'MEMO' }, day);
   return (
     <>
@@ -199,79 +177,21 @@ export default function ActivityRecordListModal({
                 기록을 불러오지 못했어요. 다시 시도
               </button>
             )}
-            {error && (
-              <p role="alert" className="text-theme-danger">
-                {error}
-              </p>
-            )}
           </div>
         </BottomSheetBody>
       </BottomSheet>
       {menu && (
-        <BottomSheetPicker
-          labelledBy="record-actions"
-          onClose={() => {
+        <ActivityRecordActions
+          scope={scope}
+          parentId={parentId}
+          record={menu}
+          onEdit={() => {
+            onOpenForm(menu, day);
             setMenu(null);
           }}
-          header={
-            <BottomSheetHeading id="record-actions">
-              기록
-            </BottomSheetHeading>
-          }
-        >
-          <div className="flex flex-col gap-3 pb-6">
-            <>
-              <button
-                className="min-h-16 rounded-2xl border border-theme-border/50 p-4 text-left"
-                onClick={() => {
-                  onOpenForm(menu, day);
-                  setMenu(null);
-                }}
-              >
-                기록 수정하기
-              </button>
-              <button
-                className="min-h-16 rounded-2xl border border-theme-border/50 p-4 text-left text-theme-danger"
-                onClick={() => {
-                  setDeleting(menu);
-                  setMenu(null);
-                }}
-              >
-                기록 삭제하기
-              </button>
-            </>
-          </div>
-        </BottomSheetPicker>
-      )}
-      {deleting && (
-        <BottomSheet
-          ariaLabel="기록 삭제 확인"
-          dismissible={!busy}
-          onClose={() => setDeleting(null)}
-        >
-          <BottomSheetTitle title="기록을 삭제하시겠어요?" />
-          <BottomSheetBody>
-            <p className="py-4">
-              {deleting.type === 'RESTART'
-                ? '다시 시작 기록을 삭제하면 진행 기간과 통계가 다시 계산돼요.'
-                : '기록이 삭제돼요.'}{' '}
-              삭제 후 되돌릴 수 없어요.
-            </p>
-            <button
-              disabled={busy}
-              onClick={() =>
-                void run(
-                  () => authAction(() => deleteActivityRecord(scope, parentId, deleting.id)),
-                  () => setDeleting(null),
-                )
-              }
-              className="mb-6 min-h-12 w-full rounded-full bg-theme-danger text-theme-surface"
-            >
-              삭제하기
-            </button>
-            {error && <p role="alert">{error}</p>}
-          </BottomSheetBody>
-        </BottomSheet>
+          onClose={() => setMenu(null)}
+          onBusyChange={setBusy}
+        />
       )}
       {sorting && (
         <SortPicker

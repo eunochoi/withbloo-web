@@ -4,6 +4,7 @@ import { saveActivityRecord, type ActivityRecord, type RecordScope } from '@/com
 import { authAction } from '@/common/auth/authAction';
 import type { BottomSheetHandle } from '@/common/components/ui/BottomSheet/BottomSheet';
 import { uploadImagesAndCollectIds } from '@/common/components/ui/ImageAttachments/uploadImagesAndCollectIds';
+import { FEED_QUERY_KEY } from '@/common/constants/diary';
 import { useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { useRef, useState } from 'react';
@@ -42,7 +43,10 @@ export default function ActivityRecordFormModal({ scope, parentId, name, initial
         await authAction(() => saveActivityRecord(scope, parentId, {
           id: record.id, type, recordedAt: new Date(value).toISOString(), memo, imageContentIds,
         }));
-        await client.invalidateQueries({ queryKey: [scope] });
+        await Promise.all([
+          client.invalidateQueries({ queryKey: [scope] }),
+          client.invalidateQueries({ queryKey: FEED_QUERY_KEY }),
+        ]);
         sheet.current?.close();
       } catch (failure) {
         setError(failure instanceof Error ? failure.message : '저장하지 못했어요.');

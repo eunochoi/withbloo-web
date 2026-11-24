@@ -7,7 +7,7 @@ const CalendarLoading = () => (
   <AppPageLayout
     fixedDesktop
     toolbar={<CalendarSummaryToolbar />}
-    header={<AppPageTitle title="월간 기록" hashtags="#기록 #발자국" />}
+    header={<AppPageTitle title="일기 달력" hashtags="#기록 #발자국" />}
   >
     <CalendarPageSkeleton />
   </AppPageLayout>
